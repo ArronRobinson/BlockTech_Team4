@@ -12,6 +12,9 @@ const PORT = 3000;
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(express.static('static'));
+
+
 
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
