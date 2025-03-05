@@ -10,12 +10,12 @@
 
 @font-face{
 	font-family: 'main-font';
-	src: url(fonts/Renner_\ 400\ Book.ttf);
+	src: url(/fonts/Renner_\ 400\ Book.ttf);
 }
 
 @font-face{
 	font-family: 'accent-font';
-	src: url(fonts/MALISON.ttf);
+	src: url(/fonts/MALISON.ttf);
 }
 
 *{
