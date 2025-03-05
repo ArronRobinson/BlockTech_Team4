@@ -1,6 +1,59 @@
-const express = require('express');
+const express = require("express");
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const uri = "mongodb+srv://team4:ProjectPodcast102%40%21@podcast.q7iop.mongodb.net/users?retryWrites=true&w=majority&appName=podcast";
+
 const app = express();
+const PORT = 3000;
 
-app.get('/', (req, res) => res.send('Hello from Express!'));
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.set("view engine", "ejs");
+app.set("views", __dirname + "/views");
+
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => console.log("Connected to MongoDB Atlas"))
+.catch(err => console.error("Error connecting to MongoDB:", err));
+
+const userSchema = new mongoose.Schema({
+    username: String,
+    email: String,
+    password: String,
+});
+
+const User = mongoose.model("User", userSchema);
+
+app.get("/", (req, res) => {
+    res.render("index", { title: "Sign Up" });
+});
+
+app.post("/signup", async (req, res) => {
+    const { username, email, password } = req.body;
+
+    try {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new User({ username, email, password: hashedPassword });
+        await newUser.save();
+
+        res.redirect("/");
+    } catch (error) {
+        res.status(500).json({ message: "Error signing up" });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
