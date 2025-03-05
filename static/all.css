@@ -1,0 +1,23 @@
+:root {
+    --color-text: #181717;
+    --color-accentcolor: #FFAA00;
+    --color-textaccent: #ffffff;
+    --color-accentTwo: #FF6A00;
+
+    --color-formbg: rgb(243, 243, 243);
+    --color-dropshadow: black;
+}
+
+@font-face{
+	font-family: 'main-font';
+	src: url(fonts/Renner_\ 400\ Book.ttf);
+}
+
+@font-face{
+	font-family: 'accent-font';
+	src: url(fonts/MALISON.ttf);
+}
+
+*{
+    font-family: 'main-font';
+}

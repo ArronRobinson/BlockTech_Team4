@@ -1,0 +1,169 @@
+*{
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.circle {
+    z-index: -2;
+    overflow: hidden;
+    position: absolute;
+    left: -20em;
+    bottom: -25em;
+    width: 63em;
+    height: 63em;
+    background-color: var(--color-accentcolor);
+    clip-path: circle(50% at center);
+}
+
+.circleTwo {
+    z-index: -2;
+    overflow: hidden;
+    position: absolute;
+    right: 4em;
+    top: -20em;
+    width: 40em;
+    height: 40em;
+    background-color: var(--color-accentcolor);
+    clip-path: circle(50% at center);
+}
+
+
+/* ************
+FORM STYLING
+************ */
+
+
+main form:nth-of-type(1){
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.shadowForm{
+    display: flex;
+    filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
+}
+
+main form div img:nth-of-type(1){
+    width: 25.5em;
+    order: 1;
+    border: 1em solid white;
+}
+
+main form:nth-of-type(1) fieldset section{
+    border: 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    background-color: var(--color-accentcolor);
+}
+
+main form:nth-of-type(1) fieldset{
+    border: 0px;
+    background-color: var(--color-accentcolor);
+    padding: 3em;
+}
+
+main form:nth-of-type(1) fieldset div{
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+    background-color: var(--color-accentcolor);
+}
+
+
+main form:nth-of-type(1) fieldset legend{
+    color: var(--color-textaccent);
+    font-size: x-large;
+    background-color: var(--color-accentcolor);
+}
+
+main form:nth-of-type(1) fieldset input{
+    border: .2em solid var(--color-formbg);
+    border-radius: 2em;
+    background-color: var(--color-textaccent);
+    width: 20em;
+    height: 3em;
+    padding-left: 1em;
+}
+
+main form:nth-of-type(1) fieldset input:focus{
+    border-color: var(--color-accentTwo);
+    outline: none;
+}
+
+main form:nth-of-type(1) fieldset label{
+    color: var(--color-textaccent);
+    background-color: var(--color-accentcolor);
+}
+
+main form fieldset button{
+    border: none;
+    padding: 0.7em;
+    border-radius: 2em;
+    margin-top: 3em;
+    width: 10em;
+    background-color: var(--color-formbg);
+}
+
+main form fieldset button:hover{
+    transform: scale(1.05);
+    transition: transform 0.3s
+}
+
+main form fieldset p{
+    text-decoration: none;
+    color: var(--color-textaccent);
+    background-color: var(--color-accentcolor);
+    margin-top: .2em;
+}
+
+main form fieldset p:nth-of-type(1){
+    margin-top: 1em;
+}
+
+main form fieldset a{
+    color: var(--color-textaccent);
+    text-decoration: none;
+    font-weight: bold;
+    background-color: var(--color-accentcolor);
+}
+
+main form fieldset a:hover{
+    text-decoration: underline;
+    transition: transform 0.3s;
+}
+
+main form fieldset section div:has(input:focus) label {
+    color: var(--color-accentTwo);
+}
+
+.toggle-password{
+    position: absolute;
+    right: 3.3em;
+    top: 10.7em;
+    cursor: pointer;
+    color: var(--color-textaccent);
+    font-size: 1.2em;
+}
+
+.toggle-password:hover{
+    transform: scale(1.1);
+    transition: transform 0.3s
+}
+
+.rememberMe{
+    margin-top: 1em;
+}
+
+#remember{
+    width: 1.2em;
+    height: 1.2em;
+    accent-color: var(--color-accentTwo);
+    cursor: pointer;
+}
+
+
+
