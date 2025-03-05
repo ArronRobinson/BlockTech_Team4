@@ -1,9 +1,10 @@
+require('dotenv').config();
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const uri = "mongodb+srv://team4:ProjectPodcast102%40%21@podcast.q7iop.mongodb.net/users?retryWrites=true&w=majority&appName=podcast";
+const uri = `mongodb+srv://${process.env.DATA_USERNAME}:${process.env.DATA_PW}@${process.env.DATA_HOST}/${process.env.DATA_NAME}?retryWrites=true&w=majority`;
 
 const app = express();
 const PORT = 3000;
@@ -19,7 +20,7 @@ mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
-.then(() => console.log("Connected to MongoDB Atlas"))
+.then(() => console.log("Connected to MongoDB"))
 .catch(err => console.error("Error connecting to MongoDB:", err));
 
 const userSchema = new mongoose.Schema({
