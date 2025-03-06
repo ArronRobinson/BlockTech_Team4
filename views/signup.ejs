@@ -3,17 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MatchCast Login</title>
-    <link rel="stylesheet" href="/static/register.css">
-    <link rel="stylesheet" href="/static/all.css">
+    <title>MatchCast Signup</title>
+    <link rel="stylesheet" href="/register.css">
+    <link rel="stylesheet" href="/all.css">
 </head>
 <body>
-    <header>
-
-    </header>
+    <header></header>
 
     <main>
-        <form action="Login">
+        <form action="/signup" method="POST">
             <div class="shadowForm">
                 <img src="/images/podcast-listener.png" alt="">
                 <fieldset>
@@ -22,16 +20,15 @@
 
                         <div>
                             <label for="naam">Gebruikersnaam:</label>
-                            <input type="text" name="gebruikersnaam" id="naam">
+                            <input type="text" name="username" id="naam" required>
                         </div>
                         <div>
-                            <label for="naam">E-mail:</label>
-                            <input type="email" name="email" id="email">
+                            <label for="email">E-mail:</label>
+                            <input type="email" name="email" id="email" required>
                         </div>
-
                         <div>
                             <label for="wachtwoord">Wachtwoord:</label>
-                            <input type="password" name="password" id="wachtwoord">
+                            <input type="password" name="password" id="wachtwoord" required>
                             <span class="toggle-password">👁️</span>
                         </div>
                     </section>
@@ -42,7 +39,7 @@
                         </label>
                     </div>
                     
-                    <button>Sign-up</button>
+                    <button type="submit">Sign-up</button>
                 </fieldset>
             </div>
         </form>
@@ -51,13 +48,15 @@
             <div class="circle"></div>
             <div class="circleTwo"></div>
         </section>
-
-
     </main>
 
     <footer>
-        <script src="index.js"></script>
-        
+        <script>
+            document.querySelector(".toggle-password").addEventListener("click", function () {
+                let passwordField = document.getElementById("wachtwoord");
+                passwordField.type = passwordField.type === "password" ? "text" : "password";
+            });
+        </script>
     </footer>
 </body>
 </html>
