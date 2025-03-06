@@ -36,7 +36,12 @@ const User = mongoose.model("User", userSchema);
 app
     .get('/', onindex)
     .get('/signup', onsignup)
-    .get('/login', onlogin); 
+    .get('/login', onlogin)
+    .get('/explore', onexplore);
+
+function onexplore(req, res) {
+    res.render('explore', { title: 'Explore Page' });
+}
 
 function onindex(req, res) {
     res.render('index', { title: 'Index Page' });
@@ -64,7 +69,7 @@ app.post("/signup", async (req, res) => {
         const newUser = new User({ username, email, password: hashedPassword });
         await newUser.save();
 
-        res.redirect("/");
+        res.redirect("/explore");
     } catch (error) {
         res.status(500).json({ message: "Error signing up" });
     }
