@@ -1,0 +1,103 @@
+
+/* ***********
+  achtergrond
+*********** */
+
+
+
+.circle {
+    z-index: -2;
+    overflow: hidden;
+    position: absolute;
+    left: -20em;
+    bottom: -25em;
+    width: 63em;
+    height: 63em;
+    background-color: var(--color-accentcolor);
+    clip-path: circle(50% at center);
+}
+
+.circleTwo {
+    z-index: -2;
+    overflow: hidden;
+    position: absolute;
+    right: 4em;
+    top: -20em;
+    width: 40em;
+    height: 40em;
+    background-color: var(--color-accentcolor);
+    clip-path: circle(50% at center);
+}
+
+
+
+/* ***********
+   explore
+*********** */
+
+
+
+section:first-of-type{
+    background-color: #ffffff;
+    box-shadow: 5px 10px black;
+    height: 40em;
+    width: 75em;
+    margin-left: 5em;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+    overflow: scroll;
+    scroll-behavior: smooth;
+}
+
+section article{
+    display: grid;
+    place-items: center;
+    
+    width: 20em;
+    height: 15em;
+    margin-bottom: 2.5em;
+    margin-top: 2.5em;
+}
+
+section article:hover{
+    outline: 2px solid black;
+    
+}
+
+section article img{
+    width: 10em;
+}
+
+nav{
+    margin-top: 2em;
+}
+
+nav ul{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+nav ul li{
+    list-style: none;
+}
+
+.aanwezig{
+    color: var(--color-accentTwo);
+    
+}
+
+button{
+    background-color: var(--color-accentTwo);
+    border: none;
+    border-radius: 5em;
+    font-size: 2em;
+    margin: 1em;
+    padding: 0.5em;
+    cursor: pointer;
+}
+
+h2{
+    font-family: 'main-font';
+}
