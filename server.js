@@ -11,7 +11,7 @@ const uri = `mongodb+srv://${process.env.DATA_USERNAME}:${process.env.DATA_PW}@$
 
 const app = express();
 const PORT = 3000;
-const SECRET_KEY = process.env.JWT_SECRET 
+const SECRET_KEY = process.env.JWT_SECRET_KEY || "Sedpm54v102";
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -84,10 +84,10 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/login", async (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
     try {
-        const user = await User.findOne({email});
+        const user = await User.findOne({username});
         if(!user) return res.status(400).json({message: "User not found"});
 
         const isMatch = await bcrypt.compare(password, user.password);
@@ -103,7 +103,7 @@ app.post("/login", async (req, res) => {
 
         res.redirect("/explore");
     } catch (error) {
-        res.status(500).json({message: "error logging in"});
+        res.status(500).json({message: "error logging in", error: error.message });
     }
     
 });

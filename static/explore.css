@@ -149,7 +149,7 @@ section:nth-of-type(2){
 }
 
 section:nth-of-type(2) article{
-    display: grid;
+
     grid-template-columns: 1fr;
     align-items: center;
     justify-items: center;
@@ -166,4 +166,41 @@ section:nth-of-type(2) article button{
     filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
     border: none;
     padding: 1em 3em 1em 3em;
+}
+
+.gamenOpties{
+    display: grid;
+}
+.filmOpties{
+    display: grid;
+}
+.muziekOpties{
+    display: grid;
+}
+.sportOpties{
+    display: none;
+}
+.boekenOpties{
+    display: none;
+}
+.kokenOpties{
+    display: none;
+}
+.nieuwsOpties{
+    display: none;
+}
+.kunstOpties{
+    display: none;
+}
+.misdaadOpties{
+    display: none;
+}
+.geschiedenisOpties{
+    display: none;
+}
+.lifestyleOpties{
+    display: none;
+}
+.modeOpties{
+    display: none;
 }
