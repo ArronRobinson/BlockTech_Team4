@@ -168,13 +168,13 @@ section:nth-of-type(2) article button{
 }
 
 .gamenOpties{
-    display: grid;
+    display: none;
 }
 .filmOpties{
-    display: grid;
+    display: none;
 }
 .muziekOpties{
-    display: grid;
+    display: none;
 }
 .sportOpties{
     display: none;
