@@ -90,3 +90,25 @@ function getPodcastRating(podcastName) {
 
     return ratings[podcastName] || 0.0; // Default to 0.0 if not found
 }
+
+
+
+// quiz
+
+let gamen = document.querySelector(".gamen")
+let gamenOpties = document.querySelector(".gamenOpties")
+let volgendeButton = document.querySelector(".volgendeButton")
+let tweedeVraag = document.querySelector(".tweedeVraag")
+let eersteVraag = document.querySelector(".eersteVraag")
+
+gamen.onclick = showGamen
+volgendeButton.onclick = showquiz
+
+function showGamen() {
+    gamenOpties.style.display = "grid"
+}
+
+function showquiz() {
+    tweedeVraag.style.display = "grid"
+    eersteVraag.style.display = "none"
+}
