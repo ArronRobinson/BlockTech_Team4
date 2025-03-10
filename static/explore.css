@@ -93,7 +93,7 @@ section:first-of-type{
     height: 30em;
     width: 60em;
     margin-left: 14em;
-    display: none;
+    display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     justify-items: center;
@@ -137,15 +137,14 @@ section:first-of-type article img{
 *********** */
 
 
-section:nth-of-type(2){
+.tweedeVraag{
     background-color: var(--color-formbg);
    
     height: 30em;
     width: 60em;
     margin-left: 14em;
-    display: grid;
+    display: none;
     grid-template-columns: 1fr 1fr 1fr;
-    /* scroll-behavior: smooth; */
 }
 
 section:nth-of-type(2) article{
