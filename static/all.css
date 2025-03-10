@@ -1,3 +1,9 @@
+*{
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+}
+
 :root {
     --color-text: #181717;
     --color-accentcolor: #FFAA00;
@@ -20,4 +26,49 @@
 
 *{
     font-family: 'main-font';
+}
+
+
+
+/* ***********
+NAV STYLING
+*********** */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2em 1em 2em 1em;
+    
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.logo img {
+    height: 2em;
+    width: 2em;
+    margin: 1em 0 0 1em;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 2em;
+    margin-left: auto;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: bold;
+    transition: color 0.3s ease;
+    margin-right: 2em;
+}
+
+.nav-links a:hover {
+    color: var(--color-accentTwo);
 }
