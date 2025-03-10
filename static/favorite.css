@@ -1,0 +1,111 @@
+.circle {
+    z-index: -2;
+    overflow: hidden;
+    position: absolute;
+    left: -20em;
+    bottom: -25em;
+    width: 70em;
+    height: 70em;
+    background-color: var(--color-secondaccent);
+    clip-path: circle(50% at center);
+}
+
+.circleTwo {
+    z-index: -2;
+    overflow: hidden;
+    position: absolute;
+    right: -20em;
+    top: 5em;
+    width: 40em;
+    height: 40em;
+    background-color: var(--color-accentcolor);
+    clip-path: circle(50% at center);
+}
+
+
+main{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    margin: 17em;
+    place-content: center;
+    gap: 4em;
+}
+
+main section{
+    margin: auto;
+}
+
+main section h2{
+    font-size: 1.2em;
+    max-width: 20ch;
+}
+
+main section img{
+    grid-column: 1;
+    width: 12em;
+    height: 12em;
+}
+
+main section img:hover{
+    transform: scale(1.1);
+    transition: ease-in-out .3s;
+}
+
+
+main section div{
+    display: flex;
+    gap: 4em;
+    margin-top: -.5em;
+}
+
+
+
+.likeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    display: flex; 
+    justify-content: flex-end; 
+    margin: auto;
+    order: 1;
+}
+
+.likeIcon {
+    transition: fill 0.3s ease-in-out, transform 0.3s ease-in-out;
+    fill: gray;
+    transform: scale(1);
+    width: 2em;
+    height: 2em;
+}
+
+.likeButton.liked .likeIcon {
+    fill: red;
+    transform: scale(1.05);
+}
+
+main section button{
+    align-content: right;
+}
+
+.controls {
+    position: absolute;
+    top: 15%;
+}
+
+
+
+.rating-display {
+    display: flex;
+    align-items: center;
+    gap: .4em;
+    font-size: 18px;
+    color: gray; 
+}
+
+.rating-star {
+    font-size: 2em;
+    color: var(--color-accentcolor); /* Star color */
+}
+
