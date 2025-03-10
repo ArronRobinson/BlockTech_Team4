@@ -56,7 +56,7 @@ nav ul li{
 
 
 
-button{
+body > button{
     background-color: var(--color-accentTwo);
     border: none;
     border-radius: 5em;
@@ -93,13 +93,12 @@ section:first-of-type{
     height: 30em;
     width: 60em;
     margin-left: 14em;
-    display: grid;
+    display: none;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     justify-items: center;
     overflow: scroll;
     scroll-behavior: smooth;
-    
 }
 
 section:first-of-type::-webkit-scrollbar {
@@ -111,7 +110,7 @@ section:first-of-type::-webkit-scrollbar-thumb {
     background: var(--color-accentTwo);
 }
 
-section article{
+section:first-of-type article{
     display: grid;
     place-items: center;
     background-color: var(--color-formbg);
@@ -122,34 +121,49 @@ section article{
     margin-top: 1.5em;
 }
 
-section article:hover{
+section:first-of-type article:hover{
     filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
     transform: scale(1.02);
     transition: ease-in-out 0.3s;
     border: none;
 }
 
-section article img{
+section:first-of-type article img{
     width: 7em;
 }
 
 /* ***********
-  section 1
+  section 2
 *********** */
-
 
 
 section:nth-of-type(2){
     background-color: var(--color-formbg);
-    filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
+   
     height: 30em;
     width: 60em;
     margin-left: 14em;
-    display: none;
+    display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    /* scroll-behavior: smooth; */
+}
+
+section:nth-of-type(2) article{
+    display: grid;
+    grid-template-columns: 1fr;
     align-items: center;
     justify-items: center;
     overflow: scroll;
-    scroll-behavior: smooth;
-    
+    padding-bottom: 1em;
+}
+
+section:nth-of-type(2) article h2{
+    margin-bottom: 0em;
+}
+
+section:nth-of-type(2) article button{
+    background-color: var(--color-formbg);
+    filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
+    border: none;
+    padding: 1em 3em 1em 3em;
 }
