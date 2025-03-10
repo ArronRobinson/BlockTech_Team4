@@ -80,10 +80,10 @@ main section div{
     height: 2em;
 }
 
-.likeButton.liked .likeIcon {
+/* .likeButton.liked .likeIcon {
     fill: red;
     transform: scale(1.05);
-}
+} */
 
 main section button{
     align-content: right;
@@ -109,3 +109,7 @@ main section button{
     color: var(--color-accentcolor); /* Star color */
 }
 
+.liked {
+    color: red !important; /* Turns the button/icon red */
+    transition: color 0.3s ease-in-out;
+}

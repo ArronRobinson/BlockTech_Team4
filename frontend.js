@@ -90,19 +90,3 @@ function getPodcastRating(podcastName) {
 
     return ratings[podcastName] || 0.0; // Default to 0.0 if not found
 }
-
-
-// ********
-//  quiz
-// ********
-
-
-let sport = document.querySelector(".sport")
-let boeken = document.querySelector(".boeken")
-let koken = document.querySelector(".koken")
-let gamen = document.querySelector(".gamen")
-let muziek = document.querySelector(".muziek")
-let film = document.querySelector(".film")
-
-let gamenOpties = document.querySelector(".gamenOpties")
-
