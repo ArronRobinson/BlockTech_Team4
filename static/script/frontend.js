@@ -95,20 +95,39 @@ function getPodcastRating(podcastName) {
 
 // quiz
 
-let gamen = document.querySelector(".gamen")
-let gamenOpties = document.querySelector(".gamenOpties")
-let volgendeButton = document.querySelector(".volgendeButton")
-let tweedeVraag = document.querySelector(".tweedeVraag")
-let eersteVraag = document.querySelector(".eersteVraag")
 
-gamen.onclick = showGamen
-volgendeButton.onclick = showquiz
+let nextButton = document.querySelector(".nextButton")
+let secondQuestion = document.querySelector(".secondQuestion")
+let firstQuestion = document.querySelector(".firstQuestion")
 
-function showGamen() {
-    gamenOpties.style.display = "grid"
-}
+nextButton.onclick = showquiz
 
 function showquiz() {
-    tweedeVraag.style.display = "grid"
-    eersteVraag.style.display = "none"
+    secondQuestion.style.display = "grid"
+    firstQuestion.style.display = "none"
 }
+
+let gamen = document.querySelector(".gamen")
+let gamenOption = document.querySelector(".gamenOption")
+let sport = document.querySelector(".sport")
+let sportOption = document.querySelector(".sportOption")
+let boeken = document.querySelector(".boeken")
+let boekenOption = document.querySelector(".boekenOption")
+
+gamen.onclick = showGamen
+sport.onclick = showsport
+boeken.onclick = showboeken
+
+
+function showGamen() {
+    gamenOption.style.display = "grid"
+}
+
+function showsport() {
+    sportOption.style.display = "grid"
+}
+
+function showboeken() {
+    boekenOption.style.display = "grid"
+}
+
