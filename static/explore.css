@@ -137,7 +137,7 @@ section:first-of-type article img{
 *********** */
 
 
-.tweedeVraag{
+.secondQuestion{
     background-color: var(--color-formbg);
    
     height: 30em;
@@ -167,39 +167,39 @@ section:nth-of-type(2) article button{
     padding: 1em 3em 1em 3em;
 }
 
-.gamenOpties{
+.gamenOption{
     display: none;
 }
-.filmOpties{
+.filmOption{
     display: none;
 }
-.muziekOpties{
+.muziekOption{
     display: none;
 }
-.sportOpties{
+.sportOption{
     display: none;
 }
-.boekenOpties{
+.boekenOption{
     display: none;
 }
-.kokenOpties{
+.kokenOption{
     display: none;
 }
-.nieuwsOpties{
+.nieuwsOption{
     display: none;
 }
-.kunstOpties{
+.kunstOption{
     display: none;
 }
-.misdaadOpties{
+.misdaadOption{
     display: none;
 }
-.geschiedenisOpties{
+.geschiedenisOption{
     display: none;
 }
-.lifestyleOpties{
+.lifestyleOption{
     display: none;
 }
-.modeOpties{
+.modeOption{
     display: none;
 }
