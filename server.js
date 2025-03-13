@@ -58,17 +58,12 @@ app
     .get('/', onindex)
     .get('/signup', onsignup)
     .get('/login', onlogin)
-    .get('/explore', onexplore)
-    .get('/favorite', onfavorite)
-    .get('/survey', onsurvey)
-    .get ('/result', onresult);
+    .get('/favorite', authenticateToken, onfavorite)
+    .get('/survey', authenticateToken, onsurvey)
+    .get ('/result', authenticateToken, onresult);
 
 function onsurvey(req, res) {
     res.render('survey', { title: 'Survey Page', user: req.user });
-}
-
-function onexplore(req, res) {
-    res.render('explore', { title: 'Explore Page' });
 }
 
 function onindex(req, res) {
@@ -241,9 +236,6 @@ async function getValidPodcastRecommendation(userData) {
     console.log("❌ No valid podcasts found after retries.");
     return null;
 }
-
-// Authentication routes
-    res.render('favorite', { title: 'Favorite Page' });
 
 function authenticateToken (req, res, next) {
     const token = req.cookies.token;
