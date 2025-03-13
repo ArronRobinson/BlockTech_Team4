@@ -69,6 +69,7 @@ app
     .get('/explore', onexplore)
     .get('/favorite', onfavorite)
     .get('/survey', onsurvey)
+    .get ('/result', onresult);
 
 function onsurvey(req, res) {
     res.render('survey', { title: 'Survey Page', user: req.user });
@@ -88,6 +89,10 @@ function onsignup(req, res) {
 
 function onlogin(req, res) {
     res.render('login', { title: 'Log In Page' });
+}
+
+function onresult(req, res) {
+    res.render('result', { title: 'Result Page' });
 }
 
 function onfavorite(req, res) {
