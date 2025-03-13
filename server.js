@@ -63,8 +63,10 @@ app
     .get ('/result', authenticateToken, onresult);
 
 function onsurvey(req, res) {
-    res.render('survey', { title: 'Survey Page', user: req.user });
+    res.render('survey', { title: 'Survey Page'});
 }
+
+
 
 function onindex(req, res) {
     res.render('index', { title: 'Index Page' });
@@ -236,6 +238,8 @@ async function getValidPodcastRecommendation(userData) {
     console.log("❌ No valid podcasts found after retries.");
     return null;
 }
+
+
 
 function authenticateToken (req, res, next) {
     const token = req.cookies.token;
