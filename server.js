@@ -20,14 +20,6 @@ const loginLimiter = rateLimit({
     message: "too many login attempts"
 });
 
-const userSchema = new mongoose.Schema({
-    username: String,
-    email: String,
-    password: String,
-});
-
-const User = mongoose.model("User", userSchema);
-
 // Initialize OpenAI client
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -61,19 +53,6 @@ const userSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model("User", userSchema);
-
-// Authentication middleware
-const authenticateToken = (req, res, next) => {
-    const token = req.cookies.token;
-    
-    if (!token) return res.redirect('/login');
-
-    jwt.verify(token, SECRET_KEY, (err, user) => {
-        if (err) return res.redirect('/login');
-        req.user = user;
-        next();
-    });
-};
 
 app
     .get('/', onindex)
@@ -265,7 +244,6 @@ async function getValidPodcastRecommendation(userData) {
 
 // Authentication routes
     res.render('favorite', { title: 'Favorite Page' });
-}
 
 function authenticateToken (req, res, next) {
     const token = req.cookies.token;
@@ -381,12 +359,6 @@ app.post("/remove-favorite", authenticateToken, async (req, res) => {
         console.error("Error removing favorite:", error);
         res.status(500).json({ success: false, message: "Error removing favorite" });
     }
-});
-
-// Logout route
-app.get("/logout", (req, res) => {
-    res.clearCookie("token");
-    res.redirect("/login");
 });
 
 app.post ("/logout", (req, res) => { 
