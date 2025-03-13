@@ -10,19 +10,12 @@
 </head>
 <body>
     <header>
-        <nav>
-            <ul>
-                <li class="aanwezig">Doe de Test</li>
-                <li>Reccomendaties</li>
-                <li>Mijn favoriet</li>
-                <li>Account</li>
-            </ul>
-        </nav>
+        <%- include('partials/nav') %>
     </header>
 
     <form id="surveyForm" action="/recommend" method="POST">
         <!-- Step 1: Main Categories -->
-        <div class="step" id="step1">
+        <div id="step1">
             <h1>Wat zijn je interesses</h1>
             <section class="category-grid">
                 <article class="category-item sport" data-category="sport">
@@ -261,7 +254,7 @@
             </section>
             
             <button type="button" class="nav-button" id="back-to-step1">Terug</button>
-            <button type="button" class="nav-button" id="next-to-step3">Volgende</button>
+            <button type="button" class="backButton" id="next-to-step3">Volgende</button>
         </div>
 
         <!-- Step 3: Podcast Length and Mood -->
@@ -327,6 +320,7 @@
         <div class="circleTwo"></div>
     </section>
    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Elements for navigation
@@ -417,5 +411,7 @@
             });
         });
     </script>
+
+    
 </body>
 </html>
