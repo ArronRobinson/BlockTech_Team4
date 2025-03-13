@@ -41,7 +41,8 @@ app
     .get('/signup', onsignup)
     .get('/login', onlogin)
     .get('/explore', onexplore)
-    .get('/favorite', onfavorite);
+    .get('/favorite', onfavorite)
+    .get('/result', onresult);
 
 function onexplore(req, res) {
     res.render('explore', { title: 'Explore Page' });
@@ -61,6 +62,10 @@ function onlogin(req, res) {
 
 function onfavorite(req, res) {
     res.render('favorite', { title: 'Favorite Page' });
+}
+
+function onresult(req, res) {
+    res.render('result', { title: 'Result Page' });
 }
 
 app.post("/signup", async (req, res) => {
