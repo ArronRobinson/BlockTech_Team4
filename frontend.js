@@ -90,3 +90,113 @@ function getPodcastRating(podcastName) {
 
     return ratings[podcastName] || 0.0; // Default to 0.0 if not found
 }
+
+// Update your existing JavaScript to properly handle form elements
+document.addEventListener('DOMContentLoaded', function() {
+    // Elements for navigation
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    
+    // Navigation buttons
+    const nextToStep2 = document.getElementById('next-to-step2');
+    const backToStep1 = document.getElementById('back-to-step1');
+    const nextToStep3 = document.getElementById('next-to-step3');
+    const backToStep2 = document.getElementById('back-to-step2');
+    
+    // Main category selection
+    const categoryItems = document.querySelectorAll('.category-item');
+    
+    // Add selection functionality to category items
+    categoryItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Toggle selected class
+            this.classList.toggle('selected');
+            
+            // Toggle checkbox
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+        });
+    });
+    
+    // Make checkboxes in subcategory options and mood options update their styling
+    const checkboxLabels = document.querySelectorAll('.checkbox-grid label, .mood-option');
+    checkboxLabels.forEach(label => {
+        label.addEventListener('click', function() {
+            // No need to toggle, the browser handles checkbox state
+            this.classList.toggle('selected');
+        });
+    });
+    
+    // Navigation: Step 1 to Step 2
+    if (nextToStep2) {
+        nextToStep2.addEventListener('click', function() {
+            // Check if at least one category is selected
+            const selectedCategories = document.querySelectorAll('.category-item.selected');
+            
+            if (selectedCategories.length === 0) {
+                alert('Selecteer ten minste één categorie');
+                return;
+            }
+            
+            // Show subcategories based on selection
+            selectedCategories.forEach(category => {
+                const categoryName = category.getAttribute('data-category');
+                const subcategory = document.querySelector(`.${categoryName}Opties`);
+                if (subcategory) {
+                    subcategory.style.display = 'block';
+                }
+            });
+            
+            // Navigate to step 2
+            step1.style.display = 'none';
+            step2.style.display = 'block';
+        });
+    }
+    
+    // Navigation: Step 2 to Step 1
+    if (backToStep1) {
+        backToStep1.addEventListener('click', function() {
+            step2.style.display = 'none';
+            step1.style.display = 'block';
+        });
+    }
+    
+    // Navigation: Step 2 to Step 3
+    if (nextToStep3) {
+        nextToStep3.addEventListener('click', function() {
+            // Check if at least one subcategory option is selected
+            const selectedInterests = document.querySelectorAll('input[name="interests"]:checked');
+            
+            if (selectedInterests.length === 0) {
+                alert('Selecteer ten minste één specifieke interesse');
+                return;
+            }
+            
+            // Navigate to step 3
+            step2.style.display = 'none';
+            step3.style.display = 'block';
+        });
+    }
+    
+    // Navigation: Step 3 to Step 2
+    if (backToStep2) {
+        backToStep2.addEventListener('click', function() {
+            step3.style.display = 'none';
+            step2.style.display = 'block';
+        });
+    }
+    
+    // Form submission validation
+    const surveyForm = document.getElementById('surveyForm');
+    if (surveyForm) {
+        surveyForm.addEventListener('submit', function(e) {
+            const selectedMoods = document.querySelectorAll('input[name="mood"]:checked');
+            
+            if (selectedMoods.length === 0) {
+                e.preventDefault();
+                alert('Selecteer ten minste één sfeer voor je podcast');
+            }
+        });
+    }
+});

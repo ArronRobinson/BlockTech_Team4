@@ -93,7 +93,7 @@ section:first-of-type{
     height: 30em;
     width: 60em;
     margin-left: 14em;
-    display: none;
+    /* display: none; */
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     justify-items: center;
