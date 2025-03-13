@@ -80,10 +80,10 @@ main section div{
     height: 2em;
 }
 
-/* .likeButton.liked .likeIcon {
+.likeButton.liked .likeIcon {
     fill: red;
     transform: scale(1.05);
-} */
+}
 
 main section button{
     align-content: right;
@@ -92,6 +92,7 @@ main section button{
 .controls {
     position: absolute;
     top: 15%;
+    left: 10%;
 }
 
 
