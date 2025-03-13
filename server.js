@@ -58,9 +58,9 @@ app
     .get('/', onindex)
     .get('/signup', onsignup)
     .get('/login', onlogin)
-    .get('/favorite', onfavorite)
-    .get('/survey', onsurvey)
-    .get ('/result', onresult);
+    .get('/favorite', authenticateToken, onfavorite)
+    .get('/survey', authenticateToken, onsurvey)
+    .get ('/result', authenticateToken, onresult);
 
 function onsurvey(req, res) {
     res.render('survey', { title: 'Survey Page'});
