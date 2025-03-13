@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Podcast Recommendation</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container dark-background">
+        <h2 class="recommendation-title">🎧 Your Podcast Recommendation</h2>
+
+        <% if (podcast) { %>
+            <div class="recommendation-card">
+                <div class="podcast-content">
+                    <h3 class="podcast-title"><%= podcast.title %></h3>
+                    <p class="podcast-description"><%= podcast.description %></p>
+                    <p class="podcast-tags">
+                        <strong>Tags:</strong> <%= podcast.tags.join(", ") %>
+                    </p>
+                    <h4 class="why-like">Why you might like it:</h4>
+                    <p class="why-like-text">Based on your interests and preferences</p>
+                    
+                    <button id="save-favorite" class="favorite-button">❤️ Save to Favorites</button>
+                </div>
+
+                <div class="podcast-image-container">
+                    <% if (spotify) { %>
+                        <img 
+                            class="podcast-image" 
+                            src="<%= spotify.image %>" 
+                            alt="<%= spotify.title %>"
+                        >
+                    <% } %>
+                </div>
+            </div>
+            
+            <% if (spotify) { %>
+                <div class="spotify-embed">
+                    <iframe 
+                        class="spotify-player"
+                        src="<%= spotify.embed_url %>" 
+                        frameborder="0" 
+                        allowtransparency="true" 
+                        allow="encrypted-media">
+                    </iframe>
+                </div>
+                
+                <% if (spotify.episodes && spotify.episodes.length > 0) { %>
+                    <div class="episodes-container">
+                        <h3>Latest Episodes</h3>
+                        <div class="episodes-list">
+                            <% spotify.episodes.forEach(episode => { %>
+                                <div class="episode-card">
+                                    <iframe 
+                                        src="<%= episode.embed_url %>" 
+                                        frameborder="0" 
+                                        allowtransparency="true" 
+                                        allow="encrypted-media">
+                                    </iframe>
+                                </div>
+                            <% }); %>
+                        </div>
+                    </div>
+                <% } %>
+            <% } else { %>
+                <p class="no-spotify-data">Spotify data not available.</p>
+            <% } %>
+        <% } else { %>
+            <h3 class="no-recommendation">❌ No Recommendation Found</h3>
+            <p class="no-recommendation-text">
+                Sorry, we couldn't find a podcast based on your input. Try again!
+            </p>
+        <% } %>
+
+        <div class="navigation-buttons">
+            <a class="button" href="/survey">🔄 Try Again</a>
+            <a class="button" href="/favorite">💾 My Favorites</a>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const saveButton = document.getElementById('save-favorite');
+            if (saveButton) {
+                saveButton.addEventListener('click', async function() {
+                    try {
+                        // Collect podcast data from the page
+                        const podcastData = {
+                            title: '<%= podcast?.title %>',
+                            description: '<%= podcast?.description %>',
+                            tags: <%- JSON.stringify(podcast?.tags || []) %>,
+                            spotify_url: '<%= spotify?.spotify_url %>',
+                            image: '<%= spotify?.image %>'
+                        };
+                        
+                        const response = await fetch('/save-favorite', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ podcastData }),
+                        });
+                        
+                        const data = await response.json();
+                        if (data.success) {
+                            saveButton.textContent = '✓ Saved to Favorites';
+                            saveButton.disabled = true;
+                        } else {
+                            alert('Failed to save to favorites');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('An error occurred while saving to favorites');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
