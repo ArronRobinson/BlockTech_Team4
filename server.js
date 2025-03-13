@@ -58,18 +58,15 @@ app
     .get('/', onindex)
     .get('/signup', onsignup)
     .get('/login', onlogin)
-    .get('/explore', onexplore)
     .get('/favorite', onfavorite)
     .get('/survey', onsurvey)
     .get ('/result', onresult);
 
 function onsurvey(req, res) {
-    res.render('survey', { title: 'Survey Page', user: req.user });
+    res.render('survey', { title: 'Survey Page'});
 }
 
-function onexplore(req, res) {
-    res.render('explore', { title: 'Explore Page' });
-}
+
 
 function onindex(req, res) {
     res.render('index', { title: 'Index Page' });
@@ -242,8 +239,7 @@ async function getValidPodcastRecommendation(userData) {
     return null;
 }
 
-// Authentication routes
-    res.render('favorite', { title: 'Favorite Page' });
+
 
 function authenticateToken (req, res, next) {
     const token = req.cookies.token;
