@@ -6,17 +6,31 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-
+const rateLimit = require("express-rate-limit");
 const uri = `mongodb+srv://${process.env.DATA_USERNAME}:${process.env.DATA_PW}@${process.env.DATA_HOST}/${process.env.DATA_NAME}?retryWrites=true&w=majority`;
-
 const app = express();
 const PORT = 3000;
-const SECRET_KEY = process.env.JWT_SECRET_KEY || "Sedpm54v102";
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
+
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    message: "too many login attempts"
+});
+
+const userSchema = new mongoose.Schema({
+    username: String,
+    email: String,
+    password: String,
+});
+
+const User = mongoose.model("User", userSchema);
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('static'));
+app.use(cookieParser());
 
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
@@ -28,20 +42,12 @@ mongoose.connect(uri, {
 .then(() => console.log("Connected to MongoDB"))
 .catch(err => console.error("Error connecting to MongoDB:", err));
 
-const userSchema = new mongoose.Schema({
-    username: String,
-    email: String,
-    password: String,
-});
-
-const User = mongoose.model("User", userSchema);
-
 app
     .get('/', onindex)
     .get('/signup', onsignup)
     .get('/login', onlogin)
-    .get('/explore', onexplore)
-    .get('/favorite', onfavorite);
+    .get('/explore', authenticateToken, onexplore)
+    .get('/favorite', authenticateToken, onfavorite);
 
 function onexplore(req, res) {
     res.render('explore', { title: 'Explore Page' });
@@ -61,6 +67,17 @@ function onlogin(req, res) {
 
 function onfavorite(req, res) {
     res.render('favorite', { title: 'Favorite Page' });
+}
+
+function authenticateToken (req, res, next) {
+    const token = req.cookies.token;
+    if(!token) return res.status(401).json({message: "Acces Denied"});
+    
+    jwt.verify(token, SECRET_KEY, (err, user) => {
+        if (err) return res.status(401).json({message: "Invalid Token"});
+        req.user = user;
+        next();
+    })
 }
 
 app.post("/signup", async (req, res) => {
@@ -83,7 +100,7 @@ app.post("/signup", async (req, res) => {
     }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/login", loginLimiter, async (req, res) => {
     const { username, password } = req.body;
 
     try {
@@ -98,7 +115,8 @@ app.post("/login", async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            maxAge: 15 * 60 * 1000,
+            sameSite: "strict"
         });
 
         res.redirect("/explore");
@@ -107,6 +125,11 @@ app.post("/login", async (req, res) => {
     }
     
 });
+
+app.post ("/logout", (req, res) => { 
+    res.cookie("token", "", {maxAge: 0});
+    res.redirect("/login");
+})
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
