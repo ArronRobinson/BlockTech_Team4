@@ -56,7 +56,7 @@ nav ul li{
 
 
 
-body > button{
+body button:first-of-type{
     background-color: var(--color-accentTwo);
     border: none;
     border-radius: 5em;
@@ -68,7 +68,21 @@ body > button{
     position: absolute;
     left: 35em;
     top: 20em;
+}
 
+body button:nth-of-type(2){
+    background-color: var(--color-accentTwo);
+    border: none;
+    border-radius: 5em;
+    font-size: 2em;
+    margin: 1em;
+    padding: 0em 0.5em 0em 0.5em;
+    cursor: pointer;
+    color: var(--color-textaccent);
+    position: absolute;
+    left: 3em;
+    top: 20em;
+    display: none;
 }
 
 h2{
@@ -110,7 +124,7 @@ section:first-of-type::-webkit-scrollbar-thumb {
     background: var(--color-accentTwo);
 }
 
-section:first-of-type article{
+section:first-of-type label{
     display: grid;
     place-items: center;
     background-color: var(--color-formbg);
@@ -121,14 +135,14 @@ section:first-of-type article{
     margin-top: 1.5em;
 }
 
-section:first-of-type article:hover{
+section:first-of-type label:hover{
     filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
     transform: scale(1.02);
     transition: ease-in-out 0.3s;
     border: none;
 }
 
-section:first-of-type article img{
+section:first-of-type label img{
     width: 7em;
 }
 
@@ -160,12 +174,12 @@ section:nth-of-type(2) article h2{
     margin-bottom: 0em;
 }
 
-section:nth-of-type(2) article button{
+/* section:nth-of-type(2) article label{
     background-color: var(--color-formbg);
     filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
     border: none;
     padding: 1em 3em 1em 3em;
-}
+} */
 
 .gamenOption{
     display: none;
