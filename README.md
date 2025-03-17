@@ -56,7 +56,7 @@ Bijdragen: Pull requests zijn welkom! Zorg ervoor dat je veranderingen goed test
 
 ## Makers van dit project
 
-Aaron 
+Arron 
 
 Yu'an
 
