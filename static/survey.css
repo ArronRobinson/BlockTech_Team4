@@ -8,38 +8,49 @@
 }
 
  
-body > button{
+body button{
     background-color: var(--color-accentTwo);
     border: none;
-    border-radius: 5em;
-    font-size: 2em;
+    border-radius: 8px;
+    font-size: 16px;
     margin: 1em;
-    padding: 0em 0.5em 0em 0.5em;
+    padding: 12px 24px;
     cursor: pointer;
     color: var(--color-textaccent);
-    position: absolute;
-    left: 35em;
-    top: 20em;
-
+    position: relative;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 
 
  
-/* Category grid */
+/* step 1 */
 .category-grid {
     background-color: #ffffff;
     box-shadow: 5px 10px black;
-    height: 35em;
-    width: 70em;
-    margin-left: 5em;
 
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     justify-items: center;
     margin: auto;
+    height: 35em;
+    width: 70em;
 }
+
+.category-grid::-webkit-scrollbar {
+    width: 10px;
+}
+
+.category-grid::-webkit-scrollbar-track {
+    background: var(--color-accentcolor-light);
+    border-radius: 3px;
+}
+
+.category-grid::-webkit-scrollbar-thumb {
+    background: var(--color-accentTwo);
+    border-radius: 3px;
+  }
 
 .category-item {
     border-radius: 12px;
@@ -79,7 +90,6 @@ body > button{
 .category-item.selected {
     background-color: var( --color-accentcolor-light);
     border: 2px solid var(--color-accentcolor);
-    
 }
 
 .hidden-checkbox {
@@ -87,38 +97,45 @@ body > button{
     opacity: 0;
 }
 
-/* .category-item.disabled {
-    opacity: 0.5; 
-    pointer-events: none; 
-} */
 
 
-/* Subcategories - Updated styles */
-.subcategories {
-    margin: 30px 0;
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
+/* Step 2  */
+
+#step2{
+    display: none;
 }
 
-.subcategory-group {
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 5px; /* Reduced from 20px */
-    width: 100%; /* Ensure full width */
-    box-sizing: border-box; /* Include padding in width calculation */
-}
-
-/* This was "display: none" which could be causing issues */
 .subcategory-group{
     display: none;
 }
 
+.subcategories {
+    background-color: #ffffff;
+    box-shadow: 5px 10px black;
+
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    margin: auto;
+    height: 20em;
+    width: 70em;
+}
+
+.checkbox-grid input[type="checkbox"] {
+    display: none;
+}
+
+.subcategory-group {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 5px; 
+    width: 70em; 
+    box-sizing: border-box;
+}
+
 .subcategory-group h2 {
     margin-top: 0;
-    color: #333;
-    border-bottom: 1px solid #ddd;
+    color: var(--color-text);
     padding-bottom: 10px;
     font-size: 18px;
 }
@@ -126,7 +143,6 @@ body > button{
 .checkbox-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 12px;
     margin-top: 15px;
 }
 
@@ -134,6 +150,7 @@ body > button{
     display: flex;
     align-items: center;
     padding: 10px 15px;
+    margin: 1em;
     background-color: #fff;
     border-radius: 6px;
     cursor: pointer;
@@ -143,8 +160,14 @@ body > button{
 }
 
 .checkbox-grid label:hover {
-    background-color: #e1f5fe;
-    transform: translateY(-2px);
+    transform: translateY(-1px);
+    background-color: var(--color-textaccent);
+    filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
+}
+
+.checkbox-grid label.selected {
+    background-color: var( --color-accentcolor-light);
+    border: 2px solid var(--color-accentcolor);
 }
 
 .checkbox-grid input[type="checkbox"] {
@@ -153,88 +176,49 @@ body > button{
 
 .checkbox-grid input[type="checkbox"]:checked + label,
 .checkbox-grid label.selected {
-    background-color: #4fc3f7;
+    background-color: var(--color-accentcolor);
     color: white;
     font-weight: 500;
 }
 
-/* Add more space between step 2 elements */
-#step2{
+
+
+
+/* Step 3 */
+
+#step3{
     display: none;
 }
 
-#step2 h1 {
-    margin-bottom: 20px;
-}
-
-#step2 .nav-button {
-    margin-top: 30px;
-}
-
-/* Step 3 - Preferences */
-.preference-section {
-    margin-bottom: 30px;
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    padding: 20px;
-}
-
-.preference-section h2 {
-    margin-top: 0;
-    color: #333;
-}
-
-.radio-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 15px;
-}
-
-.radio-option {
-    background-color: #fff;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    padding: 12px 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-}
-
-.radio-option:hover {
-    border-color: #4fc3f7;
-}
-
-.radio-option input[type="radio"] {
-    margin-right: 8px;
-}
-
-.radio-option input[type="radio"]:checked + .radio-label {
-    font-weight: 600;
-    color: #0277bd;
-}
-
 .mood-options {
+    background-color: #ffffff;
+    box-shadow: 5px 10px black;
+
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 15px;
-    margin-top: 15px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+
+    align-items: center;
+    justify-items: center;
+    margin: auto;
+    height: 10em;
+    width: 70em;
+
 }
 
-.mood-option {
-    background-color: #fff;
-    border: 2px solid #ddd;
+.mood-options label{
+    width: 10em;
     border-radius: 8px;
     padding: 15px;
     text-align: center;
     cursor: pointer;
     transition: all 0.2s;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
 }
 
-.mood-option:hover {
-    border-color: #4fc3f7;
-    transform: translateY(-3px);
+.mood-options label:hover{
+    transform: translateY(-1px);
+    background-color: var(--color-textaccent);
+    filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
 }
 
 .mood-option input[type="checkbox"] {
@@ -251,32 +235,14 @@ body > button{
     font-size: 14px;
 }
 
-.mood-option input[type="checkbox"]:checked + .mood-icon + .mood-label,
-.mood-option input[type="checkbox"]:checked + .mood-icon {
-    font-weight: 600;
-    color: #0277bd;
+.mood-option.selected {
+    background-color: var( --color-accentcolor-light);
+    border: 2px solid var(--color-accentcolor);
 }
 
-.mood-option input[type="checkbox"]:checked ~ * {
-    color: #0277bd;
-}
-
-.mood-option input[type="checkbox"]:checked + .mood-icon {
-    transform: scale(1.2);
-}
 
 /* Navigation buttons */
-.nav-button, .submit-button, .backButton, .backButton-1 {
-    background-color: #4fc3f7;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 24px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    margin-top: 20px;
-}
+
 
 .backButton{
     margin-left: 65em;
@@ -294,8 +260,7 @@ body > button{
     margin-left: 65em;
 }
 
-.nav-button:hover, .submit-button:hover {
-    background-color: #0277bd;
+.nav-button:hover, .submit-button:hover, .backButton-1:hover, .backButton:hover {
     transform: translateY(-3px);
 }
 

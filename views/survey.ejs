@@ -82,7 +82,7 @@
             <button type="button" class="backButton-1" id="next-to-step2">Volgende</button>
         </div>
 
-        <!-- Step 2: Subcategories based on selections -->
+        <!-- Step 2 -->
         <div class="step" id="step2">
             <h1>Kies je voorkeuren</h1>
             <section class="subcategories">
@@ -257,60 +257,38 @@
             <button type="button" class="backButton" id="next-to-step3">Volgende</button>
         </div>
 
-        <!-- Step 3: Podcast Length and Mood -->
-        <div class="step" id="step3" style="display: none;">
-            <h1>Hoe lang en welke sfeer?</h1>
-            
-            <div class="preference-section">
-                <h2>Hoe lang moet de podcast zijn?</h2>
-                <div class="radio-group">
-                    <label class="radio-option">
-                        <input type="radio" name="preferred_podcast_length" value="short" checked>
-                        <span class="radio-label">Kort (5-20 min)</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="preferred_podcast_length" value="medium">
-                        <span class="radio-label">Gemiddeld (20-45 min)</span>
-                    </label>
-                    <label class="radio-option">
-                        <input type="radio" name="preferred_podcast_length" value="long">
-                        <span class="radio-label">Lang (45+ min)</span>
-                    </label>
-                </div>
+        <!-- Step 3-->
+        <div class="step" id="step3">
+            <h1>Welke sfeer moet de podcast hebben?</h1>
+            <div class="mood-options">
+                <label class="mood-option">
+                    <input type="checkbox" name="mood" value="funny">
+                    <span class="mood-icon">😂</span>
+                    <span class="mood-label">Grappig</span>
+                </label>
+                <label class="mood-option">
+                    <input type="checkbox" name="mood" value="relaxed">
+                    <span class="mood-icon">😌</span>
+                    <span class="mood-label">Ontspannen</span>
+                </label>
+                <label class="mood-option">
+                    <input type="checkbox" name="mood" value="educational">
+                    <span class="mood-icon">🧠</span>
+                    <span class="mood-label">Educatief</span>
+                </label>
+                <label class="mood-option">
+                    <input type="checkbox" name="mood" value="inspiring">
+                    <span class="mood-icon">✨</span>
+                    <span class="mood-label">Inspirerend</span>
+                </label>
+                <label class="mood-option">
+                    <input type="checkbox" name="mood" value="exciting">
+                    <span class="mood-icon">🔥</span>
+                    <span class="mood-label">Spannend</span>
+                </label>
             </div>
             
-            <div class="preference-section">
-                <h2>Welke sfeer moet de podcast hebben?</h2>
-                <div class="mood-options">
-                    <label class="mood-option">
-                        <input type="checkbox" name="mood" value="funny">
-                        <span class="mood-icon">😂</span>
-                        <span class="mood-label">Grappig</span>
-                    </label>
-                    <label class="mood-option">
-                        <input type="checkbox" name="mood" value="relaxed">
-                        <span class="mood-icon">😌</span>
-                        <span class="mood-label">Ontspannen</span>
-                    </label>
-                    <label class="mood-option">
-                        <input type="checkbox" name="mood" value="educational">
-                        <span class="mood-icon">🧠</span>
-                        <span class="mood-label">Educatief</span>
-                    </label>
-                    <label class="mood-option">
-                        <input type="checkbox" name="mood" value="inspiring">
-                        <span class="mood-icon">✨</span>
-                        <span class="mood-label">Inspirerend</span>
-                    </label>
-                    <label class="mood-option">
-                        <input type="checkbox" name="mood" value="exciting">
-                        <span class="mood-icon">🔥</span>
-                        <span class="mood-label">Spannend</span>
-                    </label>
-                </div>
-            </div>
-            
-            <button type="button" class="nav-button" id="back-to-step2">Terug</button>
+            <button type="button" class="nav-button">Terug</button>
             <button type="submit" class="submit-button">Vind mijn podcast 🎧</button>
         </div>
     </form>
