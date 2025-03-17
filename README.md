@@ -4,7 +4,7 @@
 
 Welkom bij Podcast Finder, dé website voor mensen die geïnteresseerd zijn in podcasts! Onze site helpt je om de perfecte podcast te vinden op basis van jouw interesses, die je opgeeft via een korte quiz bij het begin.
 
-##Functionaliteiten
+## Functionaliteiten
 
 Podcast Aanbevelingen: Op basis van jouw antwoorden op de quiz.
 
@@ -12,11 +12,11 @@ Gebruiksvriendelijke Interface: Eenvoudig en snel de juiste podcast ontdekken.
 
 Persoonlijke Ervaring: Resultaten worden afgestemd op jouw voorkeuren.
 
-🛠 Installatie & Setup
+## Installatie & Setup
 
 Om deze website lokaal te draaien, volg de onderstaande stappen:
 
-##Benodigdheden
+## Benodigdheden
 
 Installeer Node.js (indien nog niet geïnstalleerd)
 
@@ -46,13 +46,13 @@ Dit project valt onder de MIT-licentie. Dit betekent dat je:
 
 Lees de volledige licentie in het bestand LICENSE.
 
-🛠 Bug Reports & Bijdragen
+## Bug Reports & Bijdragen
 
 Fouten melden: Ja, graag! Open een issue in de repository.
 
 Bijdragen: Pull requests zijn welkom! Zorg ervoor dat je veranderingen goed test voordat je ze indient.
 
-##Makers van dit project
+## Makers van dit project
 
 Aaron
 
