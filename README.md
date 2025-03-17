@@ -2,7 +2,7 @@
 
 ## Podcast Finder - Vind de Perfecte Podcast Voor Jou!
 
-Welkom bij Podcast Finder, dé website voor mensen die geïnteresseerd zijn in podcasts! Onze site helpt je om de perfecte podcast te vinden op basis van jouw interesses, die je opgeeft via een korte quiz bij het begin.
+Welkom bij Podcast Finder "match cast", de website voor mensen die geïnteresseerd zijn in podcasts! Onze site helpt je om de perfecte podcast te vinden op basis van jouw interesses, die je opgeeft via een korte quiz bij het begin.
 
 ## Functionaliteiten
 
@@ -11,6 +11,8 @@ Podcast Aanbevelingen: Op basis van jouw antwoorden op de quiz.
 Gebruiksvriendelijke Interface: Eenvoudig en snel de juiste podcast ontdekken.
 
 Persoonlijke Ervaring: Resultaten worden afgestemd op jouw voorkeuren.
+
+Favorite podcast toevoegen: Je kunt de podcast toevoegen aan jouw favoriten op onze site maar ook direct op spotify.
 
 ## Installatie & Setup
 
@@ -24,7 +26,7 @@ Installeer de benodigde pakketten met:
 
 npm install
 
-Maak een database aan (bijvoorbeeld met MySQL of PostgreSQL)
+Maak een database aan (bijvoorbeeld met MongoDB, MySQL of PostgreSQL)
 
 Maak een .env-bestand en voeg hierin de volgende variabelen toe:
 
@@ -54,7 +56,7 @@ Bijdragen: Pull requests zijn welkom! Zorg ervoor dat je veranderingen goed test
 
 ## Makers van dit project
 
-Aaron
+Aaron 
 
 Yu'an
 
