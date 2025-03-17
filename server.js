@@ -8,12 +8,17 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const axios = require("axios");
 const { OpenAI } = require("openai");
-
+const rateLimit = require("express-rate-limit");
 const uri = `mongodb+srv://${process.env.DATA_USERNAME}:${process.env.DATA_PW}@${process.env.DATA_HOST}/${process.env.DATA_NAME}?retryWrites=true&w=majority`;
-
 const app = express();
 const PORT = 3000;
-const SECRET_KEY = process.env.JWT_SECRET_KEY || "Sedpm54v102";
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
+
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    message: "too many login attempts"
+});
 
 // Initialize OpenAI client
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -49,35 +54,19 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-// Authentication middleware
-const authenticateToken = (req, res, next) => {
-    const token = req.cookies.token;
-    
-    if (!token) return res.redirect('/login');
-
-    jwt.verify(token, SECRET_KEY, (err, user) => {
-        if (err) return res.redirect('/login');
-        req.user = user;
-        next();
-    });
-};
-
 app
     .get('/', onindex)
     .get('/signup', onsignup)
     .get('/login', onlogin)
-    .get('/explore', onexplore)
-    .get('/favorite', onfavorite)
-    .get('/survey', onsurvey)
-    .get ('/result', onresult);
+    .get('/favorite', authenticateToken, onfavorite)
+    .get('/survey', authenticateToken, onsurvey)
+    .get ('/result', authenticateToken, onresult);
 
 function onsurvey(req, res) {
-    res.render('survey', { title: 'Survey Page', user: req.user });
+    res.render('survey', { title: 'Survey Page'});
 }
 
-function onexplore(req, res) {
-    res.render('explore', { title: 'Explore Page' });
-}
+
 
 function onindex(req, res) {
     res.render('index', { title: 'Index Page' });
@@ -250,7 +239,19 @@ async function getValidPodcastRecommendation(userData) {
     return null;
 }
 
-// Authentication routes
+
+
+function authenticateToken (req, res, next) {
+    const token = req.cookies.token;
+    if(!token) return res.status(401).json({message: "Acces Denied"});
+    
+    jwt.verify(token, SECRET_KEY, (err, user) => {
+        if (err) return res.status(401).json({message: "Invalid Token"});
+        req.user = user;
+        next();
+    })
+}
+
 app.post("/signup", async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -271,7 +272,7 @@ app.post("/signup", async (req, res) => {
     }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/login", loginLimiter, async (req, res) => {
     const { username, password } = req.body;
 
     try {
@@ -286,7 +287,8 @@ app.post("/login", async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            maxAge: 7 * 24 * 60 * 60 * 1000
+            maxAge: 15 * 60 * 1000,
+            sameSite: "strict"
         });
 
         res.redirect("/survey");
@@ -355,11 +357,10 @@ app.post("/remove-favorite", authenticateToken, async (req, res) => {
     }
 });
 
-// Logout route
-app.get("/logout", (req, res) => {
-    res.clearCookie("token");
+app.post ("/logout", (req, res) => { 
+    res.cookie("token", "", {maxAge: 0});
     res.redirect("/login");
-});
+})
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

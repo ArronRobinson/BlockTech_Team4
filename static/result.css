@@ -20,6 +20,7 @@
     height: 40em;
     background-color: var(--color-accentcolor);
     clip-path: circle(50% at center);
+<<<<<<< HEAD
 }
 
 <<<<<<< Updated upstream
@@ -131,3 +132,6 @@ main p span {
     color: var(--color-textcolor);
 }
 >>>>>>> Stashed changes
+=======
+}
+>>>>>>> main
