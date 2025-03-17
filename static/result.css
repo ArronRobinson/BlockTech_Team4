@@ -22,6 +22,7 @@
     clip-path: circle(50% at center);
 }
 
+<<<<<<< Updated upstream
 main div{
     filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
     background-color: var(--color-formbg);
@@ -107,3 +108,26 @@ main p span {
     filter: none;
 }
 
+=======
+
+
+.recommendation-container {
+    display: flex;
+    flex-direction: column;
+    grid-column: 2;
+    grid-row: 2;
+    margin: auto;
+    gap: 1em;
+    overflow: visible;
+    width: 90vw;
+    background-color: gray;
+    padding: 2em;
+    border-radius: 1em;
+}
+
+.recommendation-container p {
+    font-size: 1em;
+    font-weight: thin;
+    color: var(--color-textcolor);
+}
+>>>>>>> Stashed changes

@@ -13,6 +13,7 @@
     </header>
 
     <main>
+<<<<<<< Updated upstream
         <div>
             <section>
                 <p><span>We recommend:</span></p>
@@ -20,6 +21,15 @@
                 <p><span>Spotify description:</span>This podcast features comedian conan O'brien having relaxed
                 and humorous conversations with celebrities and friends, offering short and enjoyable episodes.</p>
             </section>
+=======
+        <div class="recommendation-container">
+            <% if (podcast && spotify) { %>
+                <section class="podcast-header">
+                    <p><span class="recommendation-label">We recommend</span></p>
+                    <h2><%= podcast.title %></h2>
+                    <p class="spotify-description"><span>Spotify description:</span> <%= spotify.description %></p>
+                </section>
+>>>>>>> Stashed changes
 
             <section>
                 <h3>Why you might like it</h3>
