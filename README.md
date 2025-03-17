@@ -1,6 +1,6 @@
 # BlockTech_Team4
 
-##Podcast Finder - Vind de Perfecte Podcast Voor Jou!
+## Podcast Finder - Vind de Perfecte Podcast Voor Jou!
 
 Welkom bij Podcast Finder, dé website voor mensen die geïnteresseerd zijn in podcasts! Onze site helpt je om de perfecte podcast te vinden op basis van jouw interesses, die je opgeeft via een korte quiz bij het begin.
 
