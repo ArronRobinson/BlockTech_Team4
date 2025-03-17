@@ -20,10 +20,10 @@
     height: 40em;
     background-color: var(--color-accentcolor);
     clip-path: circle(50% at center);
-<<<<<<< HEAD
+
 }
 
-<<<<<<< Updated upstream
+
 main div{
     filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
     background-color: var(--color-formbg);
@@ -109,7 +109,7 @@ main p span {
     filter: none;
 }
 
-=======
+
 
 
 .recommendation-container {
@@ -131,7 +131,5 @@ main p span {
     font-weight: thin;
     color: var(--color-textcolor);
 }
->>>>>>> Stashed changes
-=======
-}
->>>>>>> main
+
+

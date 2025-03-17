@@ -147,29 +147,44 @@ interestGroups.forEach(group => {
 });
 
 // Limit hobby selection
-document.addEventListener("DOMContentLoaded", function () {
-    const hobbyCheckboxes = document.querySelectorAll("input[name='hobby']");
 
-    if (hobbyCheckboxes.length > 0) {
-        function updateCheckboxes() {
-            let checkedCount = document.querySelectorAll("input[name='hobby']:checked").length;
+// document.addEventListener("DOMContentLoaded", function () {
+//     const categoryItems = document.querySelectorAll(".category-item");
 
-            hobbyCheckboxes.forEach(checkbox => {
-                if (checkedCount >= 3) {
-                    // Disable checkboxes die niet aangevinkt zijn
-                    checkbox.disabled = !checkbox.checked;
-                } else {
-                    // Zorg dat alles weer aanklikbaar is als er minder dan 3 zijn aangevinkt
-                    checkbox.disabled = false;
-                }
-            });
-        }
+//     function updateCheckboxes() {
+//         let checkedItems = document.querySelectorAll("input[name='main_interests']:checked").length;
 
-        hobbyCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener("change", updateCheckboxes);
-        });
-    }
-});
+//         categoryItems.forEach(item => {
+//             const checkbox = item.querySelector("input[name='main_interests']");
+
+//             if (checkedItems >= 3 && !checkbox.checked) {
+//                 checkbox.disabled = true; // Blokkeer extra checkboxes als er 3 geselecteerd zijn
+//                 item.classList.add("disabled"); // Optionele visuele feedback
+//             } else {
+//                 checkbox.disabled = false; // Heractiveer checkboxes als er minder dan 3 zijn
+//                 item.classList.remove("disabled");
+//             }
+//         });
+//     }
+
+//     categoryItems.forEach(item => {
+//         item.addEventListener("click", function () {
+//             const checkbox = item.querySelector("input[name='main_interests']");
+
+//             if (checkbox.disabled) return; // Stop als de checkbox al geblokkeerd is
+
+//             checkbox.checked = !checkbox.checked; // Toggle de checkbox
+//             item.classList.toggle("selected", checkbox.checked); // Visuele feedback
+//             updateCheckboxes(); // Update de checkbox-status
+//         });
+//     });
+
+//     updateCheckboxes(); // Controleer meteen de status bij laden van de pagina
+// });
+
+
+
+
 
 // New multi-step form navigation
 document.addEventListener('DOMContentLoaded', function() {

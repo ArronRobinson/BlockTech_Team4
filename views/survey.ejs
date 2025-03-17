@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="survey.css">
     <title>Podcast Survey</title>
 </head>
-<body>
+<body>  
     <header>
         <%- include('partials/nav') %>
     </header>
@@ -21,73 +21,113 @@
                 <article class="category-item sport" data-category="sport">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Sport_balls.svg/800px-Sport_balls.svg.png">
                     <h2>Sports</h2>
-                    <input type="checkbox" name="main_interests" value="sports" class="hidden-checkbox">
+                    <input type="radio" name="main_interests" value="sports" class="hidden-checkbox">
                 </article>
                 <article class="category-item boeken" data-category="boeken">
                     <img src="https://static.vecteezy.com/system/resources/previews/017/052/179/non_2x/stack-of-books-book-day-free-png.png">
                     <h2>Boeken</h2>
-                    <input type="checkbox" name="main_interests" value="books" class="hidden-checkbox">
+                    <input type="radio" name="main_interests" value="books" class="hidden-checkbox">
                 </article>
                 <article class="category-item koken" data-category="koken">
                     <img src="https://cdn.pixabay.com/photo/2020/08/23/06/54/cooking-5510047_1280.png">
                     <h2>Koken</h2>
-                    <input type="checkbox" name="main_interests" value="cooking" class="hidden-checkbox">
+                    <input type="radio" name="main_interests" value="cooking" class="hidden-checkbox">
                 </article>
                 <article class="category-item gamen" data-category="gamen">
                     <img src="https://clipart-library.com/new_gallery/117-1176041_joystick-controller-game-play-png-image-games-console.png">
                     <h2>Gamen</h2>
-                    <input type="checkbox" name="main_interests" value="gaming" class="hidden-checkbox">
+                    <input type="radio" name="main_interests" value="gaming" class="hidden-checkbox">
                 </article>
                 <article class="category-item muziek" data-category="muziek">
                     <img src="https://static.vecteezy.com/system/resources/previews/001/200/846/non_2x/music-note-png.png">
                     <h2>Muziek</h2>
-                    <input type="checkbox" name="main_interests" value="music" class="hidden-checkbox">
+                    <input type="radio" name="main_interests" value="music" class="hidden-checkbox">
                 </article>
                 <article class="category-item film" data-category="film">
                     <img src="https://png.pngtree.com/png-clipart/20220825/ourmid/pngtree-movie-film-roll-black-and-white-png-image_6123879.png">
                     <h2>Film</h2>
-                    <input type="checkbox" name="main_interests" value="movies" class="hidden-checkbox">
+                    <input type="radio" name="main_interests" value="movies" class="hidden-checkbox">
                 </article>
                 <article class="category-item nieuws" data-category="nieuws">
                     <img src="https://cdn-icons-png.flaticon.com/512/2636/2636329.png">
                     <h2>Nieuws en politiek</h2>
-                    <input type="checkbox" name="main_interests" value="news" class="hidden-checkbox">
+                    <input type="radio" name="main_interests" value="news" class="hidden-checkbox">
                 </article>
                 <article class="category-item kunst" data-category="kunst">
                     <img src="https://cdn-icons-png.flaticon.com/512/8042/8042802.png">
                     <h2>Kunst</h2>
-                    <input type="checkbox" name="main_interests" value="art" class="hidden-checkbox">
+                    <input type="radio" name="main_interests" value="art" class="hidden-checkbox">
                 </article>
                 <article class="category-item misdaad" data-category="misdaad">
                     <img src="https://png.pngtree.com/png-clipart/20230812/original/pngtree-crime-silhouette-arrest-icon-vector-picture-image_10501018.png">
                     <h2>Misdaad</h2>
-                    <input type="checkbox" name="main_interests" value="crime" class="hidden-checkbox">
+                    <input type="radio" name="main_interests" value="crime" class="hidden-checkbox">
                 </article>
                 <article class="category-item geschiedenis" data-category="geschiedenis">
                     <img src="https://cdn-icons-png.flaticon.com/512/899/899771.png">
                     <h2>Geschiedenis</h2>
-                    <input type="checkbox" name="main_interests" value="history" class="hidden-checkbox">
+                    <input type="radio" name="main_interests" value="history" class="hidden-checkbox">
                 </article>
                 <article class="category-item mode" data-category="mode">
                     <img src="https://cdn-icons-png.flaticon.com/512/3460/3460869.png">
                     <h2>Mode</h2>
-                    <input type="checkbox" name="main_interests" value="fashion" class="hidden-checkbox">
+                    <input type="radio" name="main_interests" value="fashion" class="hidden-checkbox">
                 </article>
                 <article class="category-item lifestyle" data-category="lifestyle">
                     <img src="https://cdn-icons-png.flaticon.com/512/3664/3664392.png">
                     <h2>Lifestyle</h2>
-                    <input type="checkbox" name="main_interests" value="lifestyle" class="hidden-checkbox">
+                    <input type="radio" name="main_interests" value="lifestyle" class="hidden-checkbox">
                 </article>
             </section>
-            <button type="button" class="nav-button" id="next-to-step2">Volgende</button>
+            <button type="button" class="backButton-1" id="next-to-step2">Volgende</button>
         </div>
 
         <!-- Step 2: Subcategories based on selections -->
-        <div class="step" id="step2" style="display: none;">
+        <div class="step" id="step2">
             <h1>Kies je voorkeuren</h1>
             <section class="subcategories">
+                  <!-- Sport Options -->
+                  <article class="subcategory-group sportOpties">
+                    <h2>Sport</h2>
+                    <div class="checkbox-grid">
+                        <label><input type="checkbox" name="interests" value="Basketball"> Basketbal</label>
+                        <label><input type="checkbox" name="interests" value="Football/Soccer"> Voetbal</label>
+                        <label><input type="checkbox" name="interests" value="Hockey"> Hockey</label>
+                        <label><input type="checkbox" name="interests" value="Rugby"> Rugby</label>
+                        <label><input type="checkbox" name="interests" value="Tennis"> Tennis</label>
+                        <label><input type="checkbox" name="interests" value="Athletics"> Atletiek</label>
+                        <label><input type="checkbox" name="interests" value="Martial Arts"> Vechtsport</label>
+                    </div>
+                </article>
+                 
+                <!-- Books Options -->
+                <article class="subcategory-group boekenOpties">
+                    <h2>Boeken</h2>
+                    <div class="checkbox-grid">
+                        <label><input type="checkbox" name="interests" value="Fiction Books"> Fictie</label>
+                        <label><input type="checkbox" name="interests" value="Fantasy & Sci-Fi Books"> Fantasy & Sciencefiction</label>
+                        <label><input type="checkbox" name="interests" value="Thriller & Crime Books"> Thriller & Misdaad</label>
+                        <label><input type="checkbox" name="interests" value="Self-Help Books"> Zelfhulp & Persoonlijke ontwikkeling</label>
+                        <label><input type="checkbox" name="interests" value="Biographies & Memoirs"> Biografieën & Memoires</label>
+                        <label><input type="checkbox" name="interests" value="Young Adult Books"> Young Adult</label>
+                        <label><input type="checkbox" name="interests" value="Spiritual & Philosophy Books"> Spiritueel, Religie & Filosofie</label>
+                    </div>
+                </article>
+
+                <!-- Cooking Options -->
+                <article class="subcategory-group kokenOpties">
+                    <h2>Koken</h2>
+                    <div class="checkbox-grid">
+                        <label><input type="checkbox" name="interests" value="Healthy Cooking"> Gezonde voeding & dieet</label>
+                        <label><input type="checkbox" name="interests" value="Baking"> Bakken & Patisserie</label>
+                        <label><input type="checkbox" name="interests" value="World Cuisine"> Wereldkeuken</label>
+                        <label><input type="checkbox" name="interests" value="BBQ & Grilling"> BBQ & Grillen</label>
+                        <label><input type="checkbox" name="interests" value="Budget Cooking"> Meal Prepping & Budgetkoken</label>
+                    </div>
+                </article>
+
                 <!-- Gaming Options -->
-                <article class="subcategory-group gamenOpties" style="display: none;">
+                <article class="subcategory-group gamenOpties">
                     <h2>Gaming</h2>
                     <div class="checkbox-grid">
                         <label><input type="checkbox" name="interests" value="Action Gaming"> Action</label>
@@ -100,8 +140,22 @@
                     </div>
                 </article>
                 
-                <!-- Film Options -->
-                <article class="subcategory-group filmOpties" style="display: none;">
+                <!-- Music Options -->
+                <article class="subcategory-group muziekOpties">
+                    <h2>Muziek</h2>
+                    <div class="checkbox-grid">
+                        <label><input type="checkbox" name="interests" value="Jazz Music"> Jazz</label>
+                        <label><input type="checkbox" name="interests" value="Hip-hop Music"> Hip-hop</label>
+                        <label><input type="checkbox" name="interests" value="Rock Music"> Rock</label>
+                        <label><input type="checkbox" name="interests" value="R&B Music"> R&B</label>
+                        <label><input type="checkbox" name="interests" value="Soul Music"> Soul</label>
+                        <label><input type="checkbox" name="interests" value="Singers"> Sing</label>
+                        <label><input type="checkbox" name="interests" value="K-Pop Music"> K-Pop</label>
+                    </div>
+                </article>
+
+                 <!-- Film Options -->
+                 <article class="subcategory-group filmOpties">
                     <h2>Film</h2>
                     <div class="checkbox-grid">
                         <label><input type="checkbox" name="interests" value="Action Films"> Action</label>
@@ -114,62 +168,8 @@
                     </div>
                 </article>
                 
-                <!-- Music Options -->
-                <article class="subcategory-group muziekOpties" style="display: none;">
-                    <h2>Muziek</h2>
-                    <div class="checkbox-grid">
-                        <label><input type="checkbox" name="interests" value="Jazz Music"> Jazz</label>
-                        <label><input type="checkbox" name="interests" value="Hip-hop Music"> Hip-hop</label>
-                        <label><input type="checkbox" name="interests" value="Rock Music"> Rock</label>
-                        <label><input type="checkbox" name="interests" value="R&B Music"> R&B</label>
-                        <label><input type="checkbox" name="interests" value="Soul Music"> Soul</label>
-                        <label><input type="checkbox" name="interests" value="Singers"> Sing</label>
-                        <label><input type="checkbox" name="interests" value="K-Pop Music"> K-Pop</label>
-                    </div>
-                </article>
-                
-                <!-- Sport Options -->
-                <article class="subcategory-group sportOpties" style="display: none;">
-                    <h2>Sport</h2>
-                    <div class="checkbox-grid">
-                        <label><input type="checkbox" name="interests" value="Basketball"> Basketbal</label>
-                        <label><input type="checkbox" name="interests" value="Football/Soccer"> Voetbal</label>
-                        <label><input type="checkbox" name="interests" value="Hockey"> Hockey</label>
-                        <label><input type="checkbox" name="interests" value="Rugby"> Rugby</label>
-                        <label><input type="checkbox" name="interests" value="Tennis"> Tennis</label>
-                        <label><input type="checkbox" name="interests" value="Athletics"> Atletiek</label>
-                        <label><input type="checkbox" name="interests" value="Martial Arts"> Vechtsport</label>
-                    </div>
-                </article>
-                
-                <!-- Books Options -->
-                <article class="subcategory-group boekenOpties" style="display: none;">
-                    <h2>Boeken</h2>
-                    <div class="checkbox-grid">
-                        <label><input type="checkbox" name="interests" value="Fiction Books"> Fictie</label>
-                        <label><input type="checkbox" name="interests" value="Fantasy & Sci-Fi Books"> Fantasy & Sciencefiction</label>
-                        <label><input type="checkbox" name="interests" value="Thriller & Crime Books"> Thriller & Misdaad</label>
-                        <label><input type="checkbox" name="interests" value="Self-Help Books"> Zelfhulp & Persoonlijke ontwikkeling</label>
-                        <label><input type="checkbox" name="interests" value="Biographies & Memoirs"> Biografieën & Memoires</label>
-                        <label><input type="checkbox" name="interests" value="Young Adult Books"> Young Adult</label>
-                        <label><input type="checkbox" name="interests" value="Spiritual & Philosophy Books"> Spiritueel, Religie & Filosofie</label>
-                    </div>
-                </article>
-                
-                <!-- Cooking Options -->
-                <article class="subcategory-group kokenOpties" style="display: none;">
-                    <h2>Koken</h2>
-                    <div class="checkbox-grid">
-                        <label><input type="checkbox" name="interests" value="Healthy Cooking"> Gezonde voeding & dieet</label>
-                        <label><input type="checkbox" name="interests" value="Baking"> Bakken & Patisserie</label>
-                        <label><input type="checkbox" name="interests" value="World Cuisine"> Wereldkeuken</label>
-                        <label><input type="checkbox" name="interests" value="BBQ & Grilling"> BBQ & Grillen</label>
-                        <label><input type="checkbox" name="interests" value="Budget Cooking"> Meal Prepping & Budgetkoken</label>
-                    </div>
-                </article>
-                
                 <!-- News Options -->
-                <article class="subcategory-group nieuwsOpties" style="display: none;">
+                <article class="subcategory-group nieuwsOpties">
                     <h2>Nieuws en politiek</h2>
                     <div class="checkbox-grid">
                         <label><input type="checkbox" name="interests" value="International Politics"> Internationale Politiek & Geopolitiek</label>
@@ -183,7 +183,7 @@
                 </article>
                 
                 <!-- Art Options -->
-                <article class="subcategory-group kunstOpties" style="display: none;">
+                <article class="subcategory-group kunstOpties">
                     <h2>Kunst</h2>
                     <div class="checkbox-grid">
                         <label><input type="checkbox" name="interests" value="Art History"> Kunstgeschiedenis</label>
@@ -197,7 +197,7 @@
                 </article>
                 
                 <!-- Crime Options -->
-                <article class="subcategory-group misdaadOpties" style="display: none;">
+                <article class="subcategory-group misdaadOpties">
                     <h2>Misdaad</h2>
                     <div class="checkbox-grid">
                         <label><input type="checkbox" name="interests" value="Detective Stories"> Detective & Politieromans</label>
@@ -211,7 +211,7 @@
                 </article>
                 
                 <!-- History Options -->
-                <article class="subcategory-group geschiedenisOpties" style="display: none;">
+                <article class="subcategory-group geschiedenisOpties">
                     <h2>Geschiedenis</h2>
                     <div class="checkbox-grid">
                         <label><input type="checkbox" name="interests" value="Ancient Civilizations"> Oude Beschavingen</label>
@@ -223,23 +223,9 @@
                         <label><input type="checkbox" name="interests" value="Archaeology"> Archeologie & Lost Civilizations</label>
                     </div>
                 </article>
-                
-                <!-- Lifestyle Options -->
-                <article class="subcategory-group lifestyleOpties" style="display: none;">
-                    <h2>Lifestyle</h2>
-                    <div class="checkbox-grid">
-                        <label><input type="checkbox" name="interests" value="Urban Lifestyle"> Urban lifestyle</label>
-                        <label><input type="checkbox" name="interests" value="Spiritual Lifestyle"> Spirituele levensstijl</label>
-                        <label><input type="checkbox" name="interests" value="Digital Nomad"> Digitale nomaden levensstijl</label>
-                        <label><input type="checkbox" name="interests" value="Luxury Lifestyle"> Luxueuze levensstijl</label>
-                        <label><input type="checkbox" name="interests" value="Sustainable Lifestyle"> Duurzame levensstijl</label>
-                        <label><input type="checkbox" name="interests" value="Minimalist Lifestyle"> Minimalistische levensstijl</label>
-                        <label><input type="checkbox" name="interests" value="Healthy Lifestyle"> Gezonde levensstijl</label>
-                    </div>
-                </article>
-                
+ 
                 <!-- Fashion Options -->
-                <article class="subcategory-group modeOpties" style="display: none;">
+                <article class="subcategory-group modeOpties">
                     <h2>Mode</h2>
                     <div class="checkbox-grid">
                         <label><input type="checkbox" name="interests" value="Casual Fashion"> Casual</label>
@@ -249,6 +235,20 @@
                         <label><input type="checkbox" name="interests" value="Preppy Fashion"> Preppy</label>
                         <label><input type="checkbox" name="interests" value="Punk Fashion"> Punk/Rock</label>
                         <label><input type="checkbox" name="interests" value="Avant-garde Fashion"> Avant-garde</label>
+                    </div>
+                </article>
+                
+                <!-- Lifestyle Options -->
+                <article class="subcategory-group lifestyleOpties">
+                    <h2>Lifestyle</h2>
+                    <div class="checkbox-grid">
+                        <label><input type="checkbox" name="interests" value="Urban Lifestyle"> Urban lifestyle</label>
+                        <label><input type="checkbox" name="interests" value="Spiritual Lifestyle"> Spirituele levensstijl</label>
+                        <label><input type="checkbox" name="interests" value="Digital Nomad"> Digitale nomaden levensstijl</label>
+                        <label><input type="checkbox" name="interests" value="Luxury Lifestyle"> Luxueuze levensstijl</label>
+                        <label><input type="checkbox" name="interests" value="Sustainable Lifestyle"> Duurzame levensstijl</label>
+                        <label><input type="checkbox" name="interests" value="Minimalist Lifestyle"> Minimalistische levensstijl</label>
+                        <label><input type="checkbox" name="interests" value="Healthy Lifestyle"> Gezonde levensstijl</label>
                     </div>
                 </article>
             </section>

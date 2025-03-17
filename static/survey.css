@@ -7,7 +7,7 @@
     padding: 0;
 }
 
-
+ 
 body > button{
     background-color: var(--color-accentTwo);
     border: none;
@@ -25,23 +25,23 @@ body > button{
 
 
 
-
+ 
 /* Category grid */
 .category-grid {
     background-color: #ffffff;
     box-shadow: 5px 10px black;
-    height: 40em;
-    width: 75em;
+    height: 35em;
+    width: 70em;
     margin-left: 5em;
 
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     justify-items: center;
+    margin: auto;
 }
 
 .category-item {
-   
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -53,7 +53,7 @@ body > button{
     display: grid;
     place-items: center;
     
-    width: 20em;
+    width: 18em;
     height: 15em;
     margin: 2em;
 }
@@ -87,6 +87,12 @@ body > button{
     opacity: 0;
 }
 
+/* .category-item.disabled {
+    opacity: 0.5; 
+    pointer-events: none; 
+} */
+
+
 /* Subcategories - Updated styles */
 .subcategories {
     margin: 30px 0;
@@ -105,8 +111,8 @@ body > button{
 }
 
 /* This was "display: none" which could be causing issues */
-.subcategory-group[style*="display: none"] {
-    display: none !important;
+.subcategory-group{
+    display: none;
 }
 
 .subcategory-group h2 {
@@ -153,6 +159,10 @@ body > button{
 }
 
 /* Add more space between step 2 elements */
+#step2{
+    display: none;
+}
+
 #step2 h1 {
     margin-bottom: 20px;
 }
@@ -256,7 +266,7 @@ body > button{
 }
 
 /* Navigation buttons */
-.nav-button, .submit-button {
+.nav-button, .submit-button, .backButton, .backButton-1 {
     background-color: #4fc3f7;
     color: white;
     border: none;
@@ -266,7 +276,22 @@ body > button{
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
     margin-top: 20px;
-    margin-right: 10px;
+}
+
+.backButton{
+    margin-left: 65em;
+}
+
+.backButton-1{
+    margin-left: 75em;
+}
+
+.nav-button{
+    margin-left: 5em;
+}
+
+.submit-button{
+    margin-left: 65em;
 }
 
 .nav-button:hover, .submit-button:hover {
@@ -282,6 +307,8 @@ body > button{
 .submit-button:hover {
     background-color: #388e3c;
 }
+
+
 
 /* Background elements */
 .background-elements {
@@ -318,32 +345,3 @@ body > button{
     clip-path: circle(50% at center);
 }
 
-
-/* Responsive adjustments
-@media (max-width: 768px) {
-    .category-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    }
-    
-    .checkbox-grid, .mood-options {
-        grid-template-columns: 1fr 1fr;
-    }
-    
-    .radio-group {
-        flex-direction: column;
-    }
-}
-
-@media (max-width: 480px) {
-    .category-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .checkbox-grid, .mood-options {
-        grid-template-columns: 1fr;
-    }
-    
-    .step {
-        padding: 15px;
-    }
-} */
