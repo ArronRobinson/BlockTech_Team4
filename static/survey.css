@@ -27,13 +27,14 @@ body button{
 /* step 1 */
 .category-grid {
     background-color: #ffffff;
-    box-shadow: 5px 10px black;
+    box-shadow: 0px 0px 60px 0px var(--color-dropshadow);
 
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     justify-items: center;
     margin: auto;
+    margin-top: 1em;
     height: 35em;
     width: 70em;
 }
@@ -50,7 +51,7 @@ body button{
 .category-grid::-webkit-scrollbar-thumb {
     background: var(--color-accentTwo);
     border-radius: 3px;
-  }
+}
 
 .category-item {
     border-radius: 12px;
@@ -109,32 +110,33 @@ body button{
     display: none;
 }
 
+.checkbox-grid input[type="checkbox"] {
+    display: none;
+}
+
 .subcategories {
     background-color: #ffffff;
-    box-shadow: 5px 10px black;
+    box-shadow: 0px 0px 60px 0px var(--color-dropshadow);
+
 
     display: flex;
     align-items: center;
     justify-items: center;
     margin: auto;
-    height: 20em;
+    margin-top: 2em;
+    height: 25em;
     width: 70em;
-}
-
-.checkbox-grid input[type="checkbox"] {
-    display: none;
 }
 
 .subcategory-group {
     background-color: #ffffff;
-    padding: 20px;
-    margin-bottom: 5px; 
-    width: 70em; 
-    box-sizing: border-box;
+
+    width: 100%;
+    margin-top: 1em;
 }
 
 .subcategory-group h2 {
-    margin-top: 0;
+    margin-left: 2em;
     color: var(--color-text);
     padding-bottom: 10px;
     font-size: 18px;
@@ -142,21 +144,25 @@ body button{
 
 .checkbox-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     margin-top: 15px;
+    padding-top: 2em;
+    align-items: center;
+    justify-items: center;
 }
 
-.checkbox-grid label {
+.checkbox-grid label{
     display: flex;
     align-items: center;
-    padding: 10px 15px;
+    height: 4em;
+    width: 7em;
+    padding: 1em;
     margin: 1em;
     background-color: #fff;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    user-select: none;
 }
 
 .checkbox-grid label:hover {
@@ -165,21 +171,11 @@ body button{
     filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
 }
 
-.checkbox-grid label.selected {
+.checkbox-grid label.selected{
     background-color: var( --color-accentcolor-light);
     border: 2px solid var(--color-accentcolor);
 }
 
-.checkbox-grid input[type="checkbox"] {
-    margin-right: 8px;
-}
-
-.checkbox-grid input[type="checkbox"]:checked + label,
-.checkbox-grid label.selected {
-    background-color: var(--color-accentcolor);
-    color: white;
-    font-weight: 500;
-}
 
 
 
@@ -192,7 +188,8 @@ body button{
 
 .mood-options {
     background-color: #ffffff;
-    box-shadow: 5px 10px black;
+    box-shadow: 0px 0px 60px 0px var(--color-dropshadow);
+
 
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -202,7 +199,7 @@ body button{
     margin: auto;
     height: 10em;
     width: 70em;
-
+    margin-top: 3em;
 }
 
 .mood-options label{
@@ -218,7 +215,7 @@ body button{
 .mood-options label:hover{
     transform: translateY(-1px);
     background-color: var(--color-textaccent);
-    filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
+    filter: drop-shadow(0.1em 0.1em 1em var(--color-dropshadow));
 }
 
 .mood-option input[type="checkbox"] {
@@ -257,7 +254,7 @@ body button{
 }
 
 .submit-button{
-    margin-left: 65em;
+    left: 58em;
 }
 
 .nav-button:hover, .submit-button:hover, .backButton-1:hover, .backButton:hover {

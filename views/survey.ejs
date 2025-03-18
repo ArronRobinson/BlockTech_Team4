@@ -288,7 +288,7 @@
                 </label>
             </div>
             
-            <button type="button" class="nav-button">Terug</button>
+            <button type="button" class="nav-button" id="back-to-step2">Terug</button>
             <button type="submit" class="submit-button">Vind mijn podcast 🎧</button>
         </div>
     </form>
@@ -322,10 +322,36 @@
                     this.classList.toggle('selected');
                     
                     // Toggle checkbox
-                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    const checkbox = this.querySelector('input[type="radio"]');
                     checkbox.checked = !checkbox.checked;
                 });
             });
+
+
+            // clicked kleur verandere
+
+    
+            const SubcategoryGroup = document.querySelectorAll('.checkbox-grid input[type="checkbox"]');
+
+            SubcategoryGroup.forEach(item => {
+                item.addEventListener('click', function() {
+                    const label = this.parentElement;
+                    // Toggle selected class
+                    label.classList.toggle("selected", this.checked);
+
+                });
+            });
+
+            const moodCheckboxes = document.querySelectorAll('.mood-options input[type="checkbox"]');
+
+            moodCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener("change", function () {
+                   const label = this.closest(".mood-option"); // Selecteert het label om de achtergrond te veranderen
+                   label.classList.toggle("selected", this.checked);
+                });
+            });
+
+            
             
             // Navigation: Step 1 to Step 2
             nextToStep2.addEventListener('click', function() {
@@ -353,8 +379,7 @@
             
             // Navigation: Step 2 to Step 1
             backToStep1.addEventListener('click', function() {
-                step2.style.display = 'none';
-                step1.style.display = 'block';
+                location.reload();
             });
             
             // Navigation: Step 2 to Step 3
