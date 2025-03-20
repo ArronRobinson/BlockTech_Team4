@@ -201,6 +201,18 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.error("⚠️ nextToStep3 knop NIET gevonden!");
     }
+
+       // Navigation: Step 3 to Step 2 
+    if (backToStep2) {
+        backToStep2.addEventListener('click', function() {
+            // Verberg stap 3
+            step3.style.display = 'none';
+            
+            // Toon stap 2
+            step2.style.display = 'block';
+        });
+    }
+    
     
     
     // Form submission validation
