@@ -28,113 +28,44 @@
             </select>
         </div>
 
+        <% if (locals.favoritePodcasts && favoritePodcasts.length > 0) { %>
+            <% favoritePodcasts.forEach(function(podcast) { %>
+                <section data-name="<%= podcast.title %>">
+                    <img src="<%= podcast.image || 'images/360_F_418874697_trvAoXSfjetoptCXpR8N8XvO3R5eLtL4.jpg' %>" alt="<%= podcast.title %>">
+                    <h2><%= podcast.title %></h2>
+                
+                    <!-- Container for Like Button & Rating -->
+                    <div class="like-rating-container">
+                        <button class="likeButton liked">
+                            <svg class="likeIcon liked">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6.5 3.5 5 5.5 5c1.54 0 3.04.99 3.57 2.36h1.87C15.46 5.99 16.96 5 18.5 5 20.5 5 22 6.5 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                            </svg>
+                        </button>
+                
+                        <div class="rating-display">
+                            <span class="rating-star">★</span>
+                            <span class="rating-value">5.0</span> 
+                        </div>
+                    </div>
 
-
-        <section data-name="Podcast1">
-            <img src="images/360_F_418874697_trvAoXSfjetoptCXpR8N8XvO3R5eLtL4.jpg" alt="">
-            <h2>podcast naam 1</h2>
-        
-            <!-- Container for Like Button & Rating -->
-            <div class="like-rating-container">
-                <button class="likeButton">
-                    <svg class="likeIcon">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6.5 3.5 5 5.5 5c1.54 0 3.04.99 3.57 2.36h1.87C15.46 5.99 16.96 5 18.5 5 20.5 5 22 6.5 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                    </svg>
-                </button>
-        
-                <div class="rating-display">
-                    <span class="rating-star">★</span>
-                    <span class="rating-value">0.0</span> 
-                </div>
-            </div>
-        </section>
-
-        <section data-name="Podcast2">
-            <img src="images/360_F_418874697_trvAoXSfjetoptCXpR8N8XvO3R5eLtL4.jpg" alt="">
-            <h2>podcast naam 2</h2>
-        
-            <!-- Container for Like Button & Rating -->
-            <div class="like-rating-container">
-                <button class="likeButton">
-                    <svg class="likeIcon">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6.5 3.5 5 5.5 5c1.54 0 3.04.99 3.57 2.36h1.87C15.46 5.99 16.96 5 18.5 5 20.5 5 22 6.5 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                    </svg>
-                </button>
-        
-                <div class="rating-display">
-                    <span class="rating-star">★</span>
-                    <span class="rating-value">0.0</span> 
-                </div>
-            </div>
-        </section>
-
-        <section data-name="Podcast3">
-            <img src="images/360_F_418874697_trvAoXSfjetoptCXpR8N8XvO3R5eLtL4.jpg" alt="">
-            <h2>podcast naam 3</h2>
-        
-            <!-- Container for Like Button & Rating -->
-            <div class="like-rating-container">
-                <button class="likeButton">
-                    <svg class="likeIcon">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6.5 3.5 5 5.5 5c1.54 0 3.04.99 3.57 2.36h1.87C15.46 5.99 16.96 5 18.5 5 20.5 5 22 6.5 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                    </svg>
-                </button>
-        
-                <div class="rating-display">
-                    <span class="rating-star">★</span>
-                    <span class="rating-value">0.0</span> 
-                </div>
-            </div>
-        </section>
-
-        <section data-name="Podcast4">
-            <img src="images/360_F_418874697_trvAoXSfjetoptCXpR8N8XvO3R5eLtL4.jpg" alt="">
-            <h2>podcast naam 4</h2>
-        
-            <!-- Container for Like Button & Rating -->
-            <div class="like-rating-container">
-                <button class="likeButton">
-                    <svg class="likeIcon">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6.5 3.5 5 5.5 5c1.54 0 3.04.99 3.57 2.36h1.87C15.46 5.99 16.96 5 18.5 5 20.5 5 22 6.5 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                    </svg>
-                </button>
-        
-                <div class="rating-display">
-                    <span class="rating-star">★</span>
-                    <span class="rating-value">0.0</span> 
-                </div>
-            </div>
-        </section>
-
-        <section data-name="Podcast5">
-            <img src="images/360_F_418874697_trvAoXSfjetoptCXpR8N8XvO3R5eLtL4.jpg" alt="">
-            <h2>podcast naam 5</h2>
-        
-            <!-- Container for Like Button & Rating -->
-            <div class="like-rating-container">
-                <button class="likeButton">
-                    <svg class="likeIcon">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6.5 3.5 5 5.5 5c1.54 0 3.04.99 3.57 2.36h1.87C15.46 5.99 16.96 5 18.5 5 20.5 5 22 6.5 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                    </svg>
-                </button>
-        
-                <div class="rating-display">
-                    <span class="rating-star">★</span>
-                    <span class="rating-value">0.0</span> 
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="circle"></div>
-            <div class="circleTwo"></div>
-        </section>
-        
+                    <p class="podcast-description"><%= podcast.description || 'No description available' %></p>
+                    
+                    <% if (podcast.tags && podcast.tags.length > 0) { %>
+                        <div class="tags-container">
+                            <% podcast.tags.forEach(function(tag) { %>
+                                <span class="tag"><%= tag %></span>
+                            <% }); %>
+                        </div>
+                    <% } %>
+                </section>
+            <% }); %>
+        <% } else { %>
+            <div class="empty-message">No favorite podcasts yet. Discover new podcasts in the survey!</div>
+        <% } %>
     </main>
 
     <footer>
         <script src="/script/frontend.js"></script>
-        
     </footer>
 </body>
 </html>

@@ -1,116 +1,133 @@
-.circle {
-    z-index: -2;
-    overflow: hidden;
-    position: absolute;
-    left: -20em;
-    bottom: -25em;
-    width: 70em;
-    height: 70em;
-    background-color: var(--color-secondaccent);
-    clip-path: circle(50% at center);
-}
-
-.circleTwo {
-    z-index: -2;
-    overflow: hidden;
-    position: absolute;
-    right: -20em;
-    top: 5em;
-    width: 40em;
-    height: 40em;
-    background-color: var(--color-accentcolor);
-    clip-path: circle(50% at center);
-}
-
-
-main{
+/* Favorite page styles */
+main {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: auto;
-    margin: 17em;
-    place-content: center;
-    gap: 4em;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    margin-top: 20px;
 }
 
-main section{
-    margin: auto;
-}
-
-main section h2{
-    font-size: 1.2em;
-    max-width: 20ch;
-}
-
-main section img{
-    grid-column: 1;
-    width: 12em;
-    height: 12em;
-}
-
-main section img:hover{
-    transform: scale(1.1);
-    transition: ease-in-out .3s;
-}
-
-
-main section div{
+.controls {
+    grid-column: 1 / -1;
     display: flex;
-    gap: 4em;
-    margin-top: -.5em;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
 }
 
+.controls label {
+    font-weight: bold;
+    margin-right: 5px;
+}
 
+.controls select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+section[data-name] {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+section[data-name]:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+section[data-name] img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+section[data-name] h2 {
+    margin: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.like-rating-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    margin-bottom: 10px;
+}
 
 .likeButton {
     background: none;
     border: none;
     cursor: pointer;
-    outline: none;
-    display: flex; 
-    justify-content: flex-end; 
-    margin: auto;
-    order: 1;
+    padding: 5px;
 }
 
 .likeIcon {
-    transition: fill 0.3s ease-in-out, transform 0.3s ease-in-out;
-    fill: gray;
-    transform: scale(1);
-    width: 2em;
-    height: 2em;
+    width: 24px;
+    height: 24px;
+    fill: #ccc;
+    transition: fill 0.3s ease;
 }
 
-.likeButton.liked .likeIcon {
-    fill: red;
-    transform: scale(1.05);
+.likeIcon.liked, .likeButton.liked .likeIcon {
+    fill: #ff5e5e;
 }
-
-main section button{
-    align-content: right;
-}
-
-.controls {
-    position: absolute;
-    top: 15%;
-    left: 10%;
-}
-
-
 
 .rating-display {
     display: flex;
     align-items: center;
-    gap: .4em;
-    font-size: 18px;
-    color: gray; 
+    gap: 5px;
 }
 
 .rating-star {
-    font-size: 2em;
-    color: var(--color-accentcolor); /* Star color */
+    color: gold;
 }
 
-.liked {
-    color: red !important; /* Turns the button/icon red */
-    transition: color 0.3s ease-in-out;
+.podcast-description {
+    padding: 0 15px;
+    margin: 10px 0;
+    color: #666;
+    font-size: 0.9rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 0 15px;
+    margin-top: 10px;
+}
+
+.tag {
+    background-color: #f0f0f0;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.empty-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+/* Hide circles on favorites page
+.circle, .circleTwo {
+    display: none; 
+} */

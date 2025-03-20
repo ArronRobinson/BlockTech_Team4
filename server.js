@@ -60,13 +60,12 @@ app
     .get('/login', onlogin)
     .get('/favorite', authenticateToken, onfavorite)
     .get('/survey', authenticateToken, onsurvey)
+    .get('/account', authenticateToken, onaccount)
     .get ('/result', authenticateToken, onresult);
 
 function onsurvey(req, res) {
     res.render('survey', { title: 'Survey Page'});
 }
-
-
 
 function onindex(req, res) {
     res.render('index', { title: 'Index Page' });
@@ -84,21 +83,24 @@ function onresult(req, res) {
     res.render('result', { title: 'Result Page' });
 }
 
+function onaccount(req, res) {
+    res.render('account', { title: 'Account Page' });
+}
+
 function onfavorite(req, res) {
-    // Get user favorites from database
     User.findById(req.user.userId)
         .then(user => {
-            if (!user) {
-                return res.redirect('/login');
+            if(!user) {
+                return res.status(404).render('error', {message: 'User not found'});
             }
             res.render('favorite', { 
-                title: 'Favorite Page', 
-                favoritePodcasts: user.favoritePodcasts || [] 
-            });
+                title: 'Favorite page',
+                favoritePodcasts: user.favoritePodcasts 
+            });  
         })
         .catch(err => {
-            console.error("Error retrieving favorites:", err);
-            res.status(500).send("Error retrieving favorites");
+            console.error('Error fetching podcasts')
+            res.status(500).render('error', {message: 'User not found'});
         });
 }
 
@@ -239,14 +241,13 @@ async function getValidPodcastRecommendation(userData) {
     return null;
 }
 
-
-
 function authenticateToken (req, res, next) {
     const token = req.cookies.token;
     if(!token) return res.status(401).json({message: "Acces Denied"});
     
     jwt.verify(token, SECRET_KEY, (err, user) => {
-        if (err) return res.status(401).json({message: "Invalid Token"});
+        if (err) return res.status(403).json({message: "Invalid Token"});
+        
         req.user = user;
         next();
     })
@@ -325,35 +326,27 @@ app.post("/recommend", authenticateToken, async (req, res) => {
     }
 });
 
-// Save favorite podcast
 app.post("/save-favorite", authenticateToken, async (req, res) => {
     try {
-        const { podcastData } = req.body;
-        
-        await User.findByIdAndUpdate(req.user.userId, {
-            $addToSet: { favoritePodcasts: podcastData }
-        });
-        
-        res.status(200).json({ success: true });
-    } catch (error) {
-        console.error("Error saving favorite:", error);
-        res.status(500).json({ success: false, message: "Error saving favorite" });
-    }
-});
+        const {podcastData} = req.body;
 
-// Remove favorite podcast
-app.post("/remove-favorite", authenticateToken, async (req, res) => {
-    try {
-        const { podcastTitle } = req.body;
+        const user = await User.findById(req.user.userId);
+        if(!user) {
+            return res.status(404).json({success: false, message: 'User not found'});
+        }
+
+        const isAlreadyFavorite = user.favoritePodcasts.some(fave => fave.title === podcastData.title);
+        if(isAlreadyFavorite) {
+            return res.json({success: false, message: 'Podcast already in favorites'});
+        }
+
+        user.favoritePodcasts.push(podcastData);
+        await user.save();
         
-        await User.findByIdAndUpdate(req.user.userId, {
-            $pull: { favoritePodcasts: { title: podcastTitle } }
-        });
-        
-        res.status(200).json({ success: true });
+        res.json({success: true, message: 'Added to favorites'});
     } catch (error) {
-        console.error("Error removing favorite:", error);
-        res.status(500).json({ success: false, message: "Error removing favorite" });
+        console.error("Save favorite error:", error);
+        res.status(500).json({success: false, message: 'Server error'});
     }
 });
 
@@ -361,6 +354,38 @@ app.post ("/logout", (req, res) => {
     res.cookie("token", "", {maxAge: 0});
     res.redirect("/login");
 })
+
+app.post("/remove-favorite", authenticateToken, async (req, res) => {
+    try {
+        const { podcastTitle } = req.body;
+
+        const user = await User.findById(req.user.userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+        
+        user.favoritePodcasts = user.favoritePodcasts.filter(podcast => podcast.title != podcastTitle);
+        await user.save();
+
+        res.json({ success: true, message: 'Removed '});
+    } catch (error) {
+        console.error("Remove failed: ", error);
+        res.status(500).json({ success: false, message: 'server error'});
+    }
+});
+
+app.get('/api/favorites', authenticateToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+        res.json({ success: true, favorites: user.favoritePodcasts });
+    } catch (error) {
+        console.error("Error fetching favorites:", error);
+        res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
