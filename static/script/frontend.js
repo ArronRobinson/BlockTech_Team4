@@ -1,18 +1,211 @@
-document.querySelectorAll(".likeButton").forEach((button) => {
-    button.addEventListener("click", () => {
-        button.classList.toggle("liked"); // Toggle liked class on button
-    });
-});
-
-// Filter and Sort Podcasts
 document.addEventListener("DOMContentLoaded", function () {
     const filterSelect = document.getElementById("filter");
     const sortSelect = document.getElementById("sort");
     const podcastList = document.getElementById("podcastList");
+    const isOnFavoritesPage = window.location.pathname.includes('/favorite');
 
-    // Function to filter & sort podcasts
+    // If we're on the favorites page, fetch and display favorites
+    if (isOnFavoritesPage) {
+        loadFavorites();
+    } else {
+        // On other pages, initialize the existing filtering/sorting
+        filterAndSort();
+    }
+
+    // Function to load favorites from the server
+    function loadFavorites() {
+        fetch('/api/favorites')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayFavorites(data.favorites);
+                } else {
+                    console.error('Error:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching favorites:', error);
+            });
+    }
+
+    // Function to display favorites
+    function displayFavorites(podcasts) {
+        const main = document.querySelector('main');
+        
+        // Clear existing podcasts but keep controls
+        const existingSections = document.querySelectorAll('main > section[data-name]');
+        existingSections.forEach(section => section.remove());
+        
+        // Show message if no favorites
+        // if (!podcasts || podcasts.length === 0) {
+        //     const emptyMessage = document.createElement('div');
+        //     emptyMessage.className = 'empty-message';
+        //     emptyMessage.textContent = 'No favorite podcasts yet. Discover new podcasts in the survey!';
+        //     main.appendChild(emptyMessage);
+        //     return;
+        // }
+        
+        // Apply filtering
+        let filteredPodcasts = [...podcasts];
+        
+        // Apply sorting
+        if (sortSelect) {
+            if (sortSelect.value === "name-asc") {
+                filteredPodcasts.sort((a, b) => a.title.localeCompare(b.title));
+            } else if (sortSelect.value === "name-desc") {
+                filteredPodcasts.sort((a, b) => b.title.localeCompare(a.title));
+            } else if (sortSelect.value === "likes-desc") {
+                // This is just placeholder sorting since all are liked
+                filteredPodcasts.sort((a, b) => a.title.localeCompare(b.title));
+            }
+        }
+        
+        // Create and append podcast sections
+        filteredPodcasts.forEach(podcast => {
+            const section = createPodcastElement(podcast);
+            main.appendChild(section);
+        });
+        
+        // Initialize like buttons
+        initLikeButtons();
+    }
+    
+    // Function to create a podcast element
+    function createPodcastElement(podcast) {
+        const section = document.createElement('section');
+        section.setAttribute('data-name', podcast.title);
+        
+        // Create podcast image
+        const img = document.createElement('img');
+        img.src = podcast.image || 'images/360_F_418874697_trvAoXSfjetoptCXpR8N8XvO3R5eLtL4.jpg';
+        img.alt = podcast.title;
+        
+        // Create podcast title
+        const title = document.createElement('h2');
+        title.textContent = podcast.title;
+        
+        // Create like and rating container
+        const likeRatingContainer = document.createElement('div');
+        likeRatingContainer.className = 'like-rating-container';
+        
+        // Create like button
+        const likeButton = document.createElement('button');
+        likeButton.className = 'likeButton liked'; // Already liked
+        likeButton.innerHTML = `
+            <svg class="likeIcon liked">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6.5 3.5 5 5.5 5c1.54 0 3.04.99 3.57 2.36h1.87C15.46 5.99 16.96 5 18.5 5 20.5 5 22 6.5 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+            </svg>
+        `;
+        
+        // Create rating display
+        const ratingDisplay = document.createElement('div');
+        ratingDisplay.className = 'rating-display';
+        ratingDisplay.innerHTML = `
+            <span class="rating-star">★</span>
+            <span class="rating-value">5.0</span> 
+        `;
+        
+        // Create podcast description
+        const description = document.createElement('p');
+        description.className = 'podcast-description';
+        description.textContent = podcast.description || 'No description available';
+        
+        // Create tags if available
+        if (podcast.tags && podcast.tags.length > 0) {
+            const tagsContainer = document.createElement('div');
+            tagsContainer.className = 'tags-container';
+            
+            podcast.tags.forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'tag';
+                tagElement.textContent = tag;
+                tagsContainer.appendChild(tagElement);
+            });
+            
+            section.appendChild(tagsContainer);
+        }
+        
+        // Append all elements
+        likeRatingContainer.appendChild(likeButton);
+        likeRatingContainer.appendChild(ratingDisplay);
+        
+        section.appendChild(img);
+        section.appendChild(title);
+        section.appendChild(likeRatingContainer);
+        section.appendChild(description);
+        
+        // Add click handler for the entire section to go to podcast
+        if (podcast.spotify_url) {
+            section.addEventListener('click', function(e) {
+                // Don't navigate if clicking on the like button
+                if (e.target.closest('.likeButton')) return;
+                
+                window.open(podcast.spotify_url, '_blank');
+            });
+            section.style.cursor = 'pointer';
+        }
+        
+        return section;
+    }
+    
+    // Initialize like buttons for favorite podcasts
+    function initLikeButtons() {
+        document.querySelectorAll('.likeButton').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent section click event
+                
+                const section = this.closest('section');
+                const podcastName = section.getAttribute('data-name');
+                
+                if (this.classList.contains('liked')) {
+                    // Remove from favorites
+                    removeFavorite(podcastName, section);
+                }
+            });
+        });
+    }
+    
+    // Function to remove a favorite
+    function removeFavorite(podcastName, section) {
+        fetch('/remove-favorite', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ podcastTitle: podcastName })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove section from the DOM
+                if (section) {
+                    section.remove();
+                }
+                
+                // Check if we need to show the empty message
+                const remainingSections = document.querySelectorAll('main > section[data-name]');
+                if (remainingSections.length === 0) {
+                    const main = document.querySelector('main');
+                    const emptyMessage = document.createElement('div');
+                    emptyMessage.className = 'empty-message';
+                    emptyMessage.textContent = 'No favorite podcasts yet. Discover new podcasts in the survey!';
+                    main.appendChild(emptyMessage);
+                }
+            } else {
+                console.error('Error removing favorite:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Your existing filter and sort functionality (for other pages)
     function filterAndSort() {
-        let podcastSections = Array.from(document.querySelectorAll("main section"));
+        // Skip if we're on the favorites page
+        if (isOnFavoritesPage) return;
+        
+        let podcastSections = Array.from(document.querySelectorAll("main section[data-name]"));
 
         // Apply filter
         if (filterSelect && filterSelect.value === "liked") {
@@ -35,50 +228,100 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Reorder the sections in the DOM
-        if (podcastList) {
-            podcastList.innerHTML = "";
-            podcastSections.forEach(section => podcastList.appendChild(section));
+        const main = document.querySelector('main');
+        if (main && podcastSections.length > 0) {
+            // Clear main but preserve controls
+            const controls = document.querySelector('.controls');
+            main.innerHTML = '';
+            if (controls) main.appendChild(controls);
+            
+            // Add the sorted sections
+            podcastSections.forEach(section => main.appendChild(section));
         }
     }
 
-    // Event Delegation for Like Button
-    if (podcastList) {
-        podcastList.addEventListener("click", function (event) {
-            const button = event.target.closest(".likeButton");
-            if (!button) return; // Ignore clicks outside buttons
+    // Event Delegation for Like Button (for other pages)
+    document.addEventListener("click", function (event) {
+        // Skip this handler on the favorites page
+        if (isOnFavoritesPage) return;
+        
+        const button = event.target.closest(".likeButton");
+        if (!button) return; // Ignore clicks outside buttons
 
-            const section = button.closest("section");
-            const podcastName = section.dataset.name;
+        const section = button.closest("section");
+        if (!section) return;
+        
+        const podcastName = section.dataset.name;
 
-            // Toggle like status
-            const isLiked = button.classList.toggle("liked");
-            const icon = button.querySelector(".likeIcon");
-            if (icon) icon.classList.toggle("liked");
+        // Toggle like status
+        const isLiked = button.classList.toggle("liked");
+        const icon = button.querySelector(".likeIcon");
+        if (icon) icon.classList.toggle("liked");
 
-            // Save to localStorage
-            localStorage.setItem(podcastName, isLiked ? "liked" : "not-liked");
+        // Save to localStorage
+        localStorage.setItem(podcastName, isLiked ? "liked" : "not-liked");
 
-            // Refresh the sorting & filtering
-            filterAndSort();
-        });
-    }
+        // Save to server if liked
+        if (isLiked) {
+            // Get podcast data from the section
+            const podcastData = {
+                title: podcastName,
+                description: section.querySelector('p')?.textContent || 'No description available',
+                image: section.querySelector('img')?.src || '',
+                spotify_url: '', // You might need to add this data attribute to your HTML
+                tags: []
+            };
+            
+            saveFavorite(podcastData);
+        } else {
+            // Remove from server if unliked
+            removeFavorite(podcastName);
+        }
+
+        // Refresh the sorting & filtering
+        filterAndSort();
+    });
 
     // Apply filter & sort when dropdowns change
-    if (filterSelect) filterSelect.addEventListener("change", filterAndSort);
-    if (sortSelect) sortSelect.addEventListener("change", filterAndSort);
+    if (filterSelect) filterSelect.addEventListener("change", function() {
+        if (isOnFavoritesPage) {
+            loadFavorites();
+        } else {
+            filterAndSort();
+        }
+    });
     
-    // Update ratings on page load
-    document.querySelectorAll("section").forEach(section => {
-        const podcastName = section.dataset.name;
-        const ratingValueElement = section.querySelector(".rating-value");
-
-        if (ratingValueElement) {
-            // Simulating a fetched rating (Replace this with API fetch if needed)
-            const rating = getPodcastRating(podcastName);
-            ratingValueElement.textContent = rating.toFixed(1);
+    if (sortSelect) sortSelect.addEventListener("change", function() {
+        if (isOnFavoritesPage) {
+            loadFavorites();
+        } else {
+            filterAndSort();
         }
     });
 });
+
+// Function to save favorite podcast
+async function saveFavorite(podcastData) {
+    try {
+        const response = await fetch("/save-favorite", {
+            method: "POST",
+            credentials: "include", // Ensures cookies are sent
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ podcastData }) // Make sure to wrap in { podcastData }
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            console.log("Podcast added to favorites!");
+        } else {
+            console.warn(data.message);
+        }
+    } catch (error) {
+        console.error("Error saving favorite:", error);
+    }
+}
+
+// Keep all your existing functions below this point
 
 // Example function to simulate fetching ratings
 function getPodcastRating(podcastName) {
@@ -212,6 +455,8 @@ document.addEventListener('DOMContentLoaded', function() {
             step2.style.display = 'block';
         });
     }
+});
+
   
    // Form submission validation
     document.getElementById('surveyForm').addEventListener('submit', function(e) {
@@ -222,8 +467,6 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Selecteer ten minste één sfeer voor je podcast');
         }
     });
-   
-});
 
 document.getElementById("fileInput").addEventListener("change", function (event) {
     const file = event.target.files[0];
@@ -237,5 +480,6 @@ document.getElementById("fileInput").addEventListener("change", function (event)
 
         reader.readAsDataURL(file);
     }
+
 
 })
