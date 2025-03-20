@@ -13,13 +13,29 @@
     </header>
 
     <main>
+       
         <div class="recommendation-container">
             <% if (podcast && spotify) { %>
                 <section class="podcast-header">
-                    <p><span class="recommendation-label">We recommend:</span></p>
-                    <h2><%= podcast.title %></h2>
-                    <p class="spotify-description"><span>Spotify description:</span> <%= spotify.description %></p>
+                    <div>
+                        <p><span class="recommendation-label">We recommend</span></p>
+                        <h2><%= podcast.title %></h2>
+                        <p class="spotify-description">
+                            <span>Spotify description:</span> 
+                            <span class="truncated-description"><%= spotify.description %></span>
+                        </p>
+                    </div>
+                    <div>
+                        <section class="podcast-image-container" data-name="<%= podcast.title %>">
+                            <% if (spotify.image) { %>
+                                <img src="<%= spotify.image %>" alt="<%= podcast.title %>" class="podcast-image">
+                            <% } else { %>
+                                <img src="/images/podcast-placeholder.jpg" alt="Podcast Placeholder Image" class="podcast-image">
+                            <% } %>
+                        </section>
+                    </div>
                 </section>
+            
 
                 <section class="explanation">
                     <h3>Why you might like it</h3>
@@ -56,29 +72,6 @@
                             Open in Spotify
                         </a>
                     <% } %>
-                </section>
-
-                <section class="podcast-image-container" data-name="<%= podcast.title %>">
-                    <% if (spotify.image) { %>
-                        <img src="<%= spotify.image %>" alt="<%= podcast.title %>" class="podcast-image">
-                    <% } else { %>
-                        <img src="/images/podcast-placeholder.jpg" alt="Podcast Placeholder Image" class="podcast-image">
-                    <% } %>
-                
-                    <!-- Container for Like Button & Rating -->
-                    <div class="like-rating-container">
-                        <button id="save-favorite" class="likeButton">
-                            <svg class="likeIcon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6.5 3.5 5 5.5 5c1.54 0 3.04.99 3.57 2.36h1.87C11.46 5.99 12.96 5 14.5 5 16.5 5 18 6.5 18 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                            </svg>
-                            <span class="like-text">Save to Favorites</span>
-                        </button>
-                
-                        <div class="rating-display">
-                            <span class="rating-star">★</span>
-                            <span class="rating-value">4.5</span> 
-                        </div>
-                    </div>
                 </section>
 
                 <section class="actions">
@@ -158,6 +151,38 @@
         });
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const descriptionEl = document.querySelector('.truncated-description');
+            if (!descriptionEl) return;
+            
+            // Check if the content is truncated by comparing scrollHeight with clientHeight
+            const isTruncated = descriptionEl.scrollHeight > descriptionEl.clientHeight;
+            
+            if (isTruncated) {
+                const button = document.createElement('button');
+                button.className = 'show-more-button';
+                button.textContent = 'Read more';
+                
+                button.addEventListener('click', function() {
+                    if (descriptionEl.classList.contains('show-full-text')) {
+                        descriptionEl.classList.remove('show-full-text');
+                        button.textContent = 'Read more';
+                        // Scroll back to where the description starts
+                        descriptionEl.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        descriptionEl.classList.add('show-full-text');
+                        button.textContent = 'Read less';
+                    }
+                });
+                
+                // Insert button after the description
+                descriptionEl.parentNode.insertBefore(button, descriptionEl.nextSibling);
+            }
+        });
+    </script>
+
     <script src="/script/frontend.js"></script>
 </body>
 </html>
+
