@@ -37,13 +37,13 @@ document.addEventListener("DOMContentLoaded", function () {
         existingSections.forEach(section => section.remove());
         
         // Show message if no favorites
-        if (!podcasts || podcasts.length === 0) {
-            const emptyMessage = document.createElement('div');
-            emptyMessage.className = 'empty-message';
-            emptyMessage.textContent = 'No favorite podcasts yet. Discover new podcasts in the survey!';
-            main.appendChild(emptyMessage);
-            return;
-        }
+        // if (!podcasts || podcasts.length === 0) {
+        //     const emptyMessage = document.createElement('div');
+        //     emptyMessage.className = 'empty-message';
+        //     emptyMessage.textContent = 'No favorite podcasts yet. Discover new podcasts in the survey!';
+        //     main.appendChild(emptyMessage);
+        //     return;
+        // }
         
         // Apply filtering
         let filteredPodcasts = [...podcasts];
