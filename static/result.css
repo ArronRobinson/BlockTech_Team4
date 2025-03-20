@@ -21,3 +21,89 @@
     background-color: var(--color-accentcolor);
     clip-path: circle(50% at center);
 }
+
+
+
+.recommendation-container {
+    display: flex;
+    flex-direction: column;
+    grid-column: 2;
+    grid-row: 2;
+    margin: auto;
+    gap: 1em;
+    overflow: visible;
+    width: 90vw;
+    background-color: gray;
+    padding: 2em;
+    border-radius: 1em;
+}
+
+.recommendation-container p {
+    font-size: 1em;
+    font-weight: thin;
+    color: var(--color-textcolor);
+}
+
+.recommendation-container h2 {
+    font-size: 2em;
+    font-weight: thin;
+    color: var(--color-textcolor);
+}
+
+
+.recommendation-container p {
+    font-size: 1em;
+    font-weight: thin;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.podcast-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1em;
+}
+
+
+.podcast-header img {
+    max-width: 90%;
+    border-radius: 1em;
+}
+
+.podcast-header div:first-child {
+    max-width: 60%;
+}
+
+/* Add this to your result.css file */
+.truncated-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 6;  /* Show exactly 6 lines of text */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    line-height: 1.5; /* Adjust this value based on your design */
+}
+
+/* Optional: Add a "Read more" button for expanding the text */
+.show-more-button {
+    display: block;
+    margin-top: 8px;
+    color: #4fc3f7;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.show-more-button:hover {
+    text-decoration: underline;
+}
+
+/* This class will be added with JavaScript to show full text */
+.show-full-text {
+    -webkit-line-clamp: initial;
+    display: block;
+}
