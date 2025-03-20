@@ -212,10 +212,8 @@ document.addEventListener('DOMContentLoaded', function() {
             step2.style.display = 'block';
         });
     }
-    
-    
-    
-    // Form submission validation
+  
+   // Form submission validation
     document.getElementById('surveyForm').addEventListener('submit', function(e) {
         const selectedMoods = document.querySelectorAll('input[name="mood"]:checked');
         
@@ -224,4 +222,21 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Selecteer ten minste één sfeer voor je podcast');
         }
     });
+    
+   
+  document.getElementById("fileInput").addEventListener("change", function (event) {
+    const file = event.target.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            document.getElementById("profilePic").src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    }
+    
+
+   
 });
