@@ -7,6 +7,7 @@
 :root {
     --color-text: #181717;
     --color-accentcolor: #FFAA00;
+    --color-accentcolor-light: hsl(40, 100%, 80%);
     --color-textaccent: #ffffff;
     --color-accentTwo: #FF6A00;
 

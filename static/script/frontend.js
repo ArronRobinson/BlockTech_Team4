@@ -92,195 +92,136 @@ function getPodcastRating(podcastName) {
     return ratings[podcastName] || 0.0; // Default to 0.0 if not found
 }
 
-// Old Quiz Navigation Functions
-let nextButton = document.querySelector(".nextButton");
-let secondQuestion = document.querySelector(".secondQuestion");
-let firstQuestion = document.querySelector(".firstQuestion");
-let buttonBack = document.querySelector(".backButton");
+// *******
+// survey
+// *******
 
-if (nextButton) {
-    nextButton.onclick = showquiz;
-}
 
-if (buttonBack) {
-    buttonBack.onclick = reload;
-}
-
-function showquiz() {
-    if (secondQuestion && firstQuestion) {
-        secondQuestion.style.display = "grid";
-        firstQuestion.style.display = "none";
-        if (buttonBack) buttonBack.style.display = "block";
-    }
-}
-
-function reload() {
-    location.reload();
-}
-
-// Interest group show/hide functions
-const interestGroups = [
-    { checkbox: ".sport", options: ".sportOption" },
-    { checkbox: ".boeken", options: ".boekenOption" },
-    { checkbox: ".koken", options: ".kokenOption" },
-    { checkbox: ".gamen", options: ".gamenOption" },
-    { checkbox: ".muziek", options: ".muziekOption" },
-    { checkbox: ".film", options: ".filmOption" },
-    { checkbox: ".nieuws", options: ".nieuwsOption" },
-    { checkbox: ".kunst", options: ".kunstOption" },
-    { checkbox: ".misdaad", options: ".misdaadOption" },
-    { checkbox: ".geschiedenis", options: ".geschiedenisOption" },
-    { checkbox: ".mode", options: ".modeOption" },
-    { checkbox: ".lifestyle", options: ".lifestyleOption" },
-];
-
-// Attach event listeners for each interest group
-interestGroups.forEach(group => {
-    const checkbox = document.querySelector(group.checkbox);
-    const optionsElement = document.querySelector(group.options);
-    
-    if (checkbox && optionsElement) {
-        checkbox.addEventListener("change", () => {
-            optionsElement.style.display = checkbox.checked ? "grid" : "none";
-        });
-    }
-});
-
-// Limit hobby selection
-document.addEventListener("DOMContentLoaded", function () {
-    const hobbyCheckboxes = document.querySelectorAll("input[name='hobby']");
-
-    if (hobbyCheckboxes.length > 0) {
-        function updateCheckboxes() {
-            let checkedCount = document.querySelectorAll("input[name='hobby']:checked").length;
-
-            hobbyCheckboxes.forEach(checkbox => {
-                if (checkedCount >= 3) {
-                    // Disable checkboxes die niet aangevinkt zijn
-                    checkbox.disabled = !checkbox.checked;
-                } else {
-                    // Zorg dat alles weer aanklikbaar is als er minder dan 3 zijn aangevinkt
-                    checkbox.disabled = false;
-                }
-            });
-        }
-
-        hobbyCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener("change", updateCheckboxes);
-        });
-    }
-});
-
-// New multi-step form navigation
 document.addEventListener('DOMContentLoaded', function() {
-    // Elements for navigation
+   
     const step1 = document.getElementById('step1');
     const step2 = document.getElementById('step2');
     const step3 = document.getElementById('step3');
     
-    // Navigation buttons
     const nextToStep2 = document.getElementById('next-to-step2');
     const backToStep1 = document.getElementById('back-to-step1');
     const nextToStep3 = document.getElementById('next-to-step3');
     const backToStep2 = document.getElementById('back-to-step2');
     
-    // Category selection for new survey
     const categoryItems = document.querySelectorAll('.category-item');
-    
-    // Add selection functionality to category items
+    const SubcategoryGroup = document.querySelectorAll('.checkbox-grid input[type="checkbox"]');
+    const moodCheckboxes = document.querySelectorAll('.mood-options input[type="checkbox"]');
+
+
     categoryItems.forEach(item => {
         item.addEventListener('click', function() {
-            // Toggle selected class
-            this.classList.toggle('selected');
-            
-            // Toggle checkbox
-            const checkbox = this.querySelector('input[type="checkbox"]');
-            if (checkbox) checkbox.checked = !checkbox.checked;
-        });
-    });
-    
-    // Make checkboxes in subcategory options and mood options update their styling
-    const checkboxLabels = document.querySelectorAll('.checkbox-grid label, .mood-option');
-    checkboxLabels.forEach(label => {
-        label.addEventListener('click', function() {
-            this.classList.toggle('selected');
-        });
-    });
-    
-    // Navigation: Step 1 to Step 2
-    if (nextToStep2 && step1 && step2) {
-        nextToStep2.addEventListener('click', function() {
-            // Check if at least one category is selected
-            const selectedCategories = document.querySelectorAll('.category-item.selected');
-            
-            if (selectedCategories.length === 0) {
-                alert('Selecteer ten minste één categorie');
-                return;
-            }
-            
-            // Hide all subcategory groups first
-            document.querySelectorAll('.subcategory-group').forEach(group => {
-                group.style.display = 'none';
-            });
-            
-            // Show subcategories based on selection
-            selectedCategories.forEach(category => {
-                const categoryName = category.getAttribute('data-category');
-                const subcategory = document.querySelector(`.${categoryName}Opties`);
-                if (subcategory) {
-                    subcategory.style.display = 'block';
+            // Deselecteer alle andere categorieën
+            categoryItems.forEach(otherItem => {
+                if (otherItem !== this) {
+                    otherItem.classList.remove('selected');
+                    const checkbox = otherItem.querySelector('input[type="radio"]');
+                    if (checkbox) checkbox.checked = false; // deselecteer de radio button
                 }
             });
-            
-            // Navigate to step 2
-            step1.style.display = 'none';
-            step2.style.display = 'block';
+    
+            // Selecteer de aangeklikte categorie
+            this.classList.add('selected');
+            const checkbox = this.querySelector('input[type="radio"]');
+            if (checkbox) checkbox.checked = true; // selecteer de radio button
         });
-    }
+    });
+    
+
+
+    // clicked kleur verandere
+
+
+    SubcategoryGroup.forEach(item => {
+        item.addEventListener('click', function() {
+            const label = this.parentElement;
+            label.classList.toggle("selected", this.checked);
+        });
+    });
+
+
+
+    moodCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", function () {
+           const label = this.closest(".mood-option");
+           label.classList.toggle("selected", this.checked);
+        });
+    });
+
+    
+    
+    // Navigation: Step 1 to Step 2
+    nextToStep2.addEventListener('click', function() {
+        const selectedCategories = document.querySelectorAll('.category-item.selected');
+        if (selectedCategories.length === 0) {
+            alert('Selecteer ten minste één categorie');
+            return;
+        }
+        
+        selectedCategories.forEach(category => {
+            const categoryName = category.getAttribute('data-category');
+            const subcategory = document.querySelector(`.${categoryName}Opties`);
+            if (subcategory) {
+                subcategory.style.display = 'block';
+            } else {
+                console.warn(`Geen subcategorie gevonden voor: ${categoryName}`);
+            }
+        });
+    
+        // Navigatie naar stap 2
+        step1.style.display = 'none';
+        step2.style.display = 'block';
+    });
+    
+
+
     
     // Navigation: Step 2 to Step 1
-    if (backToStep1 && step1 && step2) {
-        backToStep1.addEventListener('click', function() {
-            step2.style.display = 'none';
-            step1.style.display = 'block';
-        });
-    }
+    backToStep1.addEventListener('click', function() {
+        location.reload();
+    });
+
+
+       // Navigation: Step 2 to Step 3 
+    if (nextToStep3) {
     
-    // Navigation: Step 2 to Step 3
-    if (nextToStep3 && step2 && step3) {
-        nextToStep3.addEventListener('click', function() {
-            // Check if at least one subcategory option is selected
+        nextToStep3.addEventListener('click', function(e) {
+            e.preventDefault(); 
+
             const selectedInterests = document.querySelectorAll('input[name="interests"]:checked');
-            
-            if (selectedInterests.length === 0) {
-                alert('Selecteer ten minste één specifieke interesse');
-                return;
-            }
-            
-            // Navigate to step 3
+
+    
             step2.style.display = 'none';
             step3.style.display = 'block';
         });
+    } else {
+        console.error("⚠️ nextToStep3 knop NIET gevonden!");
     }
-    
-    // Navigation: Step 3 to Step 2
-    if (backToStep2 && step2 && step3) {
+
+       // Navigation: Step 3 to Step 2 
+    if (backToStep2) {
         backToStep2.addEventListener('click', function() {
+            // Verberg stap 3
             step3.style.display = 'none';
+            
+            // Toon stap 2
             step2.style.display = 'block';
         });
     }
     
+    
+    
     // Form submission validation
-    const surveyForm = document.getElementById('surveyForm');
-    if (surveyForm) {
-        surveyForm.addEventListener('submit', function(e) {
-            const selectedMoods = document.querySelectorAll('input[name="mood"]:checked');
-            
-            if (selectedMoods.length === 0) {
-                e.preventDefault();
-                alert('Selecteer ten minste één sfeer voor je podcast');
-            }
-        });
-    }
+    document.getElementById('surveyForm').addEventListener('submit', function(e) {
+        const selectedMoods = document.querySelectorAll('input[name="mood"]:checked');
+        
+        if (selectedMoods.length === 0) {
+            e.preventDefault();
+            alert('Selecteer ten minste één sfeer voor je podcast');
+        }
+    });
 });
