@@ -222,9 +222,10 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Selecteer ten minste één sfeer voor je podcast');
         }
     });
-    
    
-  document.getElementById("fileInput").addEventListener("change", function (event) {
+});
+
+document.getElementById("fileInput").addEventListener("change", function (event) {
     const file = event.target.files[0];
 
     if (file) {
@@ -236,7 +237,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
         reader.readAsDataURL(file);
     }
-    
 
-   
-});
+})
