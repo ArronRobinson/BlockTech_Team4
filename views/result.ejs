@@ -21,7 +21,6 @@
                         <p><span class="recommendation-label">We recommend</span></p>
                         <h2><%= podcast.title %></h2>
                         <p class="spotify-description">
-                            <span>Spotify description:</span> 
                             <span class="truncated-description"><%= spotify.description %></span>
                         </p>
                     </div>
@@ -40,18 +39,18 @@
                 <section class="explanation">
                     <h3>Why you might like it</h3>
                     <p><%= podcast.explanation || "Based on your interests and preferences, we think you'll enjoy this podcast. It matches your taste in content and listening style." %></p>
-                    
-                    <div class="podcast-tags">
-                        <% if (podcast.tags && podcast.tags.length > 0) { %>
-                            <h4>Tags:</h4>
-                            <ul class="tag-list">
-                                <% podcast.tags.forEach(tag => { %>
-                                    <li class="tag"><%= tag %></li>
-                                <% }) %>
-                            </ul>
-                        <% } %>
-                    </div>
                 </section>
+
+                <div class="podcast-tags">
+                    <% if (podcast.tags && podcast.tags.length > 0) { %>
+                        <h4>Tags:</h4>
+                        <ul class="tag-list">
+                            <% podcast.tags.forEach(tag => { %>
+                                <li class="tag"><%= tag %></li>
+                            <% }) %>
+                        </ul>
+                    <% } %>
+                </div>
 
                 <section class="spotify-section">
                     <h3>Listen on Spotify</h3>
@@ -91,6 +90,7 @@
         <section class="background-elements">
             <div class="circle"></div>
             <div class="circleTwo"></div>
+            <div class="glass-highlight"></div>
         </section>
     </main>
 
