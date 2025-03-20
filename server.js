@@ -60,6 +60,7 @@ app
     .get('/login', onlogin)
     .get('/favorite', authenticateToken, onfavorite)
     .get('/survey', authenticateToken, onsurvey)
+    .get('/account', authenticateToken, onaccount)
     .get ('/result', authenticateToken, onresult);
 
 function onsurvey(req, res) {
@@ -80,6 +81,10 @@ function onlogin(req, res) {
 
 function onresult(req, res) {
     res.render('result', { title: 'Result Page' });
+}
+
+function onaccount(req, res) {
+    res.render('account', { title: 'Account Page' });
 }
 
 function onfavorite(req, res) {
