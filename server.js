@@ -60,12 +60,17 @@ app
     .get('/login', onlogin)
     .get('/favorite', authenticateToken, onfavorite)
     .get('/survey', authenticateToken, onsurvey)
-    .get ('/result', authenticateToken, onresult);
+    .get ('/result', authenticateToken, onresult)
+    .get('/account', authenticateToken, onaccount)
+
 
 function onsurvey(req, res) {
     res.render('survey', { title: 'Survey Page'});
 }
 
+function onaccount(req, res) {
+    res.render('account', { title: 'Account Page'})
+}
 
 
 function onindex(req, res) {

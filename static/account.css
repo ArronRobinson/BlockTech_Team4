@@ -32,21 +32,22 @@
 MIJN ACCOUNT STYLING
 ******** */
 
-main {
-    display: flex;
-    justify-content: center;  
-    align-items: center;  
-    height: 100vh; 
+header {
+    margin-bottom: 1em;
+}
+
+main{
+    height: 100vh;
 }
 
 main section:nth-of-type(1){
     background-color: var(--color-formbg);
-    width: 50%;
+    width: 60%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
     margin: auto;
-    filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
+    filter: drop-shadow(0.2rem 0.2rem 0.7rem var(--color-dropshadow));
     padding: 3em;
 }
 
@@ -65,6 +66,11 @@ main section:nth-of-type(1) h2:nth-of-type(2){
     margin-bottom: 2em;
     text-align: center;
     text-transform: uppercase;
+}
+
+main section:nth-of-type(1) button{
+    padding: 1em;
+    margin-top: 0em;
 }
 
 
@@ -116,7 +122,7 @@ main section:nth-of-type(1) article{
 
 .schijding{
     position: absolute;
-    left: 20em;
+    left: 35%;
     top: 18em;
 
     background-color: var(--color-accentcolor);
