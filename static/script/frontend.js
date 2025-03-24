@@ -205,6 +205,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // Skip if we're on the favorites page
         if (isOnFavoritesPage) return;
         
+        // ADD THIS LINE to skip on result page too
+        if (window.location.pathname.includes('/recommend')) return;
+        
         let podcastSections = Array.from(document.querySelectorAll("main section[data-name]"));
 
         // Apply filter
