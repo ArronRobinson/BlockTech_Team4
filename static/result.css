@@ -47,11 +47,11 @@ main{
 
 
 
-    margin: 2em 2em 2em 0em;
+    /* margin: 2em 2em 2em 0em;
 
     padding: 1.5em;
     border-radius: 1em;
-}
+} */
 
 main{
     display: flex;

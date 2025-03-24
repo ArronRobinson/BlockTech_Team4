@@ -3,31 +3,6 @@
     overflow: hidden;
 }
 
-[data-theme="yellow"] {
-    --color-text: #181717;
-    --color-textaccent: #ffffff;
-
-    --color-accentcolor: #FFAA00;
-    --color-accentcolor-light: hsl(40, 100%, 80%);
-    --color-accentTwo: #FF6A00;
-    --color-logout: #FF2020;
-    --color-formbg: rgb(243, 243, 243);
-    --color-dropshadow: black;
-}
-
-
-[data-theme="blue"] {
-    --color-text: #181717;
-    --color-textaccent: #ffffff;
-
-    --color-accentcolor: #00D1CF;
-    --color-accentcolor-light: hsl(40, 100%, 80%);
-    --color-accentTwo: #1589EE;
-    --color-logout: #1E02D2;
-    --color-formbg: rgb(243, 243, 243);
-    --color-dropshadow: black;
-}
-
 
 .circle {
     z-index: -2;
@@ -57,21 +32,22 @@
 MIJN ACCOUNT STYLING
 ******** */
 
-main {
-    display: flex;
-    justify-content: center;  
-    align-items: center;  
-    height: 100vh; 
+header {
+    margin-bottom: 1em;
+}
+
+main{
+    height: 100vh;
 }
 
 main section:nth-of-type(1){
     background-color: var(--color-formbg);
-    width: 60%;
+    width: 50%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
     margin: auto;
-    filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
+    filter: drop-shadow(0.2rem 0.2rem 0.7rem var(--color-dropshadow));
     padding: 3em;
 }
 
@@ -90,11 +66,6 @@ main section:nth-of-type(1) h2:nth-of-type(2){
     margin-bottom: 2em;
     text-align: center;
     text-transform: uppercase;
-}
-
-main section:nth-of-type(1) button{
-    padding: 1em;
-    margin-top: 0em;
 }
 
 
@@ -146,7 +117,7 @@ main section:nth-of-type(1) article{
 
 .schijding{
     position: absolute;
-    left: 35%;
+    left: 15em;
     top: 18em;
 
     background-color: var(--color-accentcolor);
