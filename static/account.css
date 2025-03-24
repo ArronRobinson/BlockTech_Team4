@@ -32,11 +32,12 @@
 MIJN ACCOUNT STYLING
 ******** */
 
-main {
-    display: flex;
-    justify-content: center;  
-    align-items: center;  
-    height: 100vh; 
+header {
+    margin-bottom: 1em;
+}
+
+main{
+    height: 100vh;
 }
 
 main section:nth-of-type(1){
@@ -46,7 +47,7 @@ main section:nth-of-type(1){
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
     margin: auto;
-    filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
+    filter: drop-shadow(0.2rem 0.2rem 0.7rem var(--color-dropshadow));
     padding: 3em;
 }
 
