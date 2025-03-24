@@ -4,16 +4,32 @@
     margin: 0;
 }
 
-:root {
+[data-theme="yellow"] {
     --color-text: #181717;
+    --color-textaccent: #ffffff;
+
     --color-accentcolor: #FFAA00;
     --color-accentcolor-light: hsl(40, 100%, 80%);
-    --color-textaccent: #ffffff;
     --color-accentTwo: #FF6A00;
     --color-logout: #FF2020;
     --color-formbg: rgb(243, 243, 243);
     --color-dropshadow: black;
 }
+
+
+[data-theme="blue"] {
+    --color-text: #181717;
+    --color-textaccent: #ffffff;
+
+    --color-accentcolor: #00D1CF;
+    --color-accentcolor-light: hsl(40, 100%, 80%);
+    --color-accentTwo: #1589EE;
+    --color-logout: #1E02D2;
+    --color-formbg: rgb(243, 243, 243);
+    --color-dropshadow: black;
+}
+
+
 
 @font-face{
 	font-family: 'main-font';

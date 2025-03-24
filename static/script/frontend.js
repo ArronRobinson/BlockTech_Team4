@@ -417,6 +417,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.warn(`Geen subcategorie gevonden voor: ${categoryName}`);
             }
         });
+
+
     
         // Navigatie naar stap 2
         step1.style.display = 'none';
@@ -486,3 +488,30 @@ document.getElementById("fileInput").addEventListener("change", function (event)
 
 
 })
+
+// ***************
+// kleur verandere
+// ***************
+
+// Haal het huidige thema op bij het laden van de pagina of standaard naar 'yellow'
+const savedTheme = localStorage.getItem("theme") || "yellow";
+document.documentElement.setAttribute("data-theme", savedTheme);
+document.body.style.backgroundColor = savedTheme === "blue" ? "#00D1CF" : "#FFAA00";
+
+// Selecteer de knop
+const button = document.querySelector("[data-theme-toggle]");
+
+// Functie om thema te wisselen tussen blauw en geel
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute("data-theme");
+    const newTheme = currentTheme === "blue" ? "yellow" : "blue";
+
+    document.documentElement.setAttribute("data-theme", newTheme);
+    document.body.style.backgroundColor = newTheme === "blue" ? "#00D1CF" : "#FFAA00";
+    localStorage.setItem("theme", newTheme);
+}
+
+// Event listener voor de knop
+button.addEventListener("click", toggleTheme);
+
+
