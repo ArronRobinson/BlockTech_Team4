@@ -37,13 +37,13 @@ document.addEventListener("DOMContentLoaded", function () {
         existingSections.forEach(section => section.remove());
         
         // Show message if no favorites
-        if (!podcasts || podcasts.length === 0) {
-            const emptyMessage = document.createElement('div');
-            emptyMessage.className = 'empty-message';
-            emptyMessage.textContent = 'No favorite podcasts yet. Discover new podcasts in the survey!';
-            main.appendChild(emptyMessage);
-            return;
-        }
+        // if (!podcasts || podcasts.length === 0) {
+        //     const emptyMessage = document.createElement('div');
+        //     emptyMessage.className = 'empty-message';
+        //     emptyMessage.textContent = 'No favorite podcasts yet. Discover new podcasts in the survey!';
+        //     main.appendChild(emptyMessage);
+        //     return;
+        // }
         
         // Apply filtering
         let filteredPodcasts = [...podcasts];
@@ -204,6 +204,9 @@ document.addEventListener("DOMContentLoaded", function () {
     function filterAndSort() {
         // Skip if we're on the favorites page
         if (isOnFavoritesPage) return;
+        
+        // ADD THIS LINE to skip on result page too
+        if (window.location.pathname.includes('/recommend')) return;
         
         let podcastSections = Array.from(document.querySelectorAll("main section[data-name]"));
 
@@ -467,8 +470,6 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Selecteer ten minste één sfeer voor je podcast');
         }
     });
-   
-});
 
 document.getElementById("fileInput").addEventListener("change", function (event) {
     const file = event.target.files[0];
