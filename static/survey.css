@@ -27,8 +27,6 @@ body button{
 /* step 1 */
 .category-grid {
     background-color: #ffffff;
-    box-shadow: 0px 0px 60px 0px var(--color-dropshadow);
-
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
@@ -37,6 +35,22 @@ body button{
     margin-top: 1em;
     height: 35em;
     width: 70em;
+
+    background-color: var(--color-bgBlur);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--effect-boxShadow);
+    border: var(--color-blurBorder);
+    width: 75vw;
+    border-radius: .8em;
+}
+
+form div h1{
+    color: var(--color-accentTwo);
+    font-size: 2.5em;
+    display: flex;
+    justify-content: center;
+    text-transform: uppercase;
+    -webkit-text-stroke: 1px var(--color-accentTwo);
 }
 
 .category-grid::-webkit-scrollbar {
@@ -73,7 +87,7 @@ body button{
 .category-item:hover {
     transform: translateY(-1px);
     background-color: var(--color-textaccent);
-    filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
+    filter: drop-shadow(1px 1px 2em var(--color-accentTwo));
 }
 
 .category-item img {
@@ -115,9 +129,6 @@ body button{
 
 .subcategories {
     background-color: #ffffff;
-    box-shadow: 0px 0px 60px 0px var(--color-dropshadow);
-
-
     display: flex;
     align-items: center;
     justify-items: center;
@@ -125,11 +136,16 @@ body button{
     margin-top: 2em;
     height: 25em;
     width: 70em;
+
+    background-color: var(--color-bgBlur);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--effect-boxShadow);
+    border: var(--color-blurBorder);
+    width: 75vw;
+    border-radius: .8em;
 }
 
 .subcategory-group {
-    background-color: #ffffff;
-
     width: 100%;
     margin-top: 1em;
 }
@@ -157,7 +173,6 @@ body button{
     width: 7em;
     padding: 1em;
     margin: 1em;
-    background-color: #fff;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -167,7 +182,7 @@ body button{
 .checkbox-grid label:hover {
     transform: translateY(-1px);
     background-color: var(--color-textaccent);
-    filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
+    filter: drop-shadow(1px 1px 2em var(--color-accentTwo));
 }
 
 .checkbox-grid label.selected{
@@ -187,7 +202,6 @@ body button{
 
 .mood-options {
     background-color: #ffffff;
-    box-shadow: 0px 0px 60px 0px var(--color-dropshadow);
 
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -198,6 +212,13 @@ body button{
     height: 10em;
     width: 70em;
     margin-top: 3em;
+
+    background-color: var(--color-bgBlur);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--effect-boxShadow);
+    border: var(--color-blurBorder);
+    width: 75vw;
+    border-radius: .8em;
 }
 
 .mood-options label{
@@ -213,7 +234,7 @@ body button{
 .mood-options label:hover{
     transform: translateY(-1px);
     background-color: var(--color-textaccent);
-    filter: drop-shadow(0.1em 0.1em 1em var(--color-dropshadow));
+    filter: drop-shadow(1px 1px 2em var(--color-accentTwo));
 }
 
 .mood-option input[type="checkbox"] {
@@ -249,6 +270,7 @@ body button{
 
 .nav-button{
     margin-left: 5em;
+    background-color: var(--color-logout);
 }
 
 .submit-button{
