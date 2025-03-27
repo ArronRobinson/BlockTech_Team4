@@ -37,7 +37,53 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    
+    function removeFavorite(podcastName, section) {
+        fetch('/remove-favorite', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ podcastTitle: podcastName })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove section from the DOM
+                if (section) {
+                    section.remove();
+                }
+                
+                // Check if we need to show the empty message
+                const remainingSections = document.querySelectorAll('main > section[data-name]');
+                if (remainingSections.length === 0) {
+                    const main = document.querySelector('main');
+                    const emptyMessage = document.createElement('div');
+                    emptyMessage.className = 'empty-message';
+                    emptyMessage.textContent = 'No favorite podcasts yet. Discover new podcasts in the survey!';
+                    main.appendChild(emptyMessage);
+                }
+            } else {
+                console.error('Error removing favorite:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Event listener for like buttons (which will now act as remove buttons)
+    document.querySelectorAll('.likeButton').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent form submission
+            
+            const section = this.closest('section');
+            const podcastName = section.getAttribute('data-name');
+            
+            removeFavorite(podcastName, section);
+        });
+    });
+
+
     // If we're on the favorites page, fetch and display favorites
     if (isOnFavoritesPage) {
         loadFavorites();
