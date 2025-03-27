@@ -4,7 +4,7 @@
     margin: 0;
 }
 
-[data-theme="yellow"] {
+:root {
     --color-text: #181717;
     --color-textaccent: #ffffff;
 
@@ -18,19 +18,6 @@
     --color-blurBorder: 1px solid rgba(255, 255, 255, 0.265);
     --effect-blur: blur(20px);
     --effect-boxShadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-}
-
-
-[data-theme="blue"] {
-    --color-text: #181717;
-    --color-textaccent: #ffffff;
-
-    --color-accentcolor: #00D1CF;
-    --color-accentcolor-light: hsl(40, 100%, 80%);
-    --color-accentTwo: #1589EE;
-    --color-logout: #1E02D2;
-    --color-formbg: rgb(243, 243, 243);
-    --color-dropshadow: black;
 }
 
 
