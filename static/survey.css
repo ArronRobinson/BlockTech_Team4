@@ -35,6 +35,7 @@ body button{
     margin-top: 1em;
     height: 35em;
     width: 70em;
+    overflow: scroll;
 
     background-color: var(--color-bgBlur);
     backdrop-filter: blur(20px);
@@ -57,10 +58,6 @@ form div h1{
     width: 10px;
 }
 
-.category-grid::-webkit-scrollbar-track {
-    background: var(--color-accentcolor-light);
-    border-radius: 3px;
-}
 
 .category-grid::-webkit-scrollbar-thumb {
     background: var(--color-accentTwo);
