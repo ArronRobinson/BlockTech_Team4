@@ -330,6 +330,37 @@ app.post("/recommend", authenticateToken, async (req, res) => {
     }
 });
 
+// Modify the existing add-favorite route in your server.js
+app.post("/add-favorite", authenticateToken, async (req, res) => {
+    try {
+        const { title, description, tags, spotify_url, image } = req.body;
+
+        if (!title || !spotify_url) {
+            return res.status(400).json({ success: false, message: "Invalid podcast data" });
+        }
+
+        const user = await User.findById(req.user.userId);
+        if (!user) {
+            return res.status(401).json({ success: false, message: "User not found" });
+        }
+
+        // Check if podcast is already in favorites
+        const alreadyExists = user.favoritePodcasts.some(podcast => podcast.title === title);
+        if (alreadyExists) {
+            return res.status(400).json({ success: false, message: "Podcast already in favorites" });
+        }
+
+        // Add to favorites
+        user.favoritePodcasts.push({ title, description, tags, spotify_url, image });
+        await user.save();
+
+        res.status(200).json({ success: true, message: "Podcast added to favorites" });
+    } catch (error) {
+        console.error("Error adding favorite:", error);
+        res.status(500).json({ success: false, message: "Error adding favorite" });
+    }
+});
+
 // Remove favorite podcast
 app.post("/remove-favorite", authenticateToken, async (req, res) => {
     try {

@@ -3,7 +3,41 @@ document.addEventListener("DOMContentLoaded", function () {
     const sortSelect = document.getElementById("sort");
     const podcastList = document.getElementById("podcastList");
     const isOnFavoritesPage = window.location.pathname.includes('/favorite');
+    const saveButton = document.getElementById("save-favorite");
 
+    if (saveButton && window.podcastData.available) {
+        saveButton.addEventListener("click", async () => {
+            try {
+                const response = await fetch("/add-favorite", {  // Change from "/favorites" to "/add-favorite"
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        title: window.podcastData.title,
+                        description: window.podcastData.description,
+                        tags: window.podcastData.tags,
+                        spotify_url: window.podcastData.spotify_url,
+                        image: window.podcastData.image
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    saveButton.textContent = "❤️ Saved!";
+                    saveButton.disabled = true;
+                } else {
+                    alert(data.message || "Error saving favorite. Try again.");
+                }
+            } catch (error) {
+                console.error("Error saving favorite:", error);
+                alert("Something went wrong. Please try again.");
+            }
+        });
+    }
+
+    
     // If we're on the favorites page, fetch and display favorites
     if (isOnFavoritesPage) {
         loadFavorites();
