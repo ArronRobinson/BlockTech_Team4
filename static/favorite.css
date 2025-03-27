@@ -127,7 +127,26 @@ section[data-name] h2 {
     color: #666;
 }
 
-/* Hide circles on favorites page
-.circle, .circleTwo {
-    display: none; 
-} */
+.circle {
+    z-index: -2;
+    overflow: hidden;
+    position: absolute;
+    left: -25em;
+    bottom: 7em;
+    width: 70em;
+    height: 70em;
+    background-color: var(--color-accentcolor);
+    clip-path: circle(50% at center);
+}
+
+.circleTwo {
+    z-index: -2;
+    overflow: hidden;
+    position: absolute;
+    right: -10em;
+    top: 15em;
+    width: 40em;
+    height: 40em;
+    background-color: var(--color-accentcolor);
+    clip-path: circle(50% at center);
+}

@@ -3,6 +3,86 @@ document.addEventListener("DOMContentLoaded", function () {
     const sortSelect = document.getElementById("sort");
     const podcastList = document.getElementById("podcastList");
     const isOnFavoritesPage = window.location.pathname.includes('/favorite');
+    const saveButton = document.getElementById("save-favorite");
+
+    if (saveButton && window.podcastData.available) {
+        saveButton.addEventListener("click", async () => {
+            try {
+                const response = await fetch("/add-favorite", {  // Change from "/favorites" to "/add-favorite"
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        title: window.podcastData.title,
+                        description: window.podcastData.description,
+                        tags: window.podcastData.tags,
+                        spotify_url: window.podcastData.spotify_url,
+                        image: window.podcastData.image
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    saveButton.textContent = "❤️ Saved!";
+                    saveButton.disabled = true;
+                } else {
+                    alert(data.message || "Error saving favorite. Try again.");
+                }
+            } catch (error) {
+                console.error("Error saving favorite:", error);
+                alert("Something went wrong. Please try again.");
+            }
+        });
+    }
+
+    function removeFavorite(podcastName, section) {
+        fetch('/remove-favorite', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ podcastTitle: podcastName })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove section from the DOM
+                if (section) {
+                    section.remove();
+                }
+                
+                // Check if we need to show the empty message
+                const remainingSections = document.querySelectorAll('main > section[data-name]');
+                if (remainingSections.length === 0) {
+                    const main = document.querySelector('main');
+                    const emptyMessage = document.createElement('div');
+                    emptyMessage.className = 'empty-message';
+                    emptyMessage.textContent = 'No favorite podcasts yet. Discover new podcasts in the survey!';
+                    main.appendChild(emptyMessage);
+                }
+            } else {
+                console.error('Error removing favorite:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Event listener for like buttons (which will now act as remove buttons)
+    document.querySelectorAll('.likeButton').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent form submission
+            
+            const section = this.closest('section');
+            const podcastName = section.getAttribute('data-name');
+            
+            removeFavorite(podcastName, section);
+        });
+    });
+
 
     // If we're on the favorites page, fetch and display favorites
     if (isOnFavoritesPage) {
@@ -303,27 +383,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Function to save favorite podcast
-async function saveFavorite(podcastData) {
-    try {
-        const response = await fetch("/save-favorite", {
-            method: "POST",
-            credentials: "include", // Ensures cookies are sent
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ podcastData }) // Make sure to wrap in { podcastData }
-        });
-
-        const data = await response.json();
-        if (data.success) {
-            console.log("Podcast added to favorites!");
-        } else {
-            console.warn(data.message);
-        }
-    } catch (error) {
-        console.error("Error saving favorite:", error);
-    }
-}
-
 // Keep all your existing functions below this point
 
 // Example function to simulate fetching ratings
@@ -486,7 +545,6 @@ document.getElementById("fileInput").addEventListener("change", function (event)
 
 
 })
-
 
 
 

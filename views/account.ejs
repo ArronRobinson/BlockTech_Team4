@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,11 +17,6 @@
         <section>
             <h2>Mijn account</h2>
             <article>
-                <li>Light & Dark mode</li>
-                <button>Geel</button>
-                <button>Blauw</button>
-                <button>Rose</button>
-                <button>Groen</button>
                 <li>Mijn favorieten</li>
                 <li>Doe de test opnieuw</li>
                 <li>Wachtwoord veranderen</li>
@@ -43,7 +38,9 @@
                     <input type="file" id="fileInput" accept="image/*" style="display: none;">
                 </div>
                 <p>Podcastlover21</p>
-                <button class="logout">Log Out</button>
+                <form action="/logout" method="POST">
+                    <button type="submit" class="logout">Log Out</button>
+                </form>                  
             </article>
         </section>
 
