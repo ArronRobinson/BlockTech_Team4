@@ -32,7 +32,7 @@
 MIJN ACCOUNT STYLING
 ******** */
 
-header {
+header { 
     margin-bottom: 1em;
 }
 
@@ -48,6 +48,7 @@ main section:nth-of-type(1){
     grid-template-rows: auto;
     margin: auto;
     padding: 3em;
+    position: relative;
 
     background-color: var(--color-bgBlur);
     backdrop-filter: blur(20px);
@@ -123,10 +124,10 @@ main section:nth-of-type(1) article{
 
 .schijding{
     position: absolute;
-    left: 15em;
-    top: 18em;
+    left: 30%;
+    top: 15em;
 
-    background-color: var(--color-accentcolor);
+    background-color: var( --color-accentTwo);
     rotate: 90deg;
     width: 25em;
     height: .1em;

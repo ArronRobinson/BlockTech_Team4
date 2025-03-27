@@ -1,5 +1,5 @@
 /* ***********
-   explore
+   explore 
 *********** */
 
 *{
@@ -153,7 +153,7 @@ form div h1{
 .subcategory-group h2 {
     margin-left: 2em;
     color: var(--color-text);
-    padding-bottom: 10px;
+    padding-bottom: 5px;
     font-size: 18px;
 }
 
@@ -161,7 +161,7 @@ form div h1{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     margin-top: 15px;
-    padding-top: 2em;
+    padding-top: 3em;
     align-items: center;
     justify-items: center;
 }
