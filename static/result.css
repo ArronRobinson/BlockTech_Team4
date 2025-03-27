@@ -593,3 +593,128 @@ main p span {
     width: 0;
     height: 0;
 }
+
+/* ----------------------------- */
+/* carousel styling */
+/* ----------------------------- */
+
+/* Carousel Navigation */
+.carousel-navigation {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    transform: translateY(63vh);
+    background: rgba(182, 182, 182, 0.56);
+    backdrop-filter: blur(20px);
+    box-shadow: -7.0022125244140625px 9.013397216796875px 14px 1px rgba(0, 0, 0, 0.2);
+    border: var(--color-blurBorder);
+    height: fit-content;
+    overflow: hidden;
+    width: 30vw;
+    margin: 0;
+    padding: 0.5em;
+    font-weight: bold;
+}
+
+.carousel-navigation div {
+    display: flex;
+    flex-direction: row ;
+    height: fit-content;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 0.5em;
+    width: auto;
+}
+
+.carousel-navigation div:last-child {
+    gap: 0.5em;
+}
+
+.action-button {
+    background: rgba(255, 255, 255, 0.496);
+    border: none;
+    border-radius: 1em;
+    width: -webkit-fill-available;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-weight: bold;
+}
+
+.action-button:hover {
+    background: rgba(255, 255, 255, 0.885);
+    font-weight: bolder;
+}
+
+.favorite-button {
+    background: rgba(255, 255, 255, 0.496);
+    border: none;
+    border-radius: 1em;
+    width: 50px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.favorite-button:hover {
+    background: rgba(255, 255, 255, 0.885);
+}
+
+.carousel-nav-button {
+    background: rgba(255, 255, 255, 0.496);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.carousel-nav-button:hover {
+    background: rgba(255, 255, 255, 0.885);
+}
+
+.carousel-nav-button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    background: rgba(91, 91, 91, 0.496);
+}
+
+.carousel-nav-button svg {
+    fill: var(--color-textcolor);
+}
+
+.carousel-indicator {
+    font-size: 0.9em;
+    color: var(--color-textcolor);
+}
+
+/* Carousel Slides */
+#recommendations-carousel {
+    position: relative;
+    overflow: hidden;
+}
+
+.recommendation-slide {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.recommendation-slide.active {
+    display: block;
+    opacity: 1;
+}
+
+

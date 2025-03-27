@@ -292,7 +292,7 @@ app.post("/login", loginLimiter, async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            maxAge: 15 * 60 * 1000,
+            maxAge: 120 * 60 * 1000,
             sameSite: "strict"
         });
 
@@ -307,7 +307,7 @@ app.post("/recommend", authenticateToken, async (req, res) => {
     try {
         const userData = {
             interests: Array.isArray(req.body.interests) ? req.body.interests : [req.body.interests],
-            preferred_podcast_length: req.body.preferred_podcast_length,
+            preferred_podcast_length: req.body.preferred_podcast_length || "medium",
             mood: Array.isArray(req.body.mood) ? req.body.mood : [req.body.mood]
         };
 
@@ -316,12 +316,17 @@ app.post("/recommend", authenticateToken, async (req, res) => {
         const finalPodcast = await getValidPodcastRecommendation(userData);
 
         if (!finalPodcast) {
-            return res.render("result", { podcast: null, spotify: null });
+            return res.render("result", { 
+                podcast: null, 
+                spotify: null,
+                surveyData: userData // Pass survey data to template
+            });
         }
 
         res.render("result", { 
             podcast: finalPodcast.podcastRecommendation, 
-            spotify: finalPodcast.spotifyPodcast 
+            spotify: finalPodcast.spotifyPodcast,
+            surveyData: userData // Pass survey data to template
         });
 
     } catch (error) {
@@ -376,6 +381,59 @@ app.post("/remove-favorite", authenticateToken, async (req, res) => {
         res.status(500).json({ success: false, message: "Error removing favorite" });
     }
 });
+
+
+
+// API endpoint for getting recommendations without page reload
+app.post("/api/recommend", authenticateToken, async (req, res) => {
+    try {
+        // Log full request body to debug
+        console.log("Raw request body:", req.body);
+        
+        const userData = {
+            interests: Array.isArray(req.body.interests) ? req.body.interests : 
+                       (req.body.interests ? [req.body.interests] : []),
+            preferred_podcast_length: req.body.preferred_podcast_length || "medium",
+            mood: Array.isArray(req.body.mood) ? req.body.mood : 
+                  (req.body.mood ? [req.body.mood] : [])
+        };
+
+        console.log("Processed user data for API recommendation:", userData);
+        
+        // Validate that we have the minimum required data
+        if (!userData.interests.length || !userData.mood.length) {
+            return res.status(400).json({
+                success: false,
+                message: "Missing required interests or mood preferences"
+            });
+        }
+
+        const finalPodcast = await getValidPodcastRecommendation(userData);
+
+        if (!finalPodcast) {
+            return res.status(404).json({ 
+                success: false, 
+                message: "No matching podcast found" 
+            });
+        }
+
+        res.json({ 
+            success: true,
+            podcast: finalPodcast.podcastRecommendation, 
+            spotify: finalPodcast.spotifyPodcast 
+        });
+
+    } catch (error) {
+        console.error("❌ Error in API recommendation:", error.message);
+        res.status(500).json({ 
+            success: false, 
+            message: "Something went wrong generating a recommendation." 
+        });
+    }
+});
+
+
+
 
 app.post ("/logout", (req, res) => { 
     res.cookie("token", "", {maxAge: 0});

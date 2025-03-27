@@ -1,5 +1,4 @@
 *{
-    overflow-x: hidden;
     padding: 0;
     margin: 0;
 }
@@ -80,3 +79,5 @@ NAV STYLING
 .nav-links a:hover {
     color: var(--color-accentTwo);
 }
+
+
