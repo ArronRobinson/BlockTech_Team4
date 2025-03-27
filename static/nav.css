@@ -2,3 +2,8 @@ nav{
     background-color: var(--color-textaccent);
     margin-bottom: 2em;
 }
+
+.logo {
+    width: 10em;
+    height: 4em
+}
