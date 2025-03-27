@@ -14,19 +14,25 @@
     
     <main>
         <div class="carousel-navigation">
-            <button id="prev-recommendation" class="carousel-nav-button" disabled>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-                </svg>
-            </button>
-            <div class="carousel-indicator">
-                <span id="current-index">1</span>/<span id="total-count">1</span>
+            <div>
+                <button id="prev-recommendation" class="carousel-nav-button" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                    </svg>
+                </button>
+                <div class="carousel-indicator">
+                    <span id="current-index">1</span>/<span id="total-count">1</span>
+                </div>
+                <button id="next-recommendation" class="carousel-nav-button" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                    </svg>
+                </button>
             </div>
-            <button id="next-recommendation" class="carousel-nav-button" disabled>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
-                </svg>
-            </button>
+            <div>
+                <button id="save-favorite" class="favorite-button">❤️</button>
+                <button id="generate-new" class="action-button">Recommend another one</button>
+            </div>
         </div>
         <div class="recommendation-container">
             <div id="recommendations-carousel">
@@ -88,26 +94,21 @@
                                 </a>
                             <% } %>
                         </section>
+                        
+                        <section class="actions">
+                            <button id="save-favorite" class="favorite-button">❤ Save to Favorites</button>
+                            <a href="/survey" class="action-button">Try Another Recommendation</a>
+                            <a href="/favorite" class="action-button secondary">View My Favorites</a>
+                        </section>
                     <% } else { %>
                         <section class="no-results">
                             <h2>Sorry, we couldn't find a matching podcast</h2>
                             <p>Please try again with different preferences or categories.</p>
+                            <a href="/survey" class="action-button">Back to Survey</a>
                         </section>
                     <% } %>
                 </div>
             </div>
-                <section class="actions">
-                    <button id="save-favorite" class="favorite-button">❤ Save to Favorites</button>
-                    <a href="/survey" class="action-button">Try Another Recommendation</a>
-                    <a href="/favorite" class="action-button secondary">View My Favorites</a>
-                </section>
-            <% } else { %>
-                <section class="no-results">
-                    <h2>Sorry, we couldn't find a matching podcast</h2>
-                    <p>Please try again with different preferences or categories.</p>
-                    <a href="/survey" class="action-button">Back to Survey</a>
-                </section>
-            <% } %>
         </div>
 
         <!-- Background elements -->
