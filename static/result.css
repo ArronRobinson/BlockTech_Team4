@@ -600,15 +600,21 @@ main p span {
 
 /* Carousel Navigation */
 .carousel-navigation {
+    position: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 1.5em;
-    gap: 1em;
+    z-index: 1;
+    transform: translateY(65vh);
+    background: rgba(115, 115, 115, 0.311);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--effect-boxShadow);
+    border: var(--color-blurBorder);
+    height: 1.5em;
 }
 
 .carousel-nav-button {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.496);
     border: none;
     border-radius: 50%;
     width: 40px;
@@ -621,12 +627,13 @@ main p span {
 }
 
 .carousel-nav-button:hover {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.885);
 }
 
 .carousel-nav-button:disabled {
     opacity: 0.3;
     cursor: not-allowed;
+    background: rgba(91, 91, 91, 0.496);
 }
 
 .carousel-nav-button svg {

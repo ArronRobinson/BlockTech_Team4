@@ -13,23 +13,22 @@
     </header>
     
     <main>
-        <div class="recommendation-container">
-            <div class="carousel-navigation">
-                <button id="prev-recommendation" class="carousel-nav-button" disabled>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-                    </svg>
-                </button>
-                <div class="carousel-indicator">
-                    <span id="current-index">1</span>/<span id="total-count">1</span>
-                </div>
-                <button id="next-recommendation" class="carousel-nav-button" disabled>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
-                    </svg>
-                </button>
+        <div class="carousel-navigation">
+            <button id="prev-recommendation" class="carousel-nav-button" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                </svg>
+            </button>
+            <div class="carousel-indicator">
+                <span id="current-index">1</span>/<span id="total-count">1</span>
             </div>
-
+            <button id="next-recommendation" class="carousel-nav-button" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="recommendation-container">
             <div id="recommendations-carousel">
                 <div class="recommendation-slide active" data-index="0">
                     <% if (podcast && spotify) { %>
@@ -97,6 +96,7 @@
                     <% } %>
                 </div>
             </div>
+            
 
             <section class="actions">
                 <button id="generate-new" class="action-button">Get Another Recommendation</button>
@@ -133,51 +133,6 @@
         // Also store in sessionStorage as backup
         sessionStorage.setItem('surveyData', JSON.stringify(<%- JSON.stringify(surveyData) %>));
     <% } %>
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const saveButton = document.getElementById('save-favorite');
-            if (saveButton) {
-                saveButton.addEventListener('click', async function() {
-                    try {
-                        <% if (podcast && spotify) { %>
-                        const podcastData = {
-                            title: '<%= podcast.title %>',
-                            description: '<%= podcast.description || spotify.description %>',
-                            tags: <%- JSON.stringify(podcast.tags || []) %>,
-                            spotify_url: '<%= spotify.spotify_url || "" %>',
-                            image: '<%= spotify.image || "" %>'
-                        };
-                        
-                        const response = await fetch('/save-favorite', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ podcastData }),
-                        });
-                        
-                        const data = await response.json();
-                        if (data.success) {
-                            saveButton.classList.add('liked');
-                            saveButton.querySelector('.like-text').textContent = 'Saved to Favorites';
-                            saveButton.disabled = true;
-                        } else {
-                            if (data.message === 'Authentication required') {
-                                window.location.href = '/login?redirect=/result';
-                            } else {
-                                alert('Failed to save to favorites: ' + data.message);
-                            }
-                        }
-                        <% } %>
-                    } catch (error) {
-                        console.error('Error:', error);
-                        alert('An error occurred while saving to favorites');
-                    }
-                });
-            }
-        });
     </script>
 
     <script>
