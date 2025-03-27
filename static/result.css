@@ -593,3 +593,77 @@ main p span {
     width: 0;
     height: 0;
 }
+
+/* ----------------------------- */
+/* carousel styling */
+/* ----------------------------- */
+
+/* Carousel Navigation */
+.carousel-navigation {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    transform: translateY(65vh);
+    background: rgba(115, 115, 115, 0.311);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--effect-boxShadow);
+    border: var(--color-blurBorder);
+    height: 1.5em;
+}
+
+.carousel-nav-button {
+    background: rgba(255, 255, 255, 0.496);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.carousel-nav-button:hover {
+    background: rgba(255, 255, 255, 0.885);
+}
+
+.carousel-nav-button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    background: rgba(91, 91, 91, 0.496);
+}
+
+.carousel-nav-button svg {
+    fill: var(--color-textcolor);
+}
+
+.carousel-indicator {
+    font-size: 0.9em;
+    color: var(--color-textcolor);
+}
+
+/* Carousel Slides */
+#recommendations-carousel {
+    position: relative;
+    overflow: hidden;
+}
+
+.recommendation-slide {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.recommendation-slide.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Generate New Button */
+#generate-new {
+    background-color: var(--color-accentcolor);
+    color: white;
+}

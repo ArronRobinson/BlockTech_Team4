@@ -13,66 +13,89 @@
     </header>
     
     <main>
-       
+        <div class="carousel-navigation">
+            <button id="prev-recommendation" class="carousel-nav-button" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                </svg>
+            </button>
+            <div class="carousel-indicator">
+                <span id="current-index">1</span>/<span id="total-count">1</span>
+            </div>
+            <button id="next-recommendation" class="carousel-nav-button" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                </svg>
+            </button>
+        </div>
         <div class="recommendation-container">
-            <% if (podcast && spotify) { %>
-                <section class="podcast-header">
-                    <div>
-                        <p><span class="recommendation-label">We recommend</span></p>
-                        <h2><%= podcast.title %></h2>
-                        <p class="spotify-description">
-                            <span class="truncated-description"><%= spotify.description %></span>
-                        </p>
-                    </div>
-                    <div>
-                        <section class="podcast-image-container" data-name="<%= podcast.title %>">
-                            <% if (spotify.image) { %>
-                                <img src="<%= spotify.image %>" alt="<%= podcast.title %>" class="podcast-image">
-                            <% } else { %>
-                                <img src="/images/podcast-placeholder.jpg" alt="Podcast Placeholder Image" class="podcast-image">
+            <div id="recommendations-carousel">
+                <div class="recommendation-slide active" data-index="0">
+                    <% if (podcast && spotify) { %>
+                        <section class="podcast-header">
+                            <div>
+                                <p><span class="recommendation-label">We recommend</span></p>
+                                <h2><%= podcast.title %></h2>
+                                <p class="spotify-description">
+                                    <span class="truncated-description"><%= spotify.description %></span>
+                                </p>
+                            </div>
+                            <div>
+                                <section class="podcast-image-container" data-name="<%= podcast.title %>">
+                                    <% if (spotify.image) { %>
+                                        <img src="<%= spotify.image %>" alt="<%= podcast.title %>" class="podcast-image">
+                                    <% } else { %>
+                                        <img src="/images/podcast-placeholder.jpg" alt="Podcast Placeholder Image" class="podcast-image">
+                                    <% } %>
+                                </section>
+                            </div>
+                        </section>
+                    
+
+                        <section class="explanation">
+                            <h3>Why you might like it</h3>
+                            <p><%= podcast.explanation || "Based on your interests and preferences, we think you'll enjoy this podcast. It matches your taste in content and listening style." %></p>
+                        </section>
+
+                        <div class="podcast-tags">
+                            <% if (podcast.tags && podcast.tags.length > 0) { %>
+                                <h4>Tags:</h4>
+                                <ul class="tag-list">
+                                    <% podcast.tags.forEach(tag => { %>
+                                        <li class="tag"><%= tag %></li>
+                                    <% }) %>
+                                </ul>
+                            <% } %>
+                        </div>
+
+                        <section class="spotify-section">
+                            <h3>Listen on Spotify</h3>
+                            <% if (spotify.embed_url) { %>
+                                <div class="spotify-player">
+                                    <iframe 
+                                        src="<%= spotify.embed_url %>" 
+                                        width="100%" 
+                                        height="232" 
+                                        frameborder="0" 
+                                        allowtransparency="true" 
+                                        allow="encrypted-media">
+                                    </iframe>
+                                </div>
+                            <% } else if (spotify.spotify_url) { %>
+                                <a href="<%= spotify.spotify_url %>" target="_blank" class="spotify-link">
+                                    <img src="/images/spotify-logo.png" alt="Spotify Logo" class="spotify-logo">
+                                    Open in Spotify
+                                </a>
                             <% } %>
                         </section>
-                    </div>
-                </section>
-            
-
-                <section class="explanation">
-                    <h3>Why you might like it</h3>
-                    <p><%= podcast.explanation || "Based on your interests and preferences, we think you'll enjoy this podcast. It matches your taste in content and listening style." %></p>
-                </section>
-
-                <div class="podcast-tags">
-                    <% if (podcast.tags && podcast.tags.length > 0) { %>
-                        <h4>Tags:</h4>
-                        <ul class="tag-list">
-                            <% podcast.tags.forEach(tag => { %>
-                                <li class="tag"><%= tag %></li>
-                            <% }) %>
-                        </ul>
+                    <% } else { %>
+                        <section class="no-results">
+                            <h2>Sorry, we couldn't find a matching podcast</h2>
+                            <p>Please try again with different preferences or categories.</p>
+                        </section>
                     <% } %>
                 </div>
-
-                <section class="spotify-section">
-                    <h3>Listen on Spotify</h3>
-                    <% if (spotify.embed_url) { %>
-                        <div class="spotify-player">
-                            <iframe 
-                                src="<%= spotify.embed_url %>" 
-                                width="100%" 
-                                height="232" 
-                                frameborder="0" 
-                                allowtransparency="true" 
-                                allow="encrypted-media">
-                            </iframe>
-                        </div>
-                    <% } else if (spotify.spotify_url) { %>
-                        <a href="<%= spotify.spotify_url %>" target="_blank" class="spotify-link">
-                            <img src="/images/spotify-logo.png" alt="Spotify Logo" class="spotify-logo">
-                            Open in Spotify
-                        </a>
-                    <% } %>
-                </section>
-
+            </div>
                 <section class="actions">
                     <button id="save-favorite" class="favorite-button">❤ Save to Favorites</button>
                     <a href="/survey" class="action-button">Try Another Recommendation</a>
@@ -100,13 +123,24 @@
         window.podcastData = <% if (podcast && spotify) { %> {
             title: '<%= podcast.title %>',
             description: '<%= podcast.description || spotify.description %>',
+            explanation: '<%= podcast.explanation || "Based on your interests and preferences, we think you\'ll enjoy this podcast." %>',
             tags: <%- JSON.stringify(podcast.tags || []) %>,
             spotify_url: '<%= spotify.spotify_url || "" %>',
+            embed_url: '<%= spotify.embed_url || "" %>',
             image: '<%= spotify.image || "" %>',
             available: true
         } <% } else { %> { available: false } <% } %>
     </script>
 
+    <script>
+    // Store survey data from server response for future recommendations
+    <% if (typeof surveyData !== 'undefined') { %>
+        window.originalSurveyData = <%- JSON.stringify(surveyData) %>;
+        // Also store in sessionStorage as backup
+        sessionStorage.setItem('surveyData', JSON.stringify(<%- JSON.stringify(surveyData) %>));
+    <% } %>
+    </script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const descriptionEl = document.querySelector('.truncated-description');
@@ -139,6 +173,8 @@
     </script>
 
     <script src="/script/frontend.js"></script>
+    <!-- Add the carousel script -->
+    <script src="/script/carousel.js"></script>
+    
 </body>
 </html>
-
