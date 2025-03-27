@@ -602,15 +602,70 @@ main p span {
 .carousel-navigation {
     position: fixed;
     display: flex;
+    flex-direction: column;
+    z-index: 1;
+    transform: translateY(63vh);
+    background: rgba(182, 182, 182, 0.56);
+    backdrop-filter: blur(20px);
+    box-shadow: -7.0022125244140625px 9.013397216796875px 14px 1px rgba(0, 0, 0, 0.2);
+    border: var(--color-blurBorder);
+    height: fit-content;
+    overflow: hidden;
+    width: 30vw;
+    margin: 0;
+    padding: 0.5em;
+    font-weight: bold;
+}
+
+.carousel-navigation div {
+    display: flex;
+    flex-direction: row ;
+    height: fit-content;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 0.5em;
+    width: auto;
+}
+
+.carousel-navigation div:last-child {
+    gap: 0.5em;
+}
+
+.action-button {
+    background: rgba(255, 255, 255, 0.496);
+    border: none;
+    border-radius: 1em;
+    width: -webkit-fill-available;
+    height: 40px;
+    display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1;
-    transform: translateY(65vh);
-    background: rgba(115, 115, 115, 0.311);
-    backdrop-filter: blur(20px);
-    box-shadow: var(--effect-boxShadow);
-    border: var(--color-blurBorder);
-    height: 1.5em;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-weight: bold;
+}
+
+.action-button:hover {
+    background: rgba(255, 255, 255, 0.885);
+    font-weight: bolder;
+}
+
+.favorite-button {
+    background: rgba(255, 255, 255, 0.496);
+    border: none;
+    border-radius: 1em;
+    width: 50px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.favorite-button:hover {
+    background: rgba(255, 255, 255, 0.885);
 }
 
 .carousel-nav-button {
@@ -662,8 +717,4 @@ main p span {
     opacity: 1;
 }
 
-/* Generate New Button */
-#generate-new {
-    background-color: var(--color-accentcolor);
-    color: white;
-}
+
