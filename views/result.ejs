@@ -96,12 +96,18 @@
                     <% } %>
                 </div>
             </div>
-            
-
-            <section class="actions">
-                <button id="generate-new" class="action-button">Get Another Recommendation</button>
-                <a href="/favorite" class="action-button secondary">View My Favorites</a>
-            </section>
+                <section class="actions">
+                    <button id="save-favorite" class="favorite-button">❤ Save to Favorites</button>
+                    <a href="/survey" class="action-button">Try Another Recommendation</a>
+                    <a href="/favorite" class="action-button secondary">View My Favorites</a>
+                </section>
+            <% } else { %>
+                <section class="no-results">
+                    <h2>Sorry, we couldn't find a matching podcast</h2>
+                    <p>Please try again with different preferences or categories.</p>
+                    <a href="/survey" class="action-button">Back to Survey</a>
+                </section>
+            <% } %>
         </div>
 
         <!-- Background elements -->
@@ -134,7 +140,7 @@
         sessionStorage.setItem('surveyData', JSON.stringify(<%- JSON.stringify(surveyData) %>));
     <% } %>
     </script>
-
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const descriptionEl = document.querySelector('.truncated-description');

@@ -303,27 +303,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Function to save favorite podcast
-async function saveFavorite(podcastData) {
-    try {
-        const response = await fetch("/save-favorite", {
-            method: "POST",
-            credentials: "include", // Ensures cookies are sent
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ podcastData }) // Make sure to wrap in { podcastData }
-        });
-
-        const data = await response.json();
-        if (data.success) {
-            console.log("Podcast added to favorites!");
-        } else {
-            console.warn(data.message);
-        }
-    } catch (error) {
-        console.error("Error saving favorite:", error);
-    }
-}
-
 // Keep all your existing functions below this point
 
 // Example function to simulate fetching ratings
@@ -486,7 +465,6 @@ document.getElementById("fileInput").addEventListener("change", function (event)
 
 
 })
-
 
 
 

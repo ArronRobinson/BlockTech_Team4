@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema({
         tags: [String],
         spotify_url: String,
         image: String
-    }]
+    }],
 });
 
 const User = mongoose.model("User", userSchema);
@@ -332,22 +332,6 @@ app.post("/recommend", authenticateToken, async (req, res) => {
     } catch (error) {
         console.error("❌ Error:", error.message);
         res.status(500).send("Something went wrong.");
-    }
-});
-
-// Save favorite podcast
-app.post("/save-favorite", authenticateToken, async (req, res) => {
-    try {
-        const { podcastData } = req.body;
-        
-        await User.findByIdAndUpdate(req.user.userId, {
-            $addToSet: { favoritePodcasts: podcastData }
-        });
-        
-        res.status(200).json({ success: true });
-    } catch (error) {
-        console.error("Error saving favorite:", error);
-        res.status(500).json({ success: false, message: "Error saving favorite" });
     }
 });
 
