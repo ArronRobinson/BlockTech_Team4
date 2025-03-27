@@ -32,7 +32,7 @@
 MIJN ACCOUNT STYLING
 ******** */
 
-header {
+header { 
     margin-bottom: 1em;
 }
 
@@ -42,12 +42,13 @@ main{
 
 main section:nth-of-type(1){
     background-color: var(--color-formbg);
-    width: 60%;
+    width: 50%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
     margin: auto;
     padding: 3em;
+    position: relative;
 
     background-color: var(--color-bgBlur);
     backdrop-filter: blur(20px);
@@ -72,11 +73,6 @@ main section:nth-of-type(1) h2:nth-of-type(2){
     margin-bottom: 2em;
     text-align: center;
     text-transform: uppercase;
-}
-
-main section:nth-of-type(1) button{
-    padding: 1em;
-    margin-top: 0em;
 }
 
 
@@ -128,10 +124,10 @@ main section:nth-of-type(1) article{
 
 .schijding{
     position: absolute;
-    left: 35%;
-    top: 18em;
+    left: 30%;
+    top: 15em;
 
-    background-color: var(--color-accentcolor);
+    background-color: var( --color-accentTwo);
     rotate: 90deg;
     width: 25em;
     height: .1em;
