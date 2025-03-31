@@ -34,7 +34,6 @@ body button{
     margin: auto;
     margin-top: 1em;
     height: 35em;
-    width: 70em;
     overflow: scroll;
 
     background-color: var(--color-bgBlur);
@@ -57,7 +56,9 @@ form div h1{
 .category-grid::-webkit-scrollbar {
     width: 10px;
 }
-
+.category-grid::-webkit-scrollbar:horizontal{
+    display: none;
+}
 
 .category-grid::-webkit-scrollbar-thumb {
     background: var(--color-accentTwo);
