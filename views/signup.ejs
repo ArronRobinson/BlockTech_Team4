@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="/all.css">
 </head>
 <body>
-    <header></header>
-
     <main>
         <form action="/signup" method="POST">
             <div class="shadowForm">
@@ -49,14 +47,11 @@
             <div class="circleTwo"></div>
         </section>
     </main>
-
-    <footer>
-        <script>
-            document.querySelector(".toggle-password").addEventListener("click", function () {
-                let passwordField = document.getElementById("wachtwoord");
-                passwordField.type = passwordField.type === "password" ? "text" : "password";
-            });
-        </script>
-    </footer>
+    <script>
+        document.querySelector(".toggle-password").addEventListener("click", function () {
+            let passwordField = document.getElementById("wachtwoord");
+            passwordField.type = passwordField.type === "password" ? "text" : "password";
+        });
+    </script>
 </body>
 </html>
