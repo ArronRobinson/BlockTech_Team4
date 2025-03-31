@@ -7,6 +7,10 @@ main {
     margin-top: 20px;
 }
 
+body{
+    overflow-x: hidden;
+}
+
 .controls {
     grid-column: 1 / -1;
     display: flex;
@@ -36,6 +40,7 @@ section[data-name] {
     display: flex;
     flex-direction: column;
     padding-bottom: 15px;
+    display: block;
 }
 
 section[data-name]:hover {
@@ -149,4 +154,13 @@ section[data-name] h2 {
     height: 40em;
     background-color: var(--color-accentcolor);
     clip-path: circle(50% at center);
+}
+
+#podcast-list ul{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 1em;
+    width: 97vw;
+    place-content: center;
 }

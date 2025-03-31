@@ -239,7 +239,7 @@ main p span {
 }
 
 .spotify-player {
-    width: -webkit-fill-available;
+    width: auto;
     margin: 0;
     padding: 0;
 }
