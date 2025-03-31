@@ -491,8 +491,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-       // Navigation: Step 2 to Step 3 
-    if (nextToStep3) {
+       // Navigation: Step 2 to Step 3
     
         nextToStep3.addEventListener('click', function(e) {
             e.preventDefault(); 
@@ -503,12 +502,9 @@ document.addEventListener('DOMContentLoaded', function() {
             step2.style.display = 'none';
             step3.style.display = 'block';
         });
-    } else {
-        console.error("⚠️ nextToStep3 knop NIET gevonden!");
-    }
-
+ 
        // Navigation: Step 3 to Step 2 
-    if (backToStep2) {
+
         backToStep2.addEventListener('click', function() {
             // Verberg stap 3
             step3.style.display = 'none';
@@ -516,7 +512,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // Toon stap 2
             step2.style.display = 'block';
         });
-    }
 });
 
   
