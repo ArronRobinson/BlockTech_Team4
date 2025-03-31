@@ -22,23 +22,12 @@
     clip-path: circle(50% at center);
 }
 
-
 main div{
     width: fit-content;
     margin: 0em 2em;
     padding: 1.5em;
     border-radius: 1em;
 }
-
-main{
-    display: flex;
-    justify-content: center;
-}
-
-
-
-
-
 
 main{
     display: flex;
@@ -52,9 +41,6 @@ main{
     border: var(--color-blurBorder);
     width: 75vw;
 }
-
-
-
 
 /* main section:nth-of-type(1){
     grid-column: 1;
@@ -146,25 +132,18 @@ main p span {
     border-radius: 1em;
 } */
 
-
 .recommendation-container p {
     font-size: 1em;
     font-weight: thin;
     color: var(--color-textcolor);
+    overflow: hidden;
+    text-overflow: ellipsis;
 } 
 
 .recommendation-container h2 {
     font-size: 2em;
     font-weight: thin;
     color: var(--color-textcolor);
-}
-
-
-.recommendation-container p {
-    font-size: 1em;
-    font-weight: thin;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .podcast-header {
@@ -177,7 +156,6 @@ main p span {
 .podcast-header div {
     margin: 0;
 }
-
 
 .podcast-header img {
     max-width: 90%;
@@ -265,329 +243,6 @@ main p span {
     margin: 0;
     padding: 0;
 }
-
-.background-elements{
-    width: 0;
-    height: 0;
-}
-
-
-
-.recommendation-container h2 {
-    font-size: 2em;
-    font-weight: thin;
-    color: var(--color-textcolor);
-}
-
-
-.recommendation-container p {
-    font-size: 1em;
-    font-weight: thin;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.podcast-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 1em;
-}
-
-.podcast-header div {
-    margin: 0;
-}
-
-
-.podcast-header img {
-    max-width: 90%;
-    border-radius: 1em;
-
-}
-
-.podcast-header div:first-child {
-    max-width: 60%;
-}
-
-/* Add this to your result.css file */
-.truncated-description {
-    display: -webkit-box;
-    -webkit-line-clamp: 6;  /* Show exactly 6 lines of text */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-    line-height: 1.5; /* Adjust this value based on your design */
-}
-
-/* Optional: Add a "Read more" button for expanding the text */
-.show-more-button {
-    display: block;
-    margin-top: 8px;
-    color: #000000;
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-.show-more-button:hover {
-    text-decoration: underline;
-}
-
-/* This class will be added with JavaScript to show full text */
-.show-full-text {
-    -webkit-line-clamp: initial;
-    display: block;
-}
-
-.explanation {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    padding: 1.5em;
-}
-
-.podcast-tags {
-    display: flex;
-    justify-content: start;
-    flex-direction: row;
-    gap: 0.5em;
-    margin: 0;
-    padding: 1.5em;
-    align-items: center;
-}
-
-.tag-list {
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    gap: 0.5em;
-}
-
-.tag {
-    padding: 0.2em 0.4em;
-    background-color: rgba(128, 128, 128, 0.486);
-    border-radius: 0.5em;
-    font-size: 0.8em;
-}
-
-.spotify-section {
-    display: flex;
-    flex-direction: column;
-    padding: 1.5em;
-    gap: 1em;
-}
-
-.spotify-player {
-    width: -webkit-fill-available;
-    margin: 0;
-    padding: 0;
-}
-
-.background-elements{
-    width: 0;
-    height: 0;
-}
-
-
-.podcast-header div:first-child {
-    max-width: 60%;
-}
-
-/* Add this to your result.css file */
-.truncated-description {
-    display: -webkit-box;
-    -webkit-line-clamp: 6;  /* Show exactly 6 lines of text */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-    line-height: 1.5; /* Adjust this value based on your design */
-}
-
-/* Optional: Add a "Read more" button for expanding the text */
-.show-more-button {
-    display: block;
-    margin-top: 8px;
-    color: #000000;
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-.show-more-button:hover {
-    text-decoration: underline;
-}
-
-/* This class will be added with JavaScript to show full text */
-.show-full-text {
-    -webkit-line-clamp: initial;
-    display: block;
-}
-
-.explanation {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    padding: 1.5em;
-}
-
-.podcast-tags {
-    display: flex;
-    justify-content: start;
-    flex-direction: row;
-    gap: 0.5em;
-    margin: 0;
-    padding: 1.5em;
-    align-items: center;
-}
-
-.tag-list {
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    gap: 0.5em;
-}
-
-.tag {
-    padding: 0.2em 0.4em;
-    background-color: rgba(128, 128, 128, 0.486);
-    border-radius: 0.5em;
-    font-size: 0.8em;
-}
-
-.spotify-section {
-    display: flex;
-    flex-direction: column;
-    padding: 1.5em;
-    gap: 1em;
-}
-
-.spotify-player {
-    width: -webkit-fill-available;
-    margin: 0;
-    padding: 0;
-}
-
-
-.recommendation-container p {
-    font-size: 1em;
-    font-weight: thin;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.podcast-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 1em;
-}
-
-.podcast-header div {
-    margin: 0;
-}
-
-
-.podcast-header img {
-    max-width: 90%;
-    border-radius: 1em;
-}
-
-.podcast-header div:first-child {
-    max-width: 60%;
-}
-
-/* Add this to your result.css file */
-.truncated-description {
-    display: -webkit-box;
-    -webkit-line-clamp: 6;  /* Show exactly 6 lines of text */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-    line-height: 1.5; /* Adjust this value based on your design */
-}
-
-/* Optional: Add a "Read more" button for expanding the text */
-.show-more-button {
-    display: block;
-    margin-top: 8px;
-    color: #000000;
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-.show-more-button:hover {
-    text-decoration: underline;
-}
-
-/* This class will be added with JavaScript to show full text */
-.show-full-text {
-    -webkit-line-clamp: initial;
-    display: block;
-}
-
-.explanation {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    padding: 1.5em;
-}
-
-.podcast-tags {
-    display: flex;
-    justify-content: start;
-    flex-direction: row;
-    gap: 0.5em;
-    margin: 0;
-    padding: 1.5em;
-    align-items: center;
-}
-
-.tag-list {
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    gap: 0.5em;
-}
-
-.tag {
-    padding: 0.2em 0.4em;
-    background-color: rgba(128, 128, 128, 0.486);
-    border-radius: 0.5em;
-    font-size: 0.8em;
-}
-
-.spotify-section {
-    display: flex;
-    flex-direction: column;
-    padding: 1.5em;
-    gap: 1em;
-}
-
-.spotify-player {
-    width: -webkit-fill-available;
-    margin: 0;
-    padding: 0;
-}
-
-.background-elements{
-    width: 0;
-    height: 0;
-}
-
-
 
 .background-elements{
     width: 0;
