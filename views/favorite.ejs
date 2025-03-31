@@ -13,7 +13,6 @@
     <header>
         <%- include('partials/nav') %>
     </header>
-
     <main>
         <div class="controls">
             <label for="filter">Filter:</label>
@@ -32,7 +31,6 @@
                 <option value="mode">Mode</option>
                 <option value="lifestyle">Lifestyle</option>
             </select>
-        
             <label for="sort">Sort:</label>
             <select id="sort">
                 <option value="title">A-Z</option>
@@ -40,8 +38,6 @@
                 <option value="likes:desc">Most Liked</option>
             </select>
         </div>
-
-
         <div id="podcast-list">
             <ul class="list">
                 <% if (locals.favoritePodcasts && favoritePodcasts.length > 0) { %>
@@ -80,18 +76,12 @@
                 <% } %>
             </ul>
         </div>
-
-        
-
         <article>
             <div class="circle"></div>
             <div class="circleTwo"></div>
         </article>
     </main>
-
-    <footer>
         <!-- <script src="/script/frontend.js"></script> -->
-        <script src="/script/filter.js"></script>
-    </footer>
+    <script src="/script/filter.js"></script>
 </body>
 </html>
