@@ -81,3 +81,7 @@ NAV STYLING
 }
 
 
+.logo img {
+    width: 7em;  /* Adjust the size */
+    height: auto;  /* Maintain aspect ratio */
+}

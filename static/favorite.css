@@ -36,6 +36,7 @@ section[data-name] {
     display: flex;
     flex-direction: column;
     padding-bottom: 15px;
+
 }
 
 section[data-name]:hover {
@@ -90,6 +91,7 @@ section[data-name] h2 {
 .rating-star {
     color: gold;
 }
+
 
 .podcast-description {
     padding: 0 15px;
