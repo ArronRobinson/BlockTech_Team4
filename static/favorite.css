@@ -36,7 +36,7 @@ section[data-name] {
     display: flex;
     flex-direction: column;
     padding-bottom: 15px;
-    width: 20%;
+    display: block;
 }
 
 section[data-name]:hover {
@@ -151,4 +151,13 @@ section[data-name] h2 {
     height: 40em;
     background-color: var(--color-accentcolor);
     clip-path: circle(50% at center);
+}
+
+#podcast-list ul{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 1em;
+    width: 97vw;
+    place-content: center;
 }

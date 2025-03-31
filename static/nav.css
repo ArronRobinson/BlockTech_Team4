@@ -1,4 +1,9 @@
 nav{
     background-color: var(--color-textaccent);
-    margin-bottom: 2em;
+    align-items: center;
+    margin-top: -1.5em;
+}
+
+nav img{
+    padding-bottom: 1em;
 }
