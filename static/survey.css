@@ -7,7 +7,6 @@
     padding: 0;
 }
 
- 
 body button{
     background-color: var(--color-accentTwo);
     border: none;
@@ -56,6 +55,7 @@ form div h1{
 .category-grid::-webkit-scrollbar {
     width: 10px;
 }
+
 .category-grid::-webkit-scrollbar:horizontal{
     display: none;
 }
@@ -108,7 +108,6 @@ form div h1{
     position: absolute;
     opacity: 0;
 }
-
 
 
 /* Step 2  */
@@ -187,10 +186,6 @@ form div h1{
     background-color: var( --color-accentcolor-light);
     border: 2px solid var(--color-accentcolor);
 }
-
-
-
-
 
 /* Step 3 */
 

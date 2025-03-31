@@ -73,7 +73,6 @@ main form:nth-of-type(1) fieldset div{
     background-color: var(--color-accentcolor);
 }
 
-
 main form:nth-of-type(1) fieldset legend{
     color: var(--color-textaccent);
     font-size: x-large;

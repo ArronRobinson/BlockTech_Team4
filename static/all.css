@@ -11,6 +11,7 @@
     --color-accentcolor-light: hsl(40, 100%, 80%);
     --color-accentTwo: #FF6A00;
     --color-logout: #FF2020;
+
     --color-formbg: rgb(243, 243, 243);
     --color-dropshadow: black;
     --color-bgBlur: rgba(234, 234, 234, 0.311);
@@ -40,6 +41,11 @@
 /* ***********
 NAV STYLING
 *********** */
+
+nav{
+    background-color: var(--color-textaccent);
+    margin-bottom: 2em;
+}
 
 .navbar {
     display: flex;
