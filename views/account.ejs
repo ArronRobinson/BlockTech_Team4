@@ -11,19 +11,15 @@
     <header>
         <%- include('partials/nav') %>
     </header>
-
-
     <main>
         <section>
             <h2>Mijn account</h2>
             <article>
-                <li>Mijn favorieten</li>
-                <li>Doe de test opnieuw</li>
+                <li><a href="/favorite">Mijn Favorieten</a></li>
+                <li><a href="/survey">Doe de test opnieuw</a></li>
                 <li>Wachtwoord veranderen</li>
             </article>
-
             <span class="schijding"></span>
-
             <h2>Instellingen</h2>
             <article>
                 <div class="image-container">
@@ -43,18 +39,11 @@
                 </form>                  
             </article>
         </section>
-
-
         <section>
             <div class="circle"></div>
             <div class="circleTwo"></div>
         </section>
-        
     </main>
-
-    <footer>
-        <script src="/script/frontend.js"></script>
-        
-    </footer>
+    <script src="/script/frontend.js"></script>
 </body>
 </html>
