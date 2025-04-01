@@ -545,4 +545,4 @@ document.getElementById("fileInput").addEventListener("change", function (event)
 
 window.addEventListener("load", function () {
     document.querySelector(".loading-screen").style.display = "none";
-});
+}); 
