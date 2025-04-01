@@ -1,0 +1,104 @@
+*{
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.circle {
+    z-index: -2;
+    overflow: hidden;
+    position: absolute;
+    left: -20em;
+    bottom: -25em;
+    width: 63em;
+    height: 63em;
+    background-color: var(--color-accentcolor);
+    clip-path: circle(50% at center);
+}
+
+.circleTwo {
+    z-index: -2;
+    overflow: hidden;
+    position: absolute;
+    right: 4em;
+    top: -20em;
+    width: 40em;
+    height: 40em;
+    background-color: var(--color-accentcolor);
+    clip-path: circle(50% at center);
+}
+
+
+/* ************
+FORM STYLING
+************ */
+
+
+main form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35em;
+    filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
+}
+
+
+main form fieldset section{
+    border: 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+main form fieldset{
+    border: 0px;
+    background-color: var(--color-accentcolor);
+    padding: 3em;
+}
+
+main form fieldset div{
+    display: flex;
+    flex-direction: column;
+    gap: 0.3em;
+}
+
+main form fieldset legend{
+    color: var(--color-textaccent);
+    font-size: x-large;
+}
+
+main form fieldset input{
+    border: .2em solid var(--color-formbg);
+    border-radius: 2em;
+    width: 20em;
+    height: 3em;
+    padding-left: 1em;
+}
+
+main form fieldset input:focus{
+    border-color: var(--color-accentTwo);
+    outline: none;
+}
+
+main form fieldset label{
+    color: var(--color-textaccent);
+}
+
+main form fieldset button{
+    border: none;
+    padding: 1em;
+    border-radius: 2em;
+    margin-top: 3em;
+    width: 15em;
+    background-color: var(--color-formbg);
+    font-size: 0.7em;
+}
+
+main form fieldset button:hover{
+    transform: scale(1.05);
+    transition: transform 0.3s
+}
+
+main form fieldset section div:has(input:focus) label {
+    color: var(--color-accentTwo);
+}

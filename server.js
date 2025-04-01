@@ -454,7 +454,6 @@ app.listen(PORT, () => {
 
 
 app.post("/wachtwoordveranderen", async (req, res) => {
-    console.log("Request body:", req.body); // Debugging
 
     const { username, password } = req.body;
 
@@ -477,7 +476,13 @@ app.post("/wachtwoordveranderen", async (req, res) => {
         user.password = hashedPassword;
         await user.save();
 
-        res.json({ message: "Wachtwoord succesvol gewijzigd!" });
+        res.send(`
+        <script>
+            sessionStorage.setItem("passwordChanged", "true");
+            window.location.href = "/account";
+        </script>
+    `);
+
     } catch (error) {
         console.error("Fout bij updaten wachtwoord:", error);
         res.status(500).json({ message: "Interne serverfout" });

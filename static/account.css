@@ -192,3 +192,20 @@ HOVER PFP CHANGE
     opacity: 1; 
     z-index: 2;
 }
+
+/* ******
+ww verandere bericht
+****** */
+
+
+.alert-success{
+    position: absolute;
+    background-color: var(--color-accentTwo);
+    width: 17em;
+    padding: 0.5em 1em 0.5em 1em;
+    border-radius: 2em;
+    z-index: 2;
+    top: 33em;
+    left: 19em;
+}
+
