@@ -199,6 +199,7 @@ ww verandere bericht
 
 
 .alert-success{
+    display: none;
     position: absolute;
     background-color: var(--color-accentTwo);
     width: 17em;
