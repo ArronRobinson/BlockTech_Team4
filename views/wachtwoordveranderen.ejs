@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wachtwoord veranderen</title>
+</head>
+<body>
+    <main>
+        <form id="wachtwoordVeranderenFrom" action="/wachtwoordveranderen" method="POST">
+            <fieldset>
+                <section>
+                    <legend>Wachtwoord verand</legend>
+                    <div>
+                        <label for="naam">Gebruikersnaam:</label>
+                        <input type="text" name="username" id="naam">
+                    </div>
+                    <div>
+                        <label for="wachtwoord">Wachtwoord:</label>
+                        <input type="password" name="password" id="nieuwWachtwoord">
+                    </div>
+                </section>
+                <button type="submit">Verander wachtwoord</button>
+            </fieldset>
+        </form>
+        <section>
+            <div class="circle"></div>
+            <div class="circleTwo"></div>
+        </section>
+    </main>
+    <script>
+       document.getElementById("wachtwoordVeranderenForm").addEventListener("submit", async function (event) {
+        event.preventDefault(); // Voorkomt standaard form-verzending
+
+        const gebruikersnaam = document.getElementById("naam").value;
+        const wachtwoord = document.getElementById("nieuwWachtwoord").value;
+
+        const response = await fetch("/wachtwoordveranderen", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: gebruikersnaam, password: wachtwoord })
+        });
+
+        const data = await response.json();
+        alert(data.message);
+    });
+    </script>
+</body>
+</html>
