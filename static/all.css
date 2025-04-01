@@ -37,7 +37,6 @@
 }
 
 
-
 /* ***********
 NAV STYLING
 *********** */
@@ -45,14 +44,14 @@ NAV STYLING
 nav{
     background-color: var(--color-textaccent);
     margin-bottom: 2em;
-}
-
-.navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2em 1em 0em 1em;
-    
+    padding: 2em 1em 1em 1em;
+    margin-top: -1em;
+
+    border-bottom: 2px solid var(--color-accentcolor);
+    box-sizing: border-box;
 }
 
 .nav-container {
@@ -86,8 +85,7 @@ nav{
     color: var(--color-accentTwo);
 }
 
-
 .logo img {
-    width: 7em;  /* Adjust the size */
-    height: auto;  /* Maintain aspect ratio */
+    width: 7em;  
+    height: auto; 
 }
