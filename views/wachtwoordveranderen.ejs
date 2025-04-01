@@ -8,11 +8,14 @@
     <link rel="stylesheet" href="/all.css">
 </head>
 <body>
+    <header>
+        <%- include('partials/nav') %>
+    </header>
     <main>
         <form id="wachtwoordVeranderenFrom" action="/wachtwoordveranderen" method="POST">
             <fieldset>
                 <section>
-                    <legend>Wachtwoord verand</legend>
+                    <legend>Wachtwoord veranderen</legend>
                     <div>
                         <label for="naam">Gebruikersnaam:</label>
                         <input type="text" name="username" id="naam">

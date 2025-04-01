@@ -12,6 +12,9 @@
         <%- include('partials/nav') %>
     </header>
     <main>
+        <div id="successMessage" class="alert-success" style="display: none;">
+            <p>Je wachtwoord is succesvol gewijzigd!</p>
+        </div>
         <section>
             <h2>Mijn account</h2>
             <article>
@@ -45,5 +48,14 @@
         </section>
     </main>
     <script src="/script/frontend.js"></script>
+    <script>
+        // Controleer of de sessievariabele 'passwordChanged' bestaat
+        if (sessionStorage.getItem("passwordChanged") === "true") {
+            document.getElementById("successMessage").style.display = "block"; // Toon bericht
+    
+            // Verwijder de sessievariabele zodat het bericht verdwijnt na een refresh
+            sessionStorage.removeItem("passwordChanged");
+        }
+    </script>
 </body>
 </html>

@@ -38,7 +38,7 @@ main form{
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    height: 35em;
     filter: drop-shadow(0.1em 0.1em 2em var(--color-dropshadow));
 }
 
