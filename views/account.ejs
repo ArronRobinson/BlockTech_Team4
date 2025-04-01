@@ -31,7 +31,9 @@
                             </svg>
                         </div>
                     </label>
-                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                    <form action="/account" method="POST" enctype="multipart/form-data">
+                        <input type="file" name="avatar" id="fileInput" accept="image/*" style="display: none;">
+                    </form>
                 </div>
                 <p>Podcastlover21</p>
                 <form action="/logout" method="POST">

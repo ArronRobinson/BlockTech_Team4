@@ -85,10 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // If we're on the favorites page, fetch and display favorites
     if (isOnFavoritesPage) {
         loadFavorites();
-    } else {
-        // On other pages, initialize the existing filtering/sorting
-        filterAndSort();
-    }
+    } 
 
     // Function to load favorites from the server
     function loadFavorites() {
@@ -450,21 +447,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-document.getElementById("fileInput").addEventListener("change", function (event) {
-    const file = event.target.files[0];
 
-    if (file) {
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-            document.getElementById("profilePic").src = e.target.result;
-        };
-
-        reader.readAsDataURL(file);
-    }
-
-
-})
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        document.getElementById("fileInput").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById("profilePic").src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
 
 
 
