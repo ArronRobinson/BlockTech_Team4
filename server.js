@@ -454,7 +454,6 @@ app.listen(PORT, () => {
 
 
 app.post("/wachtwoordveranderen", async (req, res) => {
-    console.log("Request body:", req.body); // Debugging
 
     const { username, password } = req.body;
 
