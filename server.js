@@ -71,7 +71,10 @@ function onsurvey(req, res) {
 }
 
 function onaccount(req, res) {
-    res.render('account', { title: 'Account Page'})
+    if (!req.user) {
+        return res.redirect('/login');
+    }
+    res.render('account', { username: req.user.username });
 }
 
 function onindex(req, res) {
@@ -259,7 +262,7 @@ function authenticateToken (req, res, next) {
         if (err) return res.status(401).json({message: "Invalid Token"});
         req.user = user;
         next();
-    })
+    });
 }
 
 app.post("/signup", async (req, res) => {
@@ -436,9 +439,6 @@ app.post("/api/recommend", authenticateToken, async (req, res) => {
         });
     }
 });
-
-
-
 
 app.post ("/logout", (req, res) => { 
     res.cookie("token", "", {maxAge: 0});
