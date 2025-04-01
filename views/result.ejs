@@ -31,7 +31,7 @@
                 </button>
             </div>
             <div>
-                <button id="save-favorite" class="favorite-button">❤️</button>
+                <button id="save-current-favorite" class="favorite-button">❤️</button>
                 <button id="generate-new" class="action-button">Recommend another one</button>
             </div>
         </div>
@@ -96,11 +96,7 @@
                             <% } %>
                         </section>
                         
-                        <section class="actions">
-                            <button id="save-favorite" class="favorite-button">❤ Save to Favorites</button>
-                            <a href="/survey" class="action-button">Try Another Recommendation</a>
-                            <a href="/favorite" class="action-button secondary">View My Favorites</a>
-                        </section>
+                        
                     <% } else { %>
                         <section class="no-results">
                             <h2>Sorry, we couldn't find a matching podcast</h2>
