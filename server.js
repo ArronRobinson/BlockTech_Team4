@@ -24,6 +24,7 @@ const loginLimiter = rateLimit({
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.use(cors());
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('static'));
@@ -62,6 +63,7 @@ app
     .get('/survey', authenticateToken, onsurvey)
     .get ('/result', authenticateToken, onresult)
     .get('/account', authenticateToken, onaccount)
+    .get('/wachtwoordveranderen',authenticateToken, onwwveranderen)
 
 
 function onsurvey(req, res) {
@@ -71,7 +73,6 @@ function onsurvey(req, res) {
 function onaccount(req, res) {
     res.render('account', { title: 'Account Page'})
 }
-
 
 function onindex(req, res) {
     res.render('index', { title: 'Index Page' });
@@ -87,6 +88,10 @@ function onlogin(req, res) {
 
 function onresult(req, res) {
     res.render('result', { title: 'Result Page' });
+}
+
+function onwwveranderen(req, res) {
+    res.render('wachtwoordveranderen', { title: 'Wachtwoord veranderen'})
 }
 
 function onfavorite(req, res) {
@@ -443,3 +448,40 @@ app.post ("/logout", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+
+
+
+
+app.post("/wachtwoordveranderen", async (req, res) => {
+    console.log("Request body:", req.body); // Debugging
+
+    const { username, password } = req.body;
+
+    // Controleer of beide waarden aanwezig zijn
+    if (!username || !password) {
+        return res.status(400).json({ message: "Gebruikersnaam en nieuw wachtwoord zijn vereist" });
+    }
+
+    try {
+        // Zoek gebruiker in de database
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ message: "Gebruiker niet gevonden" });
+        }
+
+        // Wachtwoord hashen
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Update het wachtwoord in de database
+        user.password = hashedPassword;
+        await user.save();
+
+        res.json({ message: "Wachtwoord succesvol gewijzigd!" });
+    } catch (error) {
+        console.error("Fout bij updaten wachtwoord:", error);
+        res.status(500).json({ message: "Interne serverfout" });
+    }
+});
+
+
