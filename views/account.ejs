@@ -12,6 +12,9 @@
         <%- include('partials/nav') %>
     </header>
     <main>
+        <div id="successMessage" class="alert-success">
+            <p>Je wachtwoord is succesvol gewijzigd!</p>
+        </div>
         <section>
             <h2>Mijn account</h2>
             <article>
@@ -35,7 +38,7 @@
                         <input type="file" name="avatar" id="fileInput" accept="image/*" style="display: none;">
                     </form>
                 </div>
-                <p>Podcastlover21</p>
+                <p><%= username %></p>
                 <form action="/logout" method="POST">
                     <button type="submit" class="logout">Log Out</button>
                 </form>                  
@@ -47,5 +50,14 @@
         </section>
     </main>
     <script src="/script/frontend.js"></script>
+    <script>
+        // Controleer of de sessievariabele 'passwordChanged' bestaat
+        if (sessionStorage.getItem("passwordChanged") === "true") {
+        document.getElementById("successMessage").style.display = "block"; // Toon bericht
+
+        // Verwijder de sessievariabele zodat het bericht verdwijnt na een refresh
+        sessionStorage.removeItem("passwordChanged");
+        }
+    </script>
 </body>
 </html>

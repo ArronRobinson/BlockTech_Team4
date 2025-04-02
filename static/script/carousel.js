@@ -1,311 +1,327 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if we're on the survey page
-    const surveyForm = document.getElementById('surveyForm');
-    if (surveyForm) {
-        // We're on the survey page - add the form submission handler
-        surveyForm.addEventListener('submit', function(e) {
-            // Create an object to store the form data
-            const formData = new FormData(this);
-            const surveyData = {};
-            
-            // Process all form fields, handling arrays properly
-            for (const [key, value] of formData.entries()) {
-                if (key in surveyData) {
-                    // If the key already exists, make it an array
-                    if (!Array.isArray(surveyData[key])) {
-                        surveyData[key] = [surveyData[key]];
-                    }
-                    surveyData[key].push(value);
-                } else {
-                    surveyData[key] = value;
-                }
-            }
-            
-            // Store in sessionStorage for later use
-            console.log("Storing survey data:", surveyData);
-            sessionStorage.setItem('surveyData', JSON.stringify(surveyData));
-            
-            // Continue with form submission (don't prevent default)
-        });
-        
-        // Exit early since we're not on the results page
-        return;
+    // Variables to keep track of the carousel's state
+    let currentIndex = 0;
+    let recommendations = [];
+    let recommendedTitles = []; // Track titles of already recommended podcasts
+    
+    // DOM elements
+    const carousel = document.getElementById('recommendations-carousel');
+    const prevBtn = document.getElementById('prev-recommendation');
+    const nextBtn = document.getElementById('next-recommendation');
+    const generateNewBtn = document.getElementById('generate-new');
+    const saveCurrentBtn = document.getElementById('save-current-favorite');
+    const currentIndexEl = document.getElementById('current-index');
+    const totalCountEl = document.getElementById('total-count');
+    
+    // Initialize with any existing recommendation
+    if (window.podcastData && window.podcastData.available) {
+        recommendations.push(window.podcastData);
+        recommendedTitles.push(window.podcastData.title);
+        updateCarouselControls();
+        checkFavoriteStatus(window.podcastData.title);
     }
     
-    // If we reach here, we're on the results page - implement carousel functionality
+    // Event listeners
+    if (prevBtn) prevBtn.addEventListener('click', showPrevious);
+    if (nextBtn) nextBtn.addEventListener('click', showNext);
+    if (generateNewBtn) generateNewBtn.addEventListener('click', generateNewRecommendation);
+    if (saveCurrentBtn) saveCurrentBtn.addEventListener('click', saveCurrentToFavorites);
     
-    // State management for recommendations
-    const recommendationsState = {
-        items: [],
-        currentIndex: 0,
-        
-        // Initialize with the first recommendation
-        init: function(initialRecommendation) {
-            if (initialRecommendation && initialRecommendation.available) {
-                this.items = [initialRecommendation];
-                this.updateUI();
-            }
-        },
-        
-        // Add a new recommendation
-        addRecommendation: function(recommendation) {
-            this.items.push(recommendation);
-            this.currentIndex = this.items.length - 1;
-            this.updateUI();
-        },
-        
-        // Navigate to previous recommendation
-        previous: function() {
-            if (this.currentIndex > 0) {
-                this.currentIndex--;
-                this.updateUI();
-                return true;
-            }
-            return false;
-        },
-        
-        // Navigate to next recommendation
-        next: function() {
-            if (this.currentIndex < this.items.length - 1) {
-                this.currentIndex++;
-                this.updateUI();
-                return true;
-            }
-            return false;
-        },
-        
-        // Get current recommendation
-        current: function() {
-            return this.items[this.currentIndex];
-        },
-        
-        // Update UI to reflect current state
-        updateUI: function() {
-            // Update navigation buttons
-            document.getElementById('prev-recommendation').disabled = this.currentIndex === 0;
-            document.getElementById('next-recommendation').disabled = this.currentIndex === this.items.length - 1;
-            
-            // Update counter
-            document.getElementById('current-index').textContent = this.currentIndex + 1;
-            document.getElementById('total-count').textContent = this.items.length;
-            
-            // Update carousel display
-            this.renderCurrentRecommendation();
-        },
-        
-        // Render the current recommendation
-        renderCurrentRecommendation: function() {
-            const carousel = document.getElementById('recommendations-carousel');
-            const currentRec = this.current();
-            
-            // Create a new slide for the current recommendation
-            const slide = document.createElement('div');
-            slide.className = 'recommendation-slide active';
-            slide.dataset.index = this.currentIndex;
-            
-            // Remove any currently active slides
-            const activeSlides = carousel.querySelectorAll('.recommendation-slide.active');
-            activeSlides.forEach(activeSlide => {
-                activeSlide.classList.remove('active');
-                // We'll remove it after animation completes
-                setTimeout(() => activeSlide.remove(), 500);
-            });
-            
-            // Generate HTML for the recommendation
-            slide.innerHTML = this.generateRecommendationHTML(currentRec);
-            
-            // Add the new slide
-            carousel.appendChild(slide);
-            
-            // Initialize any interactive elements in the new slide
-            this.initializeSlideInteractivity(slide);
-        },
-        
-        // Generate HTML for a recommendation
-        generateRecommendationHTML: function(recommendation) {
-            if (!recommendation || !recommendation.available) {
-                return `
-                    <section class="no-results">
-                        <h2>Sorry, we couldn't find a matching podcast</h2>
-                        <p>Please try again with different preferences or categories.</p>
-                    </section>
-                `;
-            }
-            
-            const tagsHTML = recommendation.tags && recommendation.tags.length > 0 
-                ? `
-                    <div class="podcast-tags">
-                        <h4>Tags:</h4>
-                        <ul class="tag-list">
-                            ${recommendation.tags.map(tag => `<li class="tag">${tag}</li>`).join('')}
-                        </ul>
-                    </div>
-                ` 
-                : '';
-                
-            const spotifyPlayerHTML = recommendation.spotify_url 
-                ? `
-                    <section class="spotify-section">
-                        <h3>Listen on Spotify</h3>
-                        <div class="spotify-player">
-                            <iframe 
-                                src="${recommendation.embed_url || recommendation.spotify_url.replace('https://open.spotify.com/', 'https://open.spotify.com/embed/')}" 
-                                width="100%" 
-                                height="232" 
-                                frameborder="0" 
-                                allowtransparency="true" 
-                                allow="encrypted-media">
-                            </iframe>
-                        </div>
-                    </section>
-                `
-                : '';
-                
-            return `
-                <section class="podcast-header">
-                    <div>
-                        <p><span class="recommendation-label">We recommend</span></p>
-                        <h2>${recommendation.title}</h2>
-                        <p class="spotify-description">
-                            <span class="truncated-description">${recommendation.description}</span>
-                        </p>
-                    </div>
-                    <div>
-                        <section class="podcast-image-container" data-name="${recommendation.title}">
-                            <img src="${recommendation.image || '/images/podcast-placeholder.jpg'}" alt="${recommendation.title}" class="podcast-image">
-                        </section>
-                    </div>
-                </section>
-                
-                <section class="explanation">
-                    <h3>Why you might like it</h3>
-                    <p>${recommendation.explanation || "Based on your interests and preferences, we think you'll enjoy this podcast. It matches your taste in content and listening style."}</p>
-                </section>
-                
-                ${tagsHTML}
-                ${spotifyPlayerHTML}
-            `;
-        },
-        
-        // Initialize interactivity for a new slide
-        initializeSlideInteractivity: function(slide) {
-            // Handle "Read more" functionality
-            const descriptionEl = slide.querySelector('.truncated-description');
-            if (descriptionEl) {
-                const isTruncated = descriptionEl.scrollHeight > descriptionEl.clientHeight;
-                
-                if (isTruncated) {
-                    const button = document.createElement('button');
-                    button.className = 'show-more-button';
-                    button.textContent = 'Read more';
-                    
-                    button.addEventListener('click', function() {
-                        if (descriptionEl.classList.contains('show-full-text')) {
-                            descriptionEl.classList.remove('show-full-text');
-                            button.textContent = 'Read more';
-                            descriptionEl.scrollIntoView({ behavior: 'smooth' });
-                        } else {
-                            descriptionEl.classList.add('show-full-text');
-                            button.textContent = 'Read less';
-                        }
-                    });
-                    
-                    descriptionEl.parentNode.insertBefore(button, descriptionEl.nextSibling);
-                }
-            }
+    // Functions to navigate carousel
+    function showPrevious() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateCarouselDisplay();
+            checkFavoriteStatus(recommendations[currentIndex].title);
         }
-    };
+    }
     
-    // Check if we're on the results page
-    const recommendationsCarousel = document.getElementById('recommendations-carousel');
-    if (recommendationsCarousel) {
-        // Initialize with the first recommendation
-        recommendationsState.init(window.podcastData);
-        
-        // Set up event listeners for navigation
-        const prevButton = document.getElementById('prev-recommendation');
-        const nextButton = document.getElementById('next-recommendation');
-        const generateNewButton = document.getElementById('generate-new');
-        
-        if (prevButton) {
-            prevButton.addEventListener('click', function() {
-                recommendationsState.previous();
-            });
+    function showNext() {
+        if (currentIndex < recommendations.length - 1) {
+            currentIndex++;
+            updateCarouselDisplay();
+            checkFavoriteStatus(recommendations[currentIndex].title);
         }
+    }
+    
+    // Update the display of the carousel
+    function updateCarouselDisplay() {
+        // Update indicator
+        currentIndexEl.textContent = currentIndex + 1;
         
-        if (nextButton) {
-            nextButton.addEventListener('click', function() {
-                recommendationsState.next();
-            });
+        // Update slides
+        const slides = carousel.querySelectorAll('.recommendation-slide');
+        slides.forEach((slide, i) => {
+            if (i === currentIndex) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+        
+        // Update button states
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === recommendations.length - 1;
+    }
+    
+    // Update carousel controls visibility and state
+    function updateCarouselControls() {
+        totalCountEl.textContent = recommendations.length;
+        currentIndexEl.textContent = currentIndex + 1;
+        
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === recommendations.length - 1 || recommendations.length <= 1;
+    }
+    
+    // Check if current podcast is already a favorite
+    function checkFavoriteStatus(podcastTitle) {
+        if (!saveCurrentBtn) return;
+        
+        fetch('/check-favorite', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ title: podcastTitle })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateFavoriteButton(data.isFavorite);
+            }
+        })
+        .catch(error => {
+            console.error('Error checking favorite status:', error);
+        });
+    }
+    
+    // Update the UI of the favorite button
+    function updateFavoriteButton(isFavorite) {
+        if (!saveCurrentBtn) return;
+        
+        if (isFavorite) {
+            saveCurrentBtn.classList.add('saved');
+            saveCurrentBtn.innerHTML = `❤️ Saved`;
+            saveCurrentBtn.disabled = true;
+        } else {
+            saveCurrentBtn.classList.remove('saved');
+            saveCurrentBtn.innerHTML = `❤️`;
+            saveCurrentBtn.disabled = false;
         }
+    }
+    
+    // Generate a new recommendation using the API
+    function generateNewRecommendation() {
+        // Show loading state
+        generateNewBtn.disabled = true;
+        generateNewBtn.textContent = "Loading...";
         
-        // Replace the event listener for the generate-new button
-        if (generateNewButton) {
-            generateNewButton.addEventListener('click', async function() {
-                this.disabled = true;
-                this.textContent = 'Generating...';
+        // Get the survey data
+        const surveyData = window.originalSurveyData || 
+                          JSON.parse(sessionStorage.getItem('surveyData')) || {};
+        
+        // Add current recommendations to exclusion list
+        const requestData = {
+            ...surveyData,
+            alreadyRecommended: recommendedTitles
+        };
+        
+        // Call the API
+        fetch('/api/recommend', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Add new recommendation to the carousel
+                const newPodcast = {
+                    title: data.podcast.title,
+                    description: data.podcast.description,
+                    explanation: data.podcast.description,
+                    tags: data.podcast.tags || [],
+                    spotify_url: data.spotify.spotify_url || "",
+                    embed_url: data.spotify.embed_url || "",
+                    image: data.spotify.image || "",
+                    available: true
+                };
                 
-                try {
-                    // First try to get data from window.originalSurveyData
-                    let surveyData = window.originalSurveyData;
-                    
-                    // If not available, try sessionStorage
-                    if (!surveyData) {
-                        const storedData = sessionStorage.getItem('surveyData');
-                        if (storedData) {
-                            surveyData = JSON.parse(storedData);
+                // Add to our tracking arrays
+                recommendations.push(newPodcast);
+                recommendedTitles.push(newPodcast.title);
+                
+                // Create and append new slide
+                const newSlide = createRecommendationSlide(newPodcast, recommendations.length - 1);
+                carousel.appendChild(newSlide);
+                
+                // Update to show the new recommendation
+                currentIndex = recommendations.length - 1;
+                updateCarouselDisplay();
+                updateCarouselControls();
+                
+                // Check if this is already a favorite
+                checkFavoriteStatus(newPodcast.title);
+            } else {
+                alert("Couldn't find a new recommendation. Please try different preferences.");
+            }
+        })
+        .catch(error => {
+            console.error('Error generating recommendation:', error);
+            alert("Something went wrong. Please try again.");
+        })
+        .finally(() => {
+            // Reset button state
+            generateNewBtn.disabled = false;
+            generateNewBtn.textContent = "Recommend another one";
+        });
+    }
+    
+    // Create a new recommendation slide
+    function createRecommendationSlide(podcast, index) {
+        const slide = document.createElement('div');
+        slide.className = 'recommendation-slide';
+        slide.dataset.index = index;
+        
+        slide.innerHTML = `
+            <section class="podcast-header">
+                <div>
+                    <p><span class="recommendation-label">We recommend</span></p>
+                    <h2>${podcast.title}</h2>
+                    <p class="spotify-description">
+                        <span class="truncated-description">${podcast.description}</span>
+                    </p>
+                </div>
+                <div>
+                    <section class="podcast-image-container" data-name="${podcast.title}">
+                        ${podcast.image ? 
+                          `<img src="${podcast.image}" alt="${podcast.title}" class="podcast-image">` : 
+                          `<img src="/images/podcast-placeholder.jpg" alt="Podcast Placeholder Image" class="podcast-image">`
                         }
-                    }
-                    
-                    // Make sure we have the essential fields
-                    if (!surveyData || !surveyData.interests || !surveyData.mood) {
-                        console.error("Missing survey data:", surveyData);
-                        alert("Sorry, we couldn't retrieve your preferences. Please try the survey again.");
-                        window.location.href = '/survey';
-                        return;
-                    }
-                    
-                    console.log("Using survey data for new recommendation:", surveyData);
-                    
-                    // Make API call to get a new recommendation
-                    const response = await fetch('/api/recommend', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(surveyData)
-                    });
-                    
-                    if (!response.ok) {
-                        throw new Error('Failed to get recommendation');
-                    }
-                    
-                    const data = await response.json();
-                    
-                    if (!data.success || !data.podcast) {
-                        throw new Error('Invalid recommendation data');
-                    }
-                    
-                    // Add the new recommendation to our carousel
-                    recommendationsState.addRecommendation({
-                        title: data.podcast.title,
-                        description: data.podcast.description || data.spotify.description,
-                        explanation: data.podcast.description,
-                        tags: data.podcast.tags || [],
-                        spotify_url: data.spotify.spotify_url || "",
-                        embed_url: data.spotify.embed_url || "",
-                        image: data.spotify.image || "",
-                        available: true
-                    });
-                    
-                } catch (error) {
-                    console.error('Error generating recommendation:', error);
-                    alert('Failed to generate a new recommendation. Please try again.');
-                } finally {
-                    this.disabled = false;
-                    this.textContent = 'Get Another Recommendation';
+                    </section>
+                </div>
+            </section>
+            
+            <section class="explanation">
+                <h3>Why you might like it</h3>
+                <p>${podcast.explanation || "Based on your interests and preferences, we think you'll enjoy this podcast. It matches your taste in content and listening style."}</p>
+            </section>
+            
+            <div class="podcast-tags">
+                ${podcast.tags && podcast.tags.length > 0 ? 
+                  `<h4>Tags:</h4>
+                   <ul class="tag-list">
+                       ${podcast.tags.map(tag => `<li class="tag">${tag}</li>`).join('')}
+                   </ul>` : 
+                  ''
                 }
-            });
+            </div>
+            
+            <section class="spotify-section">
+                <h3>Listen on Spotify</h3>
+                ${podcast.embed_url ? 
+                  `<div class="spotify-player">
+                       <iframe 
+                           src="${podcast.embed_url}" 
+                           width="100%" 
+                           height="232" 
+                           frameborder="0" 
+                           allowtransparency="true" 
+                           allow="encrypted-media">
+                       </iframe>
+                   </div>` : 
+                  podcast.spotify_url ? 
+                  `<a href="${podcast.spotify_url}" target="_blank" class="spotify-link">
+                       <img src="/images/spotify-logo.png" alt="Spotify Logo" class="spotify-logo">
+                       Open in Spotify
+                   </a>` : 
+                  ''
+                }
+            </section>
+        `;
+        
+        // Add show more/less button for description if needed
+        setTimeout(() => {
+            const descEl = slide.querySelector('.truncated-description');
+            if (descEl && descEl.scrollHeight > descEl.clientHeight) {
+                const button = document.createElement('button');
+                button.className = 'show-more-button';
+                button.textContent = 'Read more';
+                
+                button.addEventListener('click', function() {
+                    if (descEl.classList.contains('show-full-text')) {
+                        descEl.classList.remove('show-full-text');
+                        button.textContent = 'Read more';
+                        descEl.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        descEl.classList.add('show-full-text');
+                        button.textContent = 'Read less';
+                    }
+                });
+                
+                descEl.parentNode.insertBefore(button, descEl.nextSibling);
+            }
+        }, 100);
+        
+        return slide;
+    }
+    
+    // Save current recommendation to favorites
+    function saveCurrentToFavorites() {
+        if (recommendations.length === 0 || currentIndex >= recommendations.length) return;
+        
+        const currentPodcast = recommendations[currentIndex];
+        
+        // Show loading state on button
+        if (saveCurrentBtn) {
+            saveCurrentBtn.disabled = true;
+            saveCurrentBtn.innerHTML = `<span class="loading-spinner"></span>`;
         }
+        
+        fetch('/add-favorite', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                title: currentPodcast.title,
+                description: currentPodcast.description,
+                tags: currentPodcast.tags,
+                spotify_url: currentPodcast.spotify_url,
+                image: currentPodcast.image
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Visual feedback for success
+                updateFavoriteButton(true);
+                
+                // Show a temporary success message
+                const successMessage = document.createElement('div');
+                successMessage.className = 'success-toast';
+                successMessage.textContent = 'Added to favorites!';
+                document.body.appendChild(successMessage);
+                
+                // Remove the success message after a delay
+                setTimeout(() => {
+                    successMessage.classList.add('fade-out');
+                    setTimeout(() => successMessage.remove(), 500);
+                }, 2000);
+            } else {
+                console.error('Error adding favorite:', data.message);
+                updateFavoriteButton(data.isFavorite || false);
+            }
+        })
+        .catch(error => {
+            console.error('Error saving favorite:', error);
+            // Reset button state
+            if (saveCurrentBtn) {
+                saveCurrentBtn.disabled = false;
+                saveCurrentBtn.innerHTML = `❤️`;
+            }
+        });
     }
 });

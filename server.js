@@ -71,7 +71,10 @@ function onsurvey(req, res) {
 }
 
 function onaccount(req, res) {
-    res.render('account', { title: 'Account Page'})
+    if (!req.user) {
+        return res.redirect('/login');
+    }
+    res.render('account', { username: req.user.username });
 }
 
 function onindex(req, res) {
@@ -184,7 +187,10 @@ async function fetchSpotifyPodcast(query) {
 }
 
 // AI Recommendation Functions
-function generatePodcastPrompt(userData, triedPodcasts) {
+function generatePodcastPrompt(userData, triedPodcasts, alreadyRecommendedPodcasts = []) {
+    // Combine both sets of podcasts to exclude
+    const allExcludedPodcasts = new Set([...Array.from(triedPodcasts), ...alreadyRecommendedPodcasts]);
+    
     return `A user is looking for a podcast recommendation.
     Their interests are: **${userData.interests.join(", ")}**.
     They prefer **${userData.preferred_podcast_length}** episodes.
@@ -194,7 +200,7 @@ function generatePodcastPrompt(userData, triedPodcasts) {
     - Recommend only **well-known, popular podcasts that are available on Spotify**.
     - Avoid niche recommendations that may not be widely available.
     
-    🚫 **DO NOT RECOMMEND** these podcasts: ${Array.from(triedPodcasts).join(", ")}.
+    🚫 **DO NOT RECOMMEND** these podcasts: ${Array.from(allExcludedPodcasts).join(", ")}.
     
     **Return structured JSON in this format (without markdown):**
     {
@@ -205,14 +211,14 @@ function generatePodcastPrompt(userData, triedPodcasts) {
     }`;
 }
 
-async function getValidPodcastRecommendation(userData) {
+async function getValidPodcastRecommendation(userData, alreadyRecommendedPodcasts = []) {
     let maxAttempts = 3; // Try up to 3 times
     let triedPodcasts = new Set(); // Keep track of previous recommendations
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         console.log(`🔄 Attempt ${attempt}: Getting recommendation...`);
 
-        const prompt = generatePodcastPrompt(userData, triedPodcasts);
+        const prompt = generatePodcastPrompt(userData, triedPodcasts, alreadyRecommendedPodcasts);
 
         const completion = await openai.chat.completions.create({
             model: "gpt-4o",
@@ -249,8 +255,6 @@ async function getValidPodcastRecommendation(userData) {
     return null;
 }
 
-
-
 function authenticateToken (req, res, next) {
     const token = req.cookies.token;
     if(!token) return res.status(401).json({message: "Acces Denied"});
@@ -259,7 +263,7 @@ function authenticateToken (req, res, next) {
         if (err) return res.status(401).json({message: "Invalid Token"});
         req.user = user;
         next();
-    })
+    });
 }
 
 app.post("/signup", async (req, res) => {
@@ -340,7 +344,36 @@ app.post("/recommend", authenticateToken, async (req, res) => {
     }
 });
 
-// Modify the existing add-favorite route in your server.js
+// Add a new endpoint to check if a podcast is in favorites
+app.post("/check-favorite", authenticateToken, async (req, res) => {
+    try {
+        const { title } = req.body;
+        
+        if (!title) {
+            return res.status(400).json({ success: false, message: "Missing podcast title" });
+        }
+
+        const user = await User.findById(req.user.userId);
+        if (!user) {
+            return res.status(401).json({ success: false, message: "User not found" });
+        }
+
+        // Check if podcast is already in favorites - use case insensitive comparison
+        const alreadyExists = user.favoritePodcasts.some(podcast => 
+            podcast.title.toLowerCase() === title.toLowerCase()
+        );
+        
+        res.status(200).json({ 
+            success: true, 
+            isFavorite: alreadyExists
+        });
+    } catch (error) {
+        console.error("Error checking favorite status:", error);
+        res.status(500).json({ success: false, message: "Error checking favorite status" });
+    }
+});
+
+// Modify the existing add-favorite route to return isFavorite status
 app.post("/add-favorite", authenticateToken, async (req, res) => {
     try {
         const { title, description, tags, spotify_url, image } = req.body;
@@ -354,17 +387,28 @@ app.post("/add-favorite", authenticateToken, async (req, res) => {
             return res.status(401).json({ success: false, message: "User not found" });
         }
 
-        // Check if podcast is already in favorites
-        const alreadyExists = user.favoritePodcasts.some(podcast => podcast.title === title);
+        // Check if podcast is already in favorites - use case insensitive comparison
+        const alreadyExists = user.favoritePodcasts.some(podcast => 
+            podcast.title.toLowerCase() === title.toLowerCase()
+        );
+        
         if (alreadyExists) {
-            return res.status(400).json({ success: false, message: "Podcast already in favorites" });
+            return res.status(200).json({ 
+                success: true, 
+                isFavorite: true, 
+                message: "Podcast already in favorites" 
+            });
         }
 
         // Add to favorites
         user.favoritePodcasts.push({ title, description, tags, spotify_url, image });
         await user.save();
 
-        res.status(200).json({ success: true, message: "Podcast added to favorites" });
+        res.status(200).json({ 
+            success: true, 
+            isFavorite: true,
+            message: "Podcast added to favorites" 
+        });
     } catch (error) {
         console.error("Error adding favorite:", error);
         res.status(500).json({ success: false, message: "Error adding favorite" });
@@ -387,8 +431,6 @@ app.post("/remove-favorite", authenticateToken, async (req, res) => {
     }
 });
 
-
-
 // API endpoint for getting recommendations without page reload
 app.post("/api/recommend", authenticateToken, async (req, res) => {
     try {
@@ -403,6 +445,10 @@ app.post("/api/recommend", authenticateToken, async (req, res) => {
                   (req.body.mood ? [req.body.mood] : [])
         };
 
+        // Get already recommended podcasts to exclude from new recommendations
+        const alreadyRecommendedPodcasts = req.body.alreadyRecommended || [];
+        console.log("Already recommended podcasts:", alreadyRecommendedPodcasts);
+
         console.log("Processed user data for API recommendation:", userData);
         
         // Validate that we have the minimum required data
@@ -413,7 +459,8 @@ app.post("/api/recommend", authenticateToken, async (req, res) => {
             });
         }
 
-        const finalPodcast = await getValidPodcastRecommendation(userData);
+        // Pass already recommended podcasts to the recommendation function
+        const finalPodcast = await getValidPodcastRecommendation(userData, alreadyRecommendedPodcasts);
 
         if (!finalPodcast) {
             return res.status(404).json({ 
@@ -437,9 +484,6 @@ app.post("/api/recommend", authenticateToken, async (req, res) => {
     }
 });
 
-
-
-
 app.post ("/logout", (req, res) => { 
     res.cookie("token", "", {maxAge: 0});
     res.redirect("/login");
@@ -454,7 +498,6 @@ app.listen(PORT, () => {
 
 
 app.post("/wachtwoordveranderen", async (req, res) => {
-    console.log("Request body:", req.body); // Debugging
 
     const { username, password } = req.body;
 
@@ -477,7 +520,13 @@ app.post("/wachtwoordveranderen", async (req, res) => {
         user.password = hashedPassword;
         await user.save();
 
-        res.json({ message: "Wachtwoord succesvol gewijzigd!" });
+        res.send(`
+        <script>
+            sessionStorage.setItem("passwordChanged", "true");
+            window.location.href = "/account";
+        </script>
+    `);
+
     } catch (error) {
         console.error("Fout bij updaten wachtwoord:", error);
         res.status(500).json({ message: "Interne serverfout" });
