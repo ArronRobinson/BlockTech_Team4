@@ -3,6 +3,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const isOnFavoritesPage = window.location.pathname.includes('/favorite');
     const saveButton = document.getElementById("save-favorite");
 
+    document.getElementById("submit-button").addEventListener("click", function () {
+        setTimeout(() => {
+            document.getElementById("loadingWrapper").classList.add("visible"); // Add 'visible' class after 0.2s
+        }, 200);
+    });
+
     if (saveButton && window.podcastData.available) {
         saveButton.addEventListener("click", async () => {
             try {
@@ -460,9 +466,3 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
-
-
-window.addEventListener("load", function () {
-    document.querySelector(".loading-screen").style.display = "none";
-}); 
