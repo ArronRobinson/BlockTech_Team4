@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("submit-button").addEventListener("click", function () {
         setTimeout(() => {
+       
+       
             document.getElementById("loadingWrapper").classList.add("visible"); // Add 'visible' class after 0.2s
         }, 200);
     });
@@ -517,26 +519,26 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
   
-   // Form submission validation
-    document.getElementById('surveyForm').addEventListener('submit', function(e) {
-        const selectedMoods = document.querySelectorAll('input[name="mood"]:checked');
-        
-        if (selectedMoods.length === 0) {
-            e.preventDefault();
-            alert('Selecteer ten minste één sfeer voor je podcast');
+// Form submission validation
+document.getElementById('surveyForm').addEventListener('submit', function(e) {
+    const selectedMoods = document.querySelectorAll('input[name="mood"]:checked');
+    
+    if (selectedMoods.length === 0) {
+        e.preventDefault();
+        alert('Selecteer ten minste één sfeer voor je podcast');
+    }
+});
+
+
+document.getElementById('fileInput').addEventListener('change', function(event) {
+    document.getElementById("fileInput").addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById("profilePic").src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
     });
-
-
-    document.getElementById('fileInput').addEventListener('change', function(event) {
-        document.getElementById("fileInput").addEventListener("change", function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById("profilePic").src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    });
+}
