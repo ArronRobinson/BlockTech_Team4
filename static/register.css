@@ -141,11 +141,12 @@ main form fieldset section div:has(input:focus) label {
 
 .toggle-password{
     position: absolute;
-    right: 3.3em;
-    top: 10.7em;
+    right: 26.3em;
+    top: 11.8em;
     cursor: pointer;
     color: var(--color-textaccent);
     font-size: 1.2em;
+    z-index: 2;
 }
 
 .toggle-password:hover{
