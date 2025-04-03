@@ -15,7 +15,7 @@
 
 /* When loading, show it */
 #loadingWrapper.visible {
-    display: flex;
+    display: flex !important; /* Force display with !important */
 }
 
 /* Loading screen itself */

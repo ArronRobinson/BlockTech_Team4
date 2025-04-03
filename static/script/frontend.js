@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const isOnFavoritesPage = window.location.pathname.includes('/favorite');
 
     document.getElementById("submit-button").addEventListener("click", function () {
+        // Show loading screen immediately when submit button is clicked
+        document.getElementById("loadingWrapper").classList.add("visible");
         setTimeout(() => {
             document.getElementById("loadingWrapper").classList.add("visible"); // Add 'visible' class after 0.2s
         }, 200);
@@ -463,11 +465,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         selectedCategories.forEach(category => {
             const categoryName = category.getAttribute('data-category');
-            const subcategory = document.querySelector(.${categoryName}Opties);
+            const subcategory = document.querySelector(`.${categoryName}Opties`);
             if (subcategory) {
                 subcategory.style.display = 'block';
             } else {
-                console.warn(Geen subcategorie gevonden voor: ${categoryName});
+                console.warn(`Geen subcategorie gevonden voor: ${categoryName}`);
             }
         });
     
@@ -508,6 +510,12 @@ document.getElementById('surveyForm').addEventListener('submit', function(e) {
     if (selectedMoods.length === 0) {
         e.preventDefault();
         alert('Selecteer ten minste één sfeer voor je podcast');
+        // Hide loading screen if validation fails
+        document.getElementById("loadingWrapper").classList.remove("visible");
+    } else {
+        // Make sure loading screen is visible
+        document.getElementById("loadingWrapper").classList.add("visible");
+        // Allow form submission to continue
     }
 });
 
