@@ -191,6 +191,12 @@ function generatePodcastPrompt(userData, triedPodcasts, alreadyRecommendedPodcas
     // Combine both sets of podcasts to exclude
     const allExcludedPodcasts = new Set([...Array.from(triedPodcasts), ...alreadyRecommendedPodcasts]);
     
+    // Define allowed tags in Dutch
+    const allowedTags = [
+        'All', 'Sports', 'Boeken', 'Koken', 'Gamen', 'Muziek', 'Film', 
+        'Nieuws en politiek', 'Kunst', 'Misdaad', 'Geschiedenis', 'Mode', 'Lifestyle'
+    ];
+    
     return `A user is looking for a podcast recommendation.
     Their interests are: **${userData.interests.join(", ")}**.
     They prefer **${userData.preferred_podcast_length}** episodes.
@@ -199,6 +205,9 @@ function generatePodcastPrompt(userData, triedPodcasts, alreadyRecommendedPodcas
     🔹 **Important Requirements**:
     - Recommend only **well-known, popular podcasts that are available on Spotify**.
     - Avoid niche recommendations that may not be widely available.
+    - ONLY use these specific tags in the response: ${allowedTags.join(", ")}
+    - Select 1-3 tags that best match the podcast from the allowed tags list.
+    - Do not invent new tags or categories.
     
     🚫 **DO NOT RECOMMEND** these podcasts: ${Array.from(allExcludedPodcasts).join(", ")}.
     
@@ -206,7 +215,7 @@ function generatePodcastPrompt(userData, triedPodcasts, alreadyRecommendedPodcas
     {
         "title": "Podcast Name",
         "description": "A short explanation of why this podcast is recommended.",
-        "tags": ["genre1", "genre2"],
+        "tags": ["tag1", "tag2"],
         "spotify_search_query": "Podcast Name"
     }`;
 }
@@ -214,6 +223,10 @@ function generatePodcastPrompt(userData, triedPodcasts, alreadyRecommendedPodcas
 async function getValidPodcastRecommendation(userData, alreadyRecommendedPodcasts = []) {
     let maxAttempts = 3; // Try up to 3 times
     let triedPodcasts = new Set(); // Keep track of previous recommendations
+    const allowedTags = [
+        'All', 'Sports', 'Boeken', 'Koken', 'Gamen', 'Muziek', 'Film', 
+        'Nieuws en politiek', 'Kunst', 'Misdaad', 'Geschiedenis', 'Mode', 'Lifestyle'
+    ];
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         console.log(`🔄 Attempt ${attempt}: Getting recommendation...`);
@@ -223,31 +236,51 @@ async function getValidPodcastRecommendation(userData, alreadyRecommendedPodcast
         const completion = await openai.chat.completions.create({
             model: "gpt-4o",
             messages: [
-                { role: "system", content: "You are a podcast recommendation expert. Always return structured JSON." },
+                { 
+                    role: "system", 
+                    content: `You are a podcast recommendation expert that only uses these specific tags: ${allowedTags.join(", ")}. 
+                              Always return structured JSON with tags selected only from this allowed list.` 
+                },
                 { role: "user", content: prompt }
             ],
         });
 
         let responseText = completion.choices[0].message.content.replace(/```json|```/g, "").trim();
-        const podcastRecommendation = JSON.parse(responseText);
+        let podcastRecommendation;
+        
+        try {
+            podcastRecommendation = JSON.parse(responseText);
+            
+            // Validate and filter tags to ensure they're from the allowed list
+            if (podcastRecommendation.tags && Array.isArray(podcastRecommendation.tags)) {
+                podcastRecommendation.tags = podcastRecommendation.tags.filter(tag => 
+                    allowedTags.includes(tag)
+                );
+            } else {
+                podcastRecommendation.tags = [];
+            }
+            
+            console.log("AI Recommended Podcast:", podcastRecommendation);
+            
+            if (triedPodcasts.has(podcastRecommendation.title.toLowerCase())) {
+                console.log(`⚠️ Recommended the same podcast again: ${podcastRecommendation.title}. Retrying...`);
+                continue; // Skip to the next attempt
+            }
 
-        console.log("AI Recommended Podcast:", podcastRecommendation);
+            triedPodcasts.add(podcastRecommendation.title.toLowerCase());
 
-        if (triedPodcasts.has(podcastRecommendation.title.toLowerCase())) {
-            console.log(`⚠️ Recommended the same podcast again: ${podcastRecommendation.title}. Retrying...`);
-            continue; // Skip to the next attempt
-        }
+            // Fetch actual Spotify details
+            const spotifyPodcast = await fetchSpotifyPodcast(podcastRecommendation.title);
 
-        triedPodcasts.add(podcastRecommendation.title.toLowerCase());
-
-        // Fetch actual Spotify details
-        const spotifyPodcast = await fetchSpotifyPodcast(podcastRecommendation.title);
-
-        if (spotifyPodcast) {
-            console.log("✅ Found on Spotify:", spotifyPodcast.title);
-            return { podcastRecommendation, spotifyPodcast };
-        } else {
-            console.log(`❌ Not found on Spotify: "${podcastRecommendation.title}". Retrying...`);
+            if (spotifyPodcast) {
+                console.log("✅ Found on Spotify:", spotifyPodcast.title);
+                return { podcastRecommendation, spotifyPodcast };
+            } else {
+                console.log(`❌ Not found on Spotify: "${podcastRecommendation.title}". Retrying...`);
+            }
+        } catch (error) {
+            console.error("Error parsing AI response:", error, "Response was:", responseText);
+            continue; // Try again
         }
     }
 
@@ -492,10 +525,6 @@ app.post ("/logout", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-
-
-
 
 app.post("/wachtwoordveranderen", async (req, res) => {
 
