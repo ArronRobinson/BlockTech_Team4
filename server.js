@@ -187,7 +187,16 @@ async function fetchSpotifyPodcast(query) {
 }
 
 // AI Recommendation Functions
-function generatePodcastPrompt(userData, triedPodcasts) {
+function generatePodcastPrompt(userData, triedPodcasts, alreadyRecommendedPodcasts = []) {
+    // Combine both sets of podcasts to exclude
+    const allExcludedPodcasts = new Set([...Array.from(triedPodcasts), ...alreadyRecommendedPodcasts]);
+    
+    // Define allowed tags in Dutch
+    const allowedTags = [
+        'All', 'Sports', 'Boeken', 'Koken', 'Gamen', 'Muziek', 'Film', 
+        'Nieuws en politiek', 'Kunst', 'Misdaad', 'Geschiedenis', 'Mode', 'Lifestyle'
+    ];
+    
     return `A user is looking for a podcast recommendation.
     Their interests are: **${userData.interests.join(", ")}**.
     They prefer **${userData.preferred_podcast_length}** episodes.
@@ -196,63 +205,88 @@ function generatePodcastPrompt(userData, triedPodcasts) {
     🔹 **Important Requirements**:
     - Recommend only **well-known, popular podcasts that are available on Spotify**.
     - Avoid niche recommendations that may not be widely available.
+    - ONLY use these specific tags in the response: ${allowedTags.join(", ")}
+    - Select 1-3 tags that best match the podcast from the allowed tags list.
+    - Do not invent new tags or categories.
     
-    🚫 **DO NOT RECOMMEND** these podcasts: ${Array.from(triedPodcasts).join(", ")}.
+    🚫 **DO NOT RECOMMEND** these podcasts: ${Array.from(allExcludedPodcasts).join(", ")}.
     
     **Return structured JSON in this format (without markdown):**
     {
         "title": "Podcast Name",
         "description": "A short explanation of why this podcast is recommended.",
-        "tags": ["genre1", "genre2"],
+        "tags": ["tag1", "tag2"],
         "spotify_search_query": "Podcast Name"
     }`;
 }
 
-async function getValidPodcastRecommendation(userData) {
+async function getValidPodcastRecommendation(userData, alreadyRecommendedPodcasts = []) {
     let maxAttempts = 3; // Try up to 3 times
     let triedPodcasts = new Set(); // Keep track of previous recommendations
+    const allowedTags = [
+        'All', 'Sports', 'Boeken', 'Koken', 'Gamen', 'Muziek', 'Film', 
+        'Nieuws en politiek', 'Kunst', 'Misdaad', 'Geschiedenis', 'Mode', 'Lifestyle'
+    ];
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         console.log(`🔄 Attempt ${attempt}: Getting recommendation...`);
 
-        const prompt = generatePodcastPrompt(userData, triedPodcasts);
+        const prompt = generatePodcastPrompt(userData, triedPodcasts, alreadyRecommendedPodcasts);
 
         const completion = await openai.chat.completions.create({
             model: "gpt-4o",
             messages: [
-                { role: "system", content: "You are a podcast recommendation expert. Always return structured JSON." },
+                { 
+                    role: "system", 
+                    content: `You are a podcast recommendation expert that only uses these specific tags: ${allowedTags.join(", ")}. 
+                              Always return structured JSON with tags selected only from this allowed list.` 
+                },
                 { role: "user", content: prompt }
             ],
         });
 
         let responseText = completion.choices[0].message.content.replace(/```json|```/g, "").trim();
-        const podcastRecommendation = JSON.parse(responseText);
+        let podcastRecommendation;
+        
+        try {
+            podcastRecommendation = JSON.parse(responseText);
+            
+            // Validate and filter tags to ensure they're from the allowed list
+            if (podcastRecommendation.tags && Array.isArray(podcastRecommendation.tags)) {
+                podcastRecommendation.tags = podcastRecommendation.tags.filter(tag => 
+                    allowedTags.includes(tag)
+                );
+            } else {
+                podcastRecommendation.tags = [];
+            }
+            
+            console.log("AI Recommended Podcast:", podcastRecommendation);
+            
+            if (triedPodcasts.has(podcastRecommendation.title.toLowerCase())) {
+                console.log(`⚠️ Recommended the same podcast again: ${podcastRecommendation.title}. Retrying...`);
+                continue; // Skip to the next attempt
+            }
 
-        console.log("AI Recommended Podcast:", podcastRecommendation);
+            triedPodcasts.add(podcastRecommendation.title.toLowerCase());
 
-        if (triedPodcasts.has(podcastRecommendation.title.toLowerCase())) {
-            console.log(`⚠️ Recommended the same podcast again: ${podcastRecommendation.title}. Retrying...`);
-            continue; // Skip to the next attempt
-        }
+            // Fetch actual Spotify details
+            const spotifyPodcast = await fetchSpotifyPodcast(podcastRecommendation.title);
 
-        triedPodcasts.add(podcastRecommendation.title.toLowerCase());
-
-        // Fetch actual Spotify details
-        const spotifyPodcast = await fetchSpotifyPodcast(podcastRecommendation.title);
-
-        if (spotifyPodcast) {
-            console.log("✅ Found on Spotify:", spotifyPodcast.title);
-            return { podcastRecommendation, spotifyPodcast };
-        } else {
-            console.log(`❌ Not found on Spotify: "${podcastRecommendation.title}". Retrying...`);
+            if (spotifyPodcast) {
+                console.log("✅ Found on Spotify:", spotifyPodcast.title);
+                return { podcastRecommendation, spotifyPodcast };
+            } else {
+                console.log(`❌ Not found on Spotify: "${podcastRecommendation.title}". Retrying...`);
+            }
+        } catch (error) {
+            console.error("Error parsing AI response:", error, "Response was:", responseText);
+            continue; // Try again
         }
     }
 
     console.log("❌ No valid podcasts found after retries.");
     return null;
 }
-
-
 
 function authenticateToken (req, res, next) {
     const token = req.cookies.token;
@@ -343,7 +377,36 @@ app.post("/recommend", authenticateToken, async (req, res) => {
     }
 });
 
-// Modify the existing add-favorite route in your server.js
+// Add a new endpoint to check if a podcast is in favorites
+app.post("/check-favorite", authenticateToken, async (req, res) => {
+    try {
+        const { title } = req.body;
+        
+        if (!title) {
+            return res.status(400).json({ success: false, message: "Missing podcast title" });
+        }
+
+        const user = await User.findById(req.user.userId);
+        if (!user) {
+            return res.status(401).json({ success: false, message: "User not found" });
+        }
+
+        // Check if podcast is already in favorites - use case insensitive comparison
+        const alreadyExists = user.favoritePodcasts.some(podcast => 
+            podcast.title.toLowerCase() === title.toLowerCase()
+        );
+        
+        res.status(200).json({ 
+            success: true, 
+            isFavorite: alreadyExists
+        });
+    } catch (error) {
+        console.error("Error checking favorite status:", error);
+        res.status(500).json({ success: false, message: "Error checking favorite status" });
+    }
+});
+
+// Modify the existing add-favorite route to return isFavorite status
 app.post("/add-favorite", authenticateToken, async (req, res) => {
     try {
         const { title, description, tags, spotify_url, image } = req.body;
@@ -357,17 +420,28 @@ app.post("/add-favorite", authenticateToken, async (req, res) => {
             return res.status(401).json({ success: false, message: "User not found" });
         }
 
-        // Check if podcast is already in favorites
-        const alreadyExists = user.favoritePodcasts.some(podcast => podcast.title === title);
+        // Check if podcast is already in favorites - use case insensitive comparison
+        const alreadyExists = user.favoritePodcasts.some(podcast => 
+            podcast.title.toLowerCase() === title.toLowerCase()
+        );
+        
         if (alreadyExists) {
-            return res.status(400).json({ success: false, message: "Podcast already in favorites" });
+            return res.status(200).json({ 
+                success: true, 
+                isFavorite: true, 
+                message: "Podcast already in favorites" 
+            });
         }
 
         // Add to favorites
         user.favoritePodcasts.push({ title, description, tags, spotify_url, image });
         await user.save();
 
-        res.status(200).json({ success: true, message: "Podcast added to favorites" });
+        res.status(200).json({ 
+            success: true, 
+            isFavorite: true,
+            message: "Podcast added to favorites" 
+        });
     } catch (error) {
         console.error("Error adding favorite:", error);
         res.status(500).json({ success: false, message: "Error adding favorite" });
@@ -390,8 +464,6 @@ app.post("/remove-favorite", authenticateToken, async (req, res) => {
     }
 });
 
-
-
 // API endpoint for getting recommendations without page reload
 app.post("/api/recommend", authenticateToken, async (req, res) => {
     try {
@@ -406,6 +478,10 @@ app.post("/api/recommend", authenticateToken, async (req, res) => {
                   (req.body.mood ? [req.body.mood] : [])
         };
 
+        // Get already recommended podcasts to exclude from new recommendations
+        const alreadyRecommendedPodcasts = req.body.alreadyRecommended || [];
+        console.log("Already recommended podcasts:", alreadyRecommendedPodcasts);
+
         console.log("Processed user data for API recommendation:", userData);
         
         // Validate that we have the minimum required data
@@ -416,7 +492,8 @@ app.post("/api/recommend", authenticateToken, async (req, res) => {
             });
         }
 
-        const finalPodcast = await getValidPodcastRecommendation(userData);
+        // Pass already recommended podcasts to the recommendation function
+        const finalPodcast = await getValidPodcastRecommendation(userData, alreadyRecommendedPodcasts);
 
         if (!finalPodcast) {
             return res.status(404).json({ 
@@ -448,10 +525,6 @@ app.post ("/logout", (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-
-
-
 
 app.post("/wachtwoordveranderen", async (req, res) => {
 
