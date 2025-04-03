@@ -4,6 +4,44 @@ document.addEventListener("DOMContentLoaded", function () {
     const podcastList = document.getElementById("podcastList");
     const isOnFavoritesPage = window.location.pathname.includes('/favorite');
 
+    document.getElementById("submit-button").addEventListener("click", function () {
+        // Show loading screen immediately when submit button is clicked
+        document.getElementById("loadingWrapper").classList.add("visible");
+        setTimeout(() => {
+            document.getElementById("loadingWrapper").classList.add("visible"); // Add 'visible' class after 0.2s
+        }, 200);
+    });
+
+    if (saveButton && window.podcastData.available) {
+        saveButton.addEventListener("click", async () => {
+            try {
+                const response = await fetch("/add-favorite", {  // Change from "/favorites" to "/add-favorite"
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        title: window.podcastData.title,
+                        description: window.podcastData.description,
+                        tags: window.podcastData.tags,
+                        spotify_url: window.podcastData.spotify_url,
+                        image: window.podcastData.image
+                    })
+                });
+                
+                // Handle the response
+                const data = await response.json();
+                if (data.success) {
+                    console.log("Podcast added to favorites");
+                } else {
+                    console.error("Error adding to favorites:", data.message);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        });
+    }
+
     // Update to use only the top navigation save button, not both
     const contentSaveButton = document.getElementById("save-favorite");
     if (contentSaveButton) {
@@ -67,14 +105,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-
     // If we're on the favorites page, fetch and display favorites
     if (isOnFavoritesPage) {
         loadFavorites();
-    } else {
-        // On other pages, initialize the existing filtering/sorting
-        filterAndSort();
-    }
+    } 
 
     // Function to load favorites from the server
     function loadFavorites() {
@@ -229,34 +263,21 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
     
-    // Function to remove a favorite
-    function removeFavorite(podcastName, section) {
-        fetch('/remove-favorite', {
+    // Function to save a favorite
+    function saveFavorite(podcastData) {
+        fetch('/add-favorite', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ podcastTitle: podcastName })
+            body: JSON.stringify(podcastData)
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Remove section from the DOM
-                if (section) {
-                    section.remove();
-                }
-                
-                // Check if we need to show the empty message
-                const remainingSections = document.querySelectorAll('main > section[data-name]');
-                if (remainingSections.length === 0) {
-                    const main = document.querySelector('main');
-                    const emptyMessage = document.createElement('div');
-                    emptyMessage.className = 'empty-message';
-                    emptyMessage.textContent = 'No favorite podcasts yet. Discover new podcasts in the survey!';
-                    main.appendChild(emptyMessage);
-                }
+                console.log('Podcast added to favorites');
             } else {
-                console.error('Error removing favorite:', data.message);
+                console.error('Error adding favorite:', data.message);
             }
         })
         .catch(error => {
@@ -381,26 +402,131 @@ function getPodcastRating(podcastName) {
     return ratings[podcastName] || 0.0; // Default to 0.0 if not found
 }
 
+// *
+// survey
+// *
+
+document.addEventListener('DOMContentLoaded', function() {
+   
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    
+    const nextToStep2 = document.getElementById('next-to-step2');
+    const backToStep1 = document.getElementById('back-to-step1');
+    const nextToStep3 = document.getElementById('next-to-step3');
+    const backToStep2 = document.getElementById('back-to-step2');
+    
+    const categoryItems = document.querySelectorAll('.category-item');
+    const SubcategoryGroup = document.querySelectorAll('.checkbox-grid input[type="checkbox"]');
+    const moodCheckboxes = document.querySelectorAll('.mood-options input[type="checkbox"]');
 
 
-document.getElementById("fileInput").addEventListener("change", function (event) {
+    categoryItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Deselecteer alle andere categorieën
+            categoryItems.forEach(otherItem => {
+                if (otherItem !== this) {
+                    otherItem.classList.remove('selected');
+                    const checkbox = otherItem.querySelector('input[type="radio"]');
+                    if (checkbox) checkbox.checked = false; // deselecteer de radio button
+                }
+            });
+    
+            // Selecteer de aangeklikte categorie
+            this.classList.add('selected');
+            const checkbox = this.querySelector('input[type="radio"]');
+            if (checkbox) checkbox.checked = true; // selecteer de radio button
+        });
+    });
+    
+    // clicked kleur verandere
+    SubcategoryGroup.forEach(item => {
+        item.addEventListener('click', function() {
+            const label = this.parentElement;
+            label.classList.toggle("selected", this.checked);
+        });
+    });
+
+    moodCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", function () {
+           const label = this.closest(".mood-option");
+           label.classList.toggle("selected", this.checked);
+        });
+    });
+    
+    // Navigation: Step 1 to Step 2
+    nextToStep2.addEventListener('click', function() {
+        const selectedCategories = document.querySelectorAll('.category-item.selected');
+        if (selectedCategories.length === 0) {
+            alert('Selecteer ten minste één categorie');
+            return;
+        }
+        
+        selectedCategories.forEach(category => {
+            const categoryName = category.getAttribute('data-category');
+            const subcategory = document.querySelector(`.${categoryName}Opties`);
+            if (subcategory) {
+                subcategory.style.display = 'block';
+            } else {
+                console.warn(`Geen subcategorie gevonden voor: ${categoryName}`);
+            }
+        });
+    
+        // Navigatie naar stap 2
+        step1.style.display = 'none';
+        step2.style.display = 'block';
+    });
+    
+    // Navigation: Step 2 to Step 1
+    backToStep1.addEventListener('click', function() {
+        location.reload();
+    });
+
+    // Navigation: Step 2 to Step 3
+    nextToStep3.addEventListener('click', function(e) {
+        e.preventDefault(); 
+
+        const selectedInterests = document.querySelectorAll('input[name="interests"]:checked');
+
+        step2.style.display = 'none';
+        step3.style.display = 'block';
+    });
+ 
+    // Navigation: Step 3 to Step 2 
+    backToStep2.addEventListener('click', function() {
+        // Verberg stap 3
+        step3.style.display = 'none';
+        
+        // Toon stap 2
+        step2.style.display = 'block';
+    });
+});
+
+// Form submission validation
+document.getElementById('surveyForm').addEventListener('submit', function(e) {
+    const selectedMoods = document.querySelectorAll('input[name="mood"]:checked');
+    
+    if (selectedMoods.length === 0) {
+        e.preventDefault();
+        alert('Selecteer ten minste één sfeer voor je podcast');
+        // Hide loading screen if validation fails
+        document.getElementById("loadingWrapper").classList.remove("visible");
+    } else {
+        // Make sure loading screen is visible
+        document.getElementById("loadingWrapper").classList.add("visible");
+        // Allow form submission to continue
+    }
+});
+
+// File input for profile picture
+document.getElementById('fileInput').addEventListener('change', function(event) {
     const file = event.target.files[0];
-
     if (file) {
         const reader = new FileReader();
-
-        reader.onload = function (e) {
+        reader.onload = function(e) {
             document.getElementById("profilePic").src = e.target.result;
         };
-
         reader.readAsDataURL(file);
     }
-
-
-})
-
-
-
-window.addEventListener("load", function () {
-    document.querySelector(".loading-screen").style.display = "none";
 });
