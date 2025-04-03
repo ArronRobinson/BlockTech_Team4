@@ -149,10 +149,7 @@ main form fieldset section div:has(input:focus) label {
     z-index: 2;
 }
 
-.toggle-password:hover{
-    transform: scale(1.1);
-    transition: transform 0.3s
-}
+
 
 .rememberMe{
     margin-top: 1em;
@@ -167,3 +164,29 @@ main form fieldset section div:has(input:focus) label {
 
 
 
+/* Add this to your CSS file */
+.password-field {
+  position: relative;
+  width: 100%;
+  display: flex;
+}
+
+.password-field input {
+  width: 100%;
+  padding-right: 40px; /* Make space for the eye icon */
+  box-sizing: border-box;
+}
+
+.toggle-password {
+  right: 1.5em;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  user-select: none;
+  z-index: 10;
+}
+
+.toggle-password:hover {
+    /* Combine both transformations to maintain vertical centering while scaling */
+    transform: translateY(-50%) scale(1.1);
+  }
