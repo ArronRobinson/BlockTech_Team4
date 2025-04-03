@@ -368,9 +368,12 @@ function getPodcastRating(podcastName) {
     return ratings[podcastName] || 0.0; // Default to 0.0 if not found
 }
 
-// *******
+
+
+// ***
 // survey
-// *******
+// ***
+
 
 document.addEventListener('DOMContentLoaded', function() {
    
