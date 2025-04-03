@@ -141,8 +141,8 @@ main form fieldset section div:has(input:focus) label {
 
 .toggle-password{
     position: absolute;
-    right: 26.3em;
-    top: 11.8em;
+    right: 61%;
+    top: 42.8%;
     cursor: pointer;
     color: var(--color-textaccent);
     font-size: 1.2em;
