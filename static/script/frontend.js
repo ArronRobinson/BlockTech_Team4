@@ -516,6 +516,19 @@ document.getElementById("fileInput").addEventListener("change", function (event)
 
 
 
+
 window.addEventListener("load", function () {
     document.querySelector(".loading-screen").style.display = "none";
+});
+
+
+document.querySelector(".toggle-password").addEventListener("click", function () {
+    let wachtwoordInput = document.getElementById("wachtwoord");
+
+    // Toggle password visibility
+    if (wachtwoordInput.type === "password") {
+        wachtwoordInput.type = "text";
+    } else {
+        wachtwoordInput.type = "password";
+    }
 });
