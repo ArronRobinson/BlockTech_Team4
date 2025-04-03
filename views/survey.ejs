@@ -6,6 +6,7 @@
     <!-- <link rel="stylesheet" href="explore.css"> -->
     <link rel="stylesheet" href="all.css">
     <link rel="stylesheet" href="survey.css">
+    <link rel="stylesheet" href="loadingscreen.css">
     <title>Podcast Survey</title>
 </head>
 <body>  
@@ -287,13 +288,22 @@
             </div>
             
             <button type="button" class="nav-button" id="back-to-step2">Terug</button>
-            <button type="submit" class="submit-button">Vind mijn podcast 🎧</button>
+            <button type="submit" id="submit-button" class="submit-button">Vind mijn podcast 🎧</button>
         </div>
     </form>
     <section class="background-elements">
         <div class="circle"></div>
         <div class="circleTwo"></div>
     </section>
+
+    <div id="loadingWrapper">
+        <div id="loadingScreen" class="loading-screen">
+            <div class="spinner"></div>
+            <p>Loading</p>
+        </div>
+    </div>
+
     <script src="/script/frontend.js"></script>
+    
 </body>
 </html>
