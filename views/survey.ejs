@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="explore.css"> -->
     <link rel="stylesheet" href="all.css">
     <link rel="stylesheet" href="survey.css">
     <link rel="stylesheet" href="loadingscreen.css">
@@ -14,7 +13,7 @@
         <%- include('partials/nav') %>
     </header>
     <form id="surveyForm" action="/recommend" method="POST">
-        <!-- Step 1: Main Categories -->
+        <!-- Step 1 -->
         <div id="step1">
             <h1>Waar hou je het meest van?</h1>
             <section class="category-grid">
@@ -304,6 +303,6 @@
     </div>
 
     <script src="/script/frontend.js"></script>
-    
+    <script src="/script/survey.js"></script>
 </body>
 </html>
