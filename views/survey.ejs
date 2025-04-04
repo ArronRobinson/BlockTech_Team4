@@ -296,12 +296,138 @@
         <div class="circleTwo"></div>
     </section>
 
-    <div id="loadingWrapper">
+    <div id="loadingWrapper" style="display: none;">
         <div id="loadingScreen" class="loading-screen">
             <div class="spinner"></div>
-            <p>Loading</p>
+            <p>Loading...</p>
         </div>
     </div>
+
+    <script>
+        // Enhanced loading screen script that persists across page returns
+        document.addEventListener('DOMContentLoaded', function() {
+            // IMMEDIATE HIDE - First thing we do is hide the loading screen
+            const loadingWrapper = document.getElementById('loadingWrapper');
+            if (loadingWrapper) {
+                loadingWrapper.style.display = "none";
+            }
+            
+            // Explicitly check if we're returning via back button
+            const isBackNavigation = (
+                performance.getEntriesByType && 
+                performance.getEntriesByType("navigation").length > 0 &&
+                performance.getEntriesByType("navigation")[0].type === "back_forward"
+            );
+            
+            // Additional check - if we just came back from recommendation page
+            const cameFromRecommend = (
+                document.referrer.includes('/recommend') || 
+                sessionStorage.getItem('lastPage') === 'recommend'
+            );
+            
+            if (isBackNavigation || cameFromRecommend) {
+                console.log('Back navigation detected, ensuring loading screen is hidden');
+                sessionStorage.removeItem('surveySubmitted');
+            }
+            
+            // Check if we're returning via back button from results page
+            const isReturningFromResults = performance.getEntriesByType("navigation")[0].type === "back_forward";
+            
+            const surveyForm = document.getElementById('surveyForm');
+            if (surveyForm) {
+                // Only replace with a cloned form if this isn't a back navigation
+                // This preserves the form state when returning via back button
+                if (!isReturningFromResults) {
+                    const newForm = surveyForm.cloneNode(true);
+                    surveyForm.parentNode.replaceChild(newForm, surveyForm);
+                    
+                    // Set up event listeners on the new form
+                    setupFormEventListeners(newForm);
+                } else {
+                    // If returning via back button, just set up the listeners without cloning
+                    setupFormEventListeners(surveyForm);
+                    
+                    // If this is a back navigation from results, clear the surveySubmitted flag
+                    sessionStorage.removeItem('surveySubmitted');
+                    
+                    // Try to restore the previous step user was on before submission
+                    const lastStep = sessionStorage.getItem('lastSurveyStep');
+                    if (lastStep) {
+                        const step1 = document.getElementById('step1');
+                        const step2 = document.getElementById('step2');
+                        const step3 = document.getElementById('step3');
+                        
+                        if (lastStep === '3' && step3) {
+                            step1.style.display = 'none';
+                            step2.style.display = 'none';
+                            step3.style.display = 'block';
+                        } else if (lastStep === '2' && step2) {
+                            step1.style.display = 'none';
+                            step2.style.display = 'block';
+                            step3.style.display = 'none';
+                        }
+                    }
+                }
+            }
+            
+            function setupFormEventListeners(form) {
+                form.addEventListener('submit', function(e) {
+                    // Check form validation first
+                    const selectedMoods = document.querySelectorAll('input[name="mood"]:checked');
+                    
+                    if (selectedMoods.length === 0) {
+                        e.preventDefault();
+                        alert('Selecteer ten minste één sfeer voor je podcast');
+                        return;
+                    }
+                    
+                    // Store which step we're on for back navigation purposes
+                    const step3Visible = document.getElementById('step3').style.display === 'block';
+                    const step2Visible = document.getElementById('step2').style.display === 'block';
+                    
+                    if (step3Visible) {
+                        sessionStorage.setItem('lastSurveyStep', '3');
+                    } else if (step2Visible) {
+                        sessionStorage.setItem('lastSurveyStep', '2');
+                    } else {
+                        sessionStorage.setItem('lastSurveyStep', '1');
+                    }
+                    
+                    // Form is valid, show loading screen
+                    if (loadingWrapper) {
+                        console.log('Showing loading screen from survey submit');
+                        loadingWrapper.style.display = "flex";
+                        
+                        // Set a session storage flag to indicate loading started
+                        sessionStorage.setItem('surveySubmitted', 'true');
+                    }
+                });
+            }
+            
+            // Also set up listeners for navigation buttons
+            const nextToStep2 = document.getElementById('next-to-step2');
+            if (nextToStep2) {
+                nextToStep2.addEventListener('click', function() {
+                    // Store current step
+                    sessionStorage.setItem('lastSurveyStep', '2');
+                });
+            }
+            
+            const nextToStep3 = document.getElementById('next-to-step3');
+            if (nextToStep3) {
+                nextToStep3.addEventListener('click', function() {
+                    // Store current step
+                    sessionStorage.setItem('lastSurveyStep', '3');
+                });
+            }
+        });
+        
+        // Add an event listener for when the page is unloaded
+        window.addEventListener('beforeunload', function() {
+            // Store the current page for reference when coming back
+            sessionStorage.setItem('lastPage', 'survey');
+        });
+    </script>
 
     <script src="/script/frontend.js"></script>
     

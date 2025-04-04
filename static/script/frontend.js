@@ -4,12 +4,22 @@ document.addEventListener("DOMContentLoaded", function () {
     const podcastList = document.getElementById("podcastList");
     const isOnFavoritesPage = window.location.pathname.includes('/favorite');
     
-    // When submit button is clicked, show loading screen
+    // Fix loading screen functionality
+    const loadingWrapper = document.getElementById("loadingWrapper");
     const submitButton = document.getElementById("submit-button");
+    
+    // When submit button is clicked, show loading screen
     if (submitButton) {
         submitButton.addEventListener("click", function () {
-            document.getElementById("loadingWrapper").classList.add("visible");
+            if (loadingWrapper) {
+                loadingWrapper.style.display = "flex";
+            }
         });
+    }
+    
+    // Initialize loading screen on page load - make sure it's hidden initially
+    if (loadingWrapper) {
+        loadingWrapper.style.display = "none";
     }
 
     // Update to use only the top navigation save button, not both
@@ -81,13 +91,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 
                 // Check if we need to show the empty message
-                const remainingSections = document.querySelectorAll('main > section[data-name]');
-                if (remainingSections.length === 0) {
+                const remainingSections = document.querySelectorAll('main section[data-name]');
+                const emptyMessage = document.querySelector('.empty-message');
+                
+                // Only add the empty message if there are no remaining podcasts
+                // AND there isn't already an empty message
+                if (remainingSections.length === 0 && !emptyMessage) {
                     const main = document.querySelector('main');
-                    const emptyMessage = document.createElement('div');
-                    emptyMessage.className = 'empty-message';
-                    emptyMessage.textContent = 'No favorite podcasts yet. Discover new podcasts in the survey!';
-                    main.appendChild(emptyMessage);
+                    const newEmptyMessage = document.createElement('div');
+                    newEmptyMessage.className = 'empty-message';
+                    newEmptyMessage.textContent = 'No favorite podcasts yet. Discover new podcasts in the survey!';
+                    
+                    // Make sure controls stay at the top if they exist
+                    const controls = document.querySelector('.controls');
+                    if (controls && main) {
+                        // Insert after controls
+                        controls.after(newEmptyMessage);
+                    } else if (main) {
+                        main.appendChild(newEmptyMessage);
+                    }
                 }
             } else {
                 console.error('Error removing favorite:', data.message);
@@ -122,21 +144,6 @@ document.addEventListener("DOMContentLoaded", function () {
         filterAndSort();
     }
 
-    // Function to load favorites from the server
-    function loadFavorites() {
-        fetch('/api/favorites')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    displayFavorites(data.favorites);
-                } else {
-                    console.error('Error:', data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching favorites:', error);
-            });
-    }
 
     // Function to display favorites
     function displayFavorites(podcasts) {
@@ -146,12 +153,25 @@ document.addEventListener("DOMContentLoaded", function () {
         const existingSections = document.querySelectorAll('main > section[data-name]');
         existingSections.forEach(section => section.remove());
         
+        // Remove any existing empty message
+        const existingEmptyMessage = document.querySelector('.empty-message');
+        if (existingEmptyMessage) {
+            existingEmptyMessage.remove();
+        }
+        
         // Show message if no favorites
         if (!podcasts || podcasts.length === 0) {
             const emptyMessage = document.createElement('div');
             emptyMessage.className = 'empty-message';
             emptyMessage.textContent = 'No favorite podcasts yet. Discover new podcasts in the survey!';
-            main.appendChild(emptyMessage);
+            
+            // Make sure to add after controls if they exist
+            const controls = document.querySelector('.controls');
+            if (controls) {
+                controls.after(emptyMessage);
+            } else {
+                main.appendChild(emptyMessage);
+            }
             return;
         }
         
@@ -374,161 +394,208 @@ function getPodcastRating(podcastName) {
 // survey
 // ***
 
-
 document.addEventListener('DOMContentLoaded', function() {
-   
+    // Check if we're on the survey page before accessing survey elements
     const step1 = document.getElementById('step1');
-    const step2 = document.getElementById('step2');
-    const step3 = document.getElementById('step3');
     
-    const nextToStep2 = document.getElementById('next-to-step2');
-    const backToStep1 = document.getElementById('back-to-step1');
-    const nextToStep3 = document.getElementById('next-to-step3');
-    const backToStep2 = document.getElementById('back-to-step2');
-    
-    const categoryItems = document.querySelectorAll('.category-item');
-    const SubcategoryGroup = document.querySelectorAll('.checkbox-grid input[type="checkbox"]');
-    const moodCheckboxes = document.querySelectorAll('.mood-options input[type="checkbox"]');
+    // Only run survey code if survey elements exist
+    if (step1) {
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+        
+        const nextToStep2 = document.getElementById('next-to-step2');
+        const backToStep1 = document.getElementById('back-to-step1');
+        const nextToStep3 = document.getElementById('next-to-step3');
+        const backToStep2 = document.getElementById('back-to-step2');
+        
+        const categoryItems = document.querySelectorAll('.category-item');
+        const SubcategoryGroup = document.querySelectorAll('.checkbox-grid input[type="checkbox"]');
+        const moodCheckboxes = document.querySelectorAll('.mood-options input[type="checkbox"]');
 
+        // Category item click handlers
+        categoryItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Deselecteer alle andere categorieën
+                categoryItems.forEach(otherItem => {
+                    if (otherItem !== this) {
+                        otherItem.classList.remove('selected');
+                        const checkbox = otherItem.querySelector('input[type="radio"]');
+                        if (checkbox) checkbox.checked = false; // deselecteer de radio button
+                    }
+                });
+        
+                // Selecteer de aangeklikte categorie
+                this.classList.add('selected');
+                const checkbox = this.querySelector('input[type="radio"]');
+                if (checkbox) checkbox.checked = true; // selecteer de radio button
+            });
+        });
+        
+        // Subcategory click handlers
+        SubcategoryGroup.forEach(item => {
+            item.addEventListener('click', function() {
+                const label = this.parentElement;
+                label.classList.toggle("selected", this.checked);
+            });
+        });
 
-    categoryItems.forEach(item => {
-        item.addEventListener('click', function() {
-            // Deselecteer alle andere categorieën
-            categoryItems.forEach(otherItem => {
-                if (otherItem !== this) {
-                    otherItem.classList.remove('selected');
-                    const checkbox = otherItem.querySelector('input[type="radio"]');
-                    if (checkbox) checkbox.checked = false; // deselecteer de radio button
+        // Mood checkbox handlers
+        moodCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", function () {
+                const label = this.closest(".mood-option");
+                label.classList.toggle("selected", this.checked);
+            });
+        });
+        
+        // Navigation handlers
+        if (nextToStep2) {
+            nextToStep2.addEventListener('click', function() {
+                const selectedCategories = document.querySelectorAll('.category-item.selected');
+                if (selectedCategories.length === 0) {
+                    alert('Selecteer ten minste één categorie');
+                    return;
+                }
+                
+                selectedCategories.forEach(category => {
+                    const categoryName = category.getAttribute('data-category');
+                    const subcategory = document.querySelector(`.${categoryName}Opties`);
+                    if (subcategory) {
+                        subcategory.style.display = 'block';
+                    } else {
+                        console.warn(`Geen subcategorie gevonden voor: ${categoryName}`);
+                    }
+                });
+            
+                // Navigatie naar stap 2
+                step1.style.display = 'none';
+                step2.style.display = 'block';
+            });
+        }
+        
+        if (backToStep1) {
+            backToStep1.addEventListener('click', function() {
+                location.reload();
+            });
+        }
+        
+        if (nextToStep3) {
+            nextToStep3.addEventListener('click', function(e) {
+                e.preventDefault(); 
+
+                const selectedInterests = document.querySelectorAll('input[name="interests"]:checked');
+
+        
+                step2.style.display = 'none';
+                step3.style.display = 'block';
+            });
+        }
+        
+        if (backToStep2) {
+            backToStep2.addEventListener('click', function() {
+                // Verberg stap 3
+                step3.style.display = 'none';
+                
+                // Toon stap 2
+                step2.style.display = 'block';
+            });
+        }
+        
+        // Form validation
+        const surveyForm = document.getElementById('surveyForm');
+        if (surveyForm) {
+            surveyForm.addEventListener('submit', function(e) {
+                const selectedMoods = document.querySelectorAll('input[name="mood"]:checked');
+                
+                if (selectedMoods.length === 0) {
+                    e.preventDefault();
+                    alert('Selecteer ten minste één sfeer voor je podcast');
                 }
             });
-    
-            // Selecteer de aangeklikte categorie
-            this.classList.add('selected');
-            const checkbox = this.querySelector('input[type="radio"]');
-            if (checkbox) checkbox.checked = true; // selecteer de radio button
-        });
-    });
-    
-
-
-    // clicked kleur verandere
-
-
-    SubcategoryGroup.forEach(item => {
-        item.addEventListener('click', function() {
-            const label = this.parentElement;
-            label.classList.toggle("selected", this.checked);
-        });
-    });
-
-
-
-    moodCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener("change", function () {
-           const label = this.closest(".mood-option");
-           label.classList.toggle("selected", this.checked);
-        });
-    });
-
-    
-    
-    // Navigation: Step 1 to Step 2
-    nextToStep2.addEventListener('click', function() {
-        const selectedCategories = document.querySelectorAll('.category-item.selected');
-        if (selectedCategories.length === 0) {
-            alert('Selecteer ten minste één categorie');
-            return;
         }
         
-        selectedCategories.forEach(category => {
-            const categoryName = category.getAttribute('data-category');
-            const subcategory = document.querySelector(`.${categoryName}Opties`);
-            if (subcategory) {
-                subcategory.style.display = 'block';
-            } else {
-                console.warn(`Geen subcategorie gevonden voor: ${categoryName}`);
-            }
-        });
-    
-        // Navigatie naar stap 2
-        step1.style.display = 'none';
-        step2.style.display = 'block';
-    });
-    
-
-
-    
-    // Navigation: Step 2 to Step 1
-    backToStep1.addEventListener('click', function() {
-        location.reload();
-    });
-
-
-       // Navigation: Step 2 to Step 3
-    
-        nextToStep3.addEventListener('click', function(e) {
-            e.preventDefault(); 
-
-            const selectedInterests = document.querySelectorAll('input[name="interests"]:checked');
-
-    
-            step2.style.display = 'none';
-            step3.style.display = 'block';
-        });
- 
-       // Navigation: Step 3 to Step 2 
-
-        backToStep2.addEventListener('click', function() {
-            // Verberg stap 3
-            step3.style.display = 'none';
-            
-            // Toon stap 2
-            step2.style.display = 'block';
-        });
+        // File input handler
+        const fileInput = document.getElementById("fileInput");
+        if (fileInput) {
+            fileInput.addEventListener("change", function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const profilePic = document.getElementById("profilePic");
+                        if (profilePic) {
+                            profilePic.src = e.target.result;
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    }
 });
 
-  
-   // Form submission validation
-    document.getElementById('surveyForm').addEventListener('submit', function(e) {
-        const selectedMoods = document.querySelectorAll('input[name="mood"]:checked');
+// Improved window load handler for loading screen
+window.addEventListener("load", function () {
+    const loadingWrapper = document.getElementById("loadingWrapper");
+    
+    // Check if we're on the survey page
+    const isSurveyPage = window.location.pathname.includes('/survey');
+    
+    // Check if we're on the result page and survey was just submitted
+    const isResultPage = window.location.pathname.includes('/recommend');
+    const wasSurveySubmitted = sessionStorage.getItem('surveySubmitted') === 'true';
+    
+    // IMPORTANT: Check if this is a back navigation
+    const isBackNavigation = performance.getEntriesByType("navigation")[0].type === "back_forward";
+    
+    if (loadingWrapper) {
+        // Always start with hiding the loading screen on page load
+        loadingWrapper.style.display = "none";
         
-        if (selectedMoods.length === 0) {
-            e.preventDefault();
-            alert('Selecteer ten minste één sfeer voor je podcast');
+        // If coming to results from survey submission, clear the flag
+        if (isResultPage && wasSurveySubmitted) {
+            console.log('Clearing survey submitted flag on result page');
+            sessionStorage.removeItem('surveySubmitted');
         }
-    });
-
-document.getElementById("fileInput").addEventListener("change", function (event) {
-    const file = event.target.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-            document.getElementById("profilePic").src = e.target.result;
-        };
-
-        reader.readAsDataURL(file);
+        
+        // If returning to survey via back button, ensure loading screen stays hidden
+        if (isSurveyPage && isBackNavigation) {
+            console.log('Back navigation to survey detected, keeping loading screen hidden');
+            loadingWrapper.style.display = "none";
+            sessionStorage.removeItem('surveySubmitted');
+        }
     }
-
-
-})
-
-
-
+    
+    // Reset any form submission state if navigating back to survey
+    if (isSurveyPage && !isBackNavigation) {
+        // Initialize the survey form submission handlers - only if NOT a back navigation
+        const surveyForm = document.getElementById('surveyForm');
+        if (surveyForm) {
+            surveyForm.addEventListener('submit', function(e) {
+                const selectedMoods = document.querySelectorAll('input[name="mood"]:checked');
+                
+                if (selectedMoods.length === 0) {
+                    e.preventDefault();
+                    alert('Selecteer ten minste één sfeer voor je podcast');
+                    return;
+                }
+                
+                if (loadingWrapper) {
+                    console.log('Showing loading screen from frontend.js');
+                    loadingWrapper.style.display = "flex";
+                    sessionStorage.setItem('surveySubmitted', 'true');
+                }
+            });
+        }
+    }
+});
 
 window.addEventListener("load", function () {
-    document.querySelector(".loading-screen").style.display = "none";
-});
-
-
-document.querySelector(".toggle-password").addEventListener("click", function () {
-    let wachtwoordInput = document.getElementById("wachtwoord");
-
-    // Toggle password visibility
-    if (wachtwoordInput.type === "password") {
-        wachtwoordInput.type = "text";
-    } else {
-        wachtwoordInput.type = "password";
+    const loadingScreen = document.querySelector(".loading-screen");
+    if (loadingScreen) {
+        const loadingWrapper = document.getElementById("loadingWrapper");
+        if (loadingWrapper) {
+            loadingWrapper.style.display = "none";
+        }
     }
 });
+
