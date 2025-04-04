@@ -9,6 +9,7 @@ const cookieParser = require("cookie-parser");
 const axios = require("axios");
 const { OpenAI } = require("openai");
 const rateLimit = require("express-rate-limit");
+const nodemailer = require('nodemailer');
 const session = require('express-session');
 const uri = `mongodb+srv://${process.env.DATA_USERNAME}:${process.env.DATA_PW}@${process.env.DATA_HOST}/${process.env.DATA_NAME}?retryWrites=true&w=majority`;
 const app = express();
