@@ -182,19 +182,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         const endpoint = isFavorite ? '/remove-favorite' : '/add-favorite';
+        const requestData = isFavorite ? 
+            { podcastTitle: currentPodcast.title } : // Use the expected parameter name for removal
+            {  // Use the full data for adding
+                title: currentPodcast.title,
+                description: currentPodcast.description,
+                tags: currentPodcast.tags,
+                spotify_url: currentPodcast.spotify_url,
+                image: currentPodcast.image
+            };
         
         fetch(endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                title: currentPodcast.title,
-                description: currentPodcast.description,
-                tags: currentPodcast.tags,
-                spotify_url: currentPodcast.spotify_url,
-                image: currentPodcast.image
-            })
+            body: JSON.stringify(requestData)
         })
         .then(response => response.json())
         .then(data => {
