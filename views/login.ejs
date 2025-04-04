@@ -43,6 +43,26 @@
             <div class="circleTwo"></div>
         </section>
     </main>
-    <script src="/static/script/frontend.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+            // Add a check to see if the element exists first
+            const loadingScreen = document.querySelector(".loading-screen");
+            if (loadingScreen) {
+                loadingScreen.style.display = "none";
+            }
+        });
+    
+        document.querySelector(".toggle-password").addEventListener("click", function () {
+            let wachtwoordInput = document.getElementById("wachtwoord");
+    
+            // Toggle password visibility
+            if (wachtwoordInput.type === "password") {
+                wachtwoordInput.type = "text";
+            } else {
+                wachtwoordInput.type = "password";
+            }
+        });
+    </script>
+    <script src="/script/frontend.js"></script>
 </body>
 </html>

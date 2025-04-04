@@ -17,8 +17,32 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.podcastData && window.podcastData.available) {
         recommendations.push(window.podcastData);
         recommendedTitles.push(window.podcastData.title);
-        updateCarouselControls();
-        checkFavoriteStatus(window.podcastData.title);
+    }
+    
+    // Load saved carousel history from session
+    if (window.carouselHistory && Array.isArray(window.carouselHistory) && window.carouselHistory.length > 0) {
+        // If the first item in history is the same as the current recommendation, skip it
+        const startIndex = (window.carouselHistory.length > 0 && 
+                          window.podcastData && 
+                          window.podcastData.available && 
+                          window.carouselHistory[0].title === window.podcastData.title) ? 1 : 0;
+        
+        // Add all items from history
+        for (let i = startIndex; i < window.carouselHistory.length; i++) {
+            if (!recommendedTitles.includes(window.carouselHistory[i].title)) {
+                recommendations.push(window.carouselHistory[i]);
+                recommendedTitles.push(window.carouselHistory[i].title);
+                
+                // Create and append the slide
+                const newSlide = createRecommendationSlide(window.carouselHistory[i], recommendations.length - 1);
+                carousel.appendChild(newSlide);
+            }
+        }
+    }
+    
+    updateCarouselControls();
+    if (recommendations.length > 0) {
+        checkFavoriteStatus(recommendations[currentIndex].title);
     }
     
     // Event listeners
@@ -62,6 +86,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update button states
         prevBtn.disabled = currentIndex === 0;
         nextBtn.disabled = currentIndex === recommendations.length - 1;
+        
+        // Save current carousel state to the session
+        saveCarouselToSession();
     }
     
     // Update carousel controls visibility and state
@@ -71,6 +98,33 @@ document.addEventListener('DOMContentLoaded', function() {
         
         prevBtn.disabled = currentIndex === 0;
         nextBtn.disabled = currentIndex === recommendations.length - 1 || recommendations.length <= 1;
+    }
+    
+    // Save the current carousel data to the session
+    function saveCarouselToSession() {
+        // Create a simplified version of recommendations for the session
+        const sessionData = recommendations.map(podcast => ({
+            title: podcast.title,
+            description: podcast.description,
+            explanation: podcast.explanation,
+            tags: podcast.tags,
+            spotify_url: podcast.spotify_url,
+            embed_url: podcast.embed_url,
+            image: podcast.image,
+            available: true
+        }));
+        
+        // Send to server to store in session
+        fetch('/api/save-carousel', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ podcasts: sessionData })
+        })
+        .catch(error => {
+            console.error('Error saving carousel to session:', error);
+        });
     }
     
     // Check if current podcast is already a favorite
@@ -161,6 +215,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentIndex = recommendations.length - 1;
                 updateCarouselDisplay();
                 updateCarouselControls();
+                
+                // Save to session
+                saveCarouselToSession();
                 
                 // Check if this is already a favorite
                 checkFavoriteStatus(newPodcast.title);
