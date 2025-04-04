@@ -217,7 +217,7 @@ function generatePodcastPrompt(userData, triedPodcasts, alreadyRecommendedPodcas
     
     // Define allowed tags in Dutch
     const allowedTags = [
-        'All', 'Sports', 'Boeken', 'Koken', 'Gamen', 'Muziek', 'Film', 
+        'Sports', 'Boeken', 'Koken', 'Gamen', 'Muziek', 'Film', 
         'Nieuws en politiek', 'Kunst', 'Misdaad', 'Geschiedenis', 'Mode', 'Lifestyle'
     ];
     
@@ -248,7 +248,7 @@ async function getValidPodcastRecommendation(userData, alreadyRecommendedPodcast
     let maxAttempts = 3; // Try up to 3 times
     let triedPodcasts = new Set(); // Keep track of previous recommendations
     const allowedTags = [
-        'All', 'Sports', 'Boeken', 'Koken', 'Gamen', 'Muziek', 'Film', 
+        'Sports', 'Boeken', 'Koken', 'Gamen', 'Muziek', 'Film', 
         'Nieuws en politiek', 'Kunst', 'Misdaad', 'Geschiedenis', 'Mode', 'Lifestyle'
     ];
 

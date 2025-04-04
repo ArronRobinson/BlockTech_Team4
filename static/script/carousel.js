@@ -84,8 +84,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Update button states
-        prevBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = currentIndex === recommendations.length - 1;
+        // prevBtn.disabled = currentIndex === 0;
+        // nextBtn.disabled = currentIndex === recommendations.length - 1;
+
+        // Call the function that handles button states
+        updateCarouselControls();
         
         // Save current carousel state to the session
         saveCarouselToSession();
@@ -179,19 +182,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         const endpoint = isFavorite ? '/remove-favorite' : '/add-favorite';
+        const requestData = isFavorite ? 
+            { podcastTitle: currentPodcast.title } : // Use the expected parameter name for removal
+            {  // Use the full data for adding
+                title: currentPodcast.title,
+                description: currentPodcast.description,
+                tags: currentPodcast.tags,
+                spotify_url: currentPodcast.spotify_url,
+                image: currentPodcast.image
+            };
         
         fetch(endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                title: currentPodcast.title,
-                description: currentPodcast.description,
-                tags: currentPodcast.tags,
-                spotify_url: currentPodcast.spotify_url,
-                image: currentPodcast.image
-            })
+            body: JSON.stringify(requestData)
         })
         .then(response => response.json())
         .then(data => {
