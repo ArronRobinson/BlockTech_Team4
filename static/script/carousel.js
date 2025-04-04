@@ -84,8 +84,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Update button states
-        prevBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = currentIndex === recommendations.length - 1;
+        // prevBtn.disabled = currentIndex === 0;
+        // nextBtn.disabled = currentIndex === recommendations.length - 1;
+
+        // Call the function that handles button states
+        updateCarouselControls();
         
         // Save current carousel state to the session
         saveCarouselToSession();
