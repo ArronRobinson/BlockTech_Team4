@@ -198,6 +198,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const section = document.createElement('section');
         section.setAttribute('data-name', podcast.title);
         
+        // Create a wrapper for clickable content
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'podcast-content';
+        contentDiv.onclick = function() {
+            window.location.href = `/podcast-detail/${encodeURIComponent(podcast.title)}`;
+        };
+        
         // Create podcast image
         const img = document.createElement('img');
         img.src = podcast.image || 'images/360_F_418874697_trvAoXSfjetoptCXpR8N8XvO3R5eLtL4.jpg';
@@ -206,10 +213,14 @@ document.addEventListener("DOMContentLoaded", function () {
         // Create podcast title
         const title = document.createElement('h2');
         title.textContent = podcast.title;
+        title.className = 'title';
         
         // Create like and rating container
         const likeRatingContainer = document.createElement('div');
         likeRatingContainer.className = 'like-rating-container';
+        likeRatingContainer.onclick = function(e) {
+            e.stopPropagation(); // Prevent navigation when clicking on like button
+        };
         
         // Create like button
         const likeButton = document.createElement('button');
@@ -233,6 +244,17 @@ document.addEventListener("DOMContentLoaded", function () {
         description.className = 'podcast-description';
         description.textContent = podcast.description || 'No description available';
         
+        // Add all elements to the content div
+        contentDiv.appendChild(img);
+        contentDiv.appendChild(title);
+        
+        // Add the like button container (this stays outside of contentDiv so it doesn't trigger navigation)
+        likeRatingContainer.appendChild(likeButton);
+        likeRatingContainer.appendChild(ratingDisplay);
+        
+        // Add description to content div
+        contentDiv.appendChild(description);
+        
         // Create tags if available
         if (podcast.tags && podcast.tags.length > 0) {
             const tagsContainer = document.createElement('div');
@@ -245,28 +267,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 tagsContainer.appendChild(tagElement);
             });
             
-            section.appendChild(tagsContainer);
+            contentDiv.appendChild(tagsContainer);
         }
         
-        // Append all elements
-        likeRatingContainer.appendChild(likeButton);
-        likeRatingContainer.appendChild(ratingDisplay);
-        
-        section.appendChild(img);
-        section.appendChild(title);
+        // Add all main elements to the section
+        section.appendChild(contentDiv);
         section.appendChild(likeRatingContainer);
-        section.appendChild(description);
-        
-        // Add click handler for the entire section to go to podcast
-        if (podcast.spotify_url) {
-            section.addEventListener('click', function(e) {
-                // Don't navigate if clicking on the like button
-                if (e.target.closest('.likeButton')) return;
-                
-                window.open(podcast.spotify_url, '_blank');
-            });
-            section.style.cursor = 'pointer';
-        }
         
         return section;
     }

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatchCast - <%= podcast.title %></title>
+    <link rel="stylesheet" href="/result.css">
+    <link rel="stylesheet" href="/all.css">
+</head>
+<body>
+    <header>
+        <%- include('partials/nav') %>
+    </header>
+    
+    <main>
+        <div class="recommendation-container">
+            <div class="recommendation-slide active">
+                <section class="podcast-header">
+                    <div>
+                        <p><span class="recommendation-label">Podcast Details</span></p>
+                        <h2><%= podcast.title %></h2>
+                        <p class="spotify-description">
+                            <span class="truncated-description"><%= podcast.description %></span>
+                        </p>
+                    </div>
+                    <div>
+                        <section class="podcast-image-container" data-name="<%= podcast.title %>">
+                            <% if (podcast.image) { %>
+                                <img src="<%= podcast.image %>" alt="<%= podcast.title %>" class="podcast-image">
+                            <% } else { %>
+                                <img src="/images/podcast-placeholder.jpg" alt="Podcast Placeholder Image" class="podcast-image">
+                            <% } %>
+                        </section>
+                    </div>
+                </section>
+                
+                <% if (podcast.explanation) { %>
+                <section class="explanation">
+                    <h3>Why you might like it</h3>
+                    <p><%= podcast.explanation || "Based on your interests and preferences, we think you'll enjoy this podcast. It matches your taste in content and listening style." %></p>
+                </section>
+                <% } %>
+
+                <div class="podcast-tags">
+                    <% if (podcast.tags && podcast.tags.length > 0) { %>
+                        <h4>Tags:</h4>
+                        <ul class="tag-list">
+                            <% podcast.tags.forEach(tag => { %>
+                                <li class="tag"><%= tag %></li>
+                            <% }) %>
+                        </ul>
+                    <% } %>
+                </div>
+
+                <section class="spotify-section">
+                    <h3>Listen on Spotify</h3>
+                    <% if (podcast.embed_url) { %>
+                        <div class="spotify-player">
+                            <iframe 
+                                src="<%= podcast.embed_url %>" 
+                                width="100%" 
+                                height="232" 
+                                frameborder="0" 
+                                allowtransparency="true" 
+                                allow="encrypted-media">
+                            </iframe>
+                        </div>
+                    <% } else if (podcast.spotify_url) { %>
+                        <a href="<%= podcast.spotify_url %>" target="_blank" class="spotify-link">
+                            <img src="/images/spotify-logo.png" alt="Spotify Logo" class="spotify-logo">
+                            Open in Spotify
+                        </a>
+                    <% } %>
+                </section>
+                
+                <div class="action-buttons">
+                    <a href="/favorite" class="back-button">Back to Favorites</a>
+                </div>
+            </div>
+        </div>
+
+        <article>
+            <div class="circle"></div>
+            <div class="circleTwo"></div>
+        </article>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const descriptionEl = document.querySelector('.truncated-description');
+            if (!descriptionEl) return;
+            
+            // Check if the content is truncated by comparing scrollHeight with clientHeight
+            setTimeout(() => {
+                const isTruncated = descriptionEl.scrollHeight > descriptionEl.clientHeight;
+                
+                if (isTruncated) {
+                    const button = document.createElement('button');
+                    button.className = 'show-more-button';
+                    button.textContent = 'Read more';
+                    
+                    button.addEventListener('click', function() {
+                        if (descriptionEl.classList.contains('show-full-text')) {
+                            descriptionEl.classList.remove('show-full-text');
+                            button.textContent = 'Read more';
+                            descriptionEl.scrollIntoView({ behavior: 'smooth' });
+                        } else {
+                            descriptionEl.classList.add('show-full-text');
+                            button.textContent = 'Read less';
+                        }
+                    });
+                    
+                    // Insert button after the description
+                    descriptionEl.parentNode.insertBefore(button, descriptionEl.nextSibling);
+                }
+            }, 100);
+        });
+    </script>
+
+    <script src="/script/frontend.js"></script>
+</body>
+</html>
