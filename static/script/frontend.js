@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
         e.stopPropagation();
         
+        // Find the closest section which contains the podcast data
         const section = likeButton.closest('section');
         if (!section) return;
         
@@ -85,18 +86,19 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Remove section from the DOM
-                if (section) {
-                    section.remove();
+                // Remove the li element from the DOM
+                const listItem = section.closest('.podcast-item');
+                if (listItem) {
+                    listItem.remove();
                 }
                 
                 // Check if we need to show the empty message
-                const remainingSections = document.querySelectorAll('main section[data-name]');
+                const remainingItems = document.querySelectorAll('.podcast-item');
                 const emptyMessage = document.querySelector('.empty-message');
                 
                 // Only add the empty message if there are no remaining podcasts
                 // AND there isn't already an empty message
-                if (remainingSections.length === 0 && !emptyMessage) {
+                if (remainingItems.length === 0 && !emptyMessage) {
                     const main = document.querySelector('main');
                     const newEmptyMessage = document.createElement('div');
                     newEmptyMessage.className = 'empty-message';
@@ -144,6 +146,14 @@ document.addEventListener("DOMContentLoaded", function () {
         filterAndSort();
     }
 
+    // Function to load favorites from the server
+    function loadFavorites() {
+        // If we're using List.js for filtering/sorting, let it handle the display
+        // No need to manually fetch favorites since they're already in the HTML
+        if (filterSelect) {
+            filterAndSort();
+        }
+    }
 
     // Function to display favorites
     function displayFavorites(podcasts) {
@@ -195,15 +205,17 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // Function to create a podcast element
     function createPodcastElement(podcast) {
+        // Create the li element
+        const li = document.createElement('li');
+        li.className = 'podcast-item';
+        
+        // Create the section element
         const section = document.createElement('section');
         section.setAttribute('data-name', podcast.title);
         
         // Create a wrapper for clickable content
         const contentDiv = document.createElement('div');
         contentDiv.className = 'podcast-content';
-        contentDiv.onclick = function() {
-            window.location.href = `/podcast-detail/${encodeURIComponent(podcast.title)}`;
-        };
         
         // Create podcast image
         const img = document.createElement('img');
@@ -218,9 +230,6 @@ document.addEventListener("DOMContentLoaded", function () {
         // Create like and rating container
         const likeRatingContainer = document.createElement('div');
         likeRatingContainer.className = 'like-rating-container';
-        likeRatingContainer.onclick = function(e) {
-            e.stopPropagation(); // Prevent navigation when clicking on like button
-        };
         
         // Create like button
         const likeButton = document.createElement('button');
@@ -248,7 +257,7 @@ document.addEventListener("DOMContentLoaded", function () {
         contentDiv.appendChild(img);
         contentDiv.appendChild(title);
         
-        // Add the like button container (this stays outside of contentDiv so it doesn't trigger navigation)
+        // Add the like button container
         likeRatingContainer.appendChild(likeButton);
         likeRatingContainer.appendChild(ratingDisplay);
         
@@ -274,7 +283,10 @@ document.addEventListener("DOMContentLoaded", function () {
         section.appendChild(contentDiv);
         section.appendChild(likeRatingContainer);
         
-        return section;
+        // Add the section to the li element
+        li.appendChild(section);
+        
+        return li;
     }
     
     // Your existing filter and sort functionality (for other pages)

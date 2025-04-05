@@ -584,78 +584,13 @@ app.post("/api/save-carousel", authenticateToken, (req, res) => {
     }
 });
 
-// Add this middleware function if it doesn't exist already
-const isAuthenticated = (req, res, next) => {
-    if (req.session && req.session.userId) {
-        return next();
-    }
-    res.redirect('/login');
-};
-
-// Route for podcast detail without authentication requirement
-app.get('/podcast-detail/:title', async (req, res) => {
-    try {
-        const podcastTitle = decodeURIComponent(req.params.title);
-        
-        // Check if user is logged in
-        if (!req.session.userId) {
-            // For non-authenticated users, render a simplified detail page
-            return res.render('podcast-detail', {
-                podcast: {
-                    title: podcastTitle,
-                    description: "Please log in to see full podcast details.",
-                    image: "/images/podcast-placeholder.jpg",
-                    tags: []
-                },
-                username: "Guest"
-            });
-        }
-        
-        // For authenticated users, get their favorites
-        const user = await User.findById(req.session.userId);
-        if (!user) {
-            return res.status(404).send('User not found');
-        }
-        
-        // Find the podcast in user's favorites
-        const podcast = user.favorites.find(p => p.title === podcastTitle);
-        
-        if (!podcast) {
-            return res.status(404).render('error', { 
-                message: 'Podcast not found in your favorites',
-                username: user.username 
-            });
-        }
-        
-        // Check if we need to fetch Spotify embed data
-        if (!podcast.embed_url && podcast.spotify_url) {
-            try {
-                const spotifyId = extractSpotifyId(podcast.spotify_url);
-                if (spotifyId) {
-                    podcast.embed_url = `https://open.spotify.com/embed/show/${spotifyId}`;
-                }
-            } catch (error) {
-                console.error('Error generating Spotify embed URL:', error);
-            }
-        }
-        
-        // Render the podcast detail page
-        return res.render('podcast-detail', { 
-            podcast,
-            username: user.username 
-        });
-    } catch (error) {
-        console.error('Error in podcast detail route:', error);
-        return res.status(500).send('Server error');
-    }
-});
-
-// Helper function to extract Spotify ID from URL
-function extractSpotifyId(url) {
-    if (!url) return null;
-    const match = url.match(/show\/([a-zA-Z0-9]+)/);
-    return match ? match[1] : null;
-}
+// // Add this middleware function if it doesn't exist already
+// const isAuthenticated = (req, res, next) => {
+//     if (req.session && req.session.userId) {
+//         return next();
+//     }
+//     res.redirect('/login');
+// };
 
 app.post ("/logout", (req, res) => { 
     res.cookie("token", "", {maxAge: 0});
