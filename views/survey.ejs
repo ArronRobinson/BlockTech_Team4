@@ -303,15 +303,12 @@
     </div>
 
     <script>
-        // Enhanced loading screen script that persists across page returns
         document.addEventListener('DOMContentLoaded', function() {
-            // IMMEDIATE HIDE - First thing we do is hide the loading screen
             const loadingWrapper = document.getElementById('loadingWrapper');
             if (loadingWrapper) {
                 loadingWrapper.style.display = "none";
             }
             
-            // Explicitly check if we're returning via back button
             const isBackNavigation = (
                 performance.getEntriesByType && 
                 performance.getEntriesByType("navigation").length > 0 &&
