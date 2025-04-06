@@ -42,12 +42,12 @@ section[data-name] {
     display: block;
 }
 
-/* Add pointer cursor to indicate it's clickable */
+
 section[data-name] .podcast-content {
     cursor: pointer;
 }
 
-/* Make sure the like button doesn't trigger navigation */
+
 section[data-name] .like-rating-container {
     cursor: default;
 }
@@ -85,7 +85,7 @@ section[data-name] h2 {
     border: none;
     cursor: pointer;
     padding: 5px;
-    z-index: 10; /* Ensure button is clickable */
+    z-index: 10; 
 }
 
 .likeIcon {
@@ -179,12 +179,12 @@ section[data-name] h2 {
 }
 
 .podcast-item {
-    list-style: none; /* Remove default list styling */
+    list-style: none; 
     margin: 0;
     padding: 0;
 }
 
-/* Enhance the clickable area styling */
+
 .podcast-content {
     position: relative;
     transition: transform 0.2s ease;
@@ -205,7 +205,3 @@ section[data-name] h2 {
     position: relative;
 }
 
-/* Ensure the podcast content is clickable */
-.podcast-content {
-    cursor: pointer;
-}

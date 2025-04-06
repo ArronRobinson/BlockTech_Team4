@@ -1,3 +1,5 @@
+// Deze code is geschreven met behulp van met Antrophic's Claude 3.7 Sonnet  en OpenAI's ChatGPT 4o
+
 require('dotenv').config();
 const express = require("express");
 const mongoose = require("mongoose");
@@ -215,7 +217,6 @@ function generatePodcastPrompt(userData, triedPodcasts, alreadyRecommendedPodcas
     // Combine both sets of podcasts to exclude
     const allExcludedPodcasts = new Set([...Array.from(triedPodcasts), ...alreadyRecommendedPodcasts]);
     
-    // Define allowed tags in Dutch
     const allowedTags = [
         'Sports', 'Boeken', 'Koken', 'Gamen', 'Muziek', 'Film', 
         'Nieuws en politiek', 'Kunst', 'Misdaad', 'Geschiedenis', 'Mode', 'Lifestyle'
@@ -565,7 +566,7 @@ app.post("/api/recommend", authenticateToken, async (req, res) => {
     }
 });
 
-// Add an API endpoint to save carousel history
+// API endpoint to save carousel history
 app.post("/api/save-carousel", authenticateToken, (req, res) => {
     try {
         const { podcasts } = req.body;
@@ -584,13 +585,7 @@ app.post("/api/save-carousel", authenticateToken, (req, res) => {
     }
 });
 
-// // Add this middleware function if it doesn't exist already
-// const isAuthenticated = (req, res, next) => {
-//     if (req.session && req.session.userId) {
-//         return next();
-//     }
-//     res.redirect('/login');
-// };
+
 
 app.post ("/logout", (req, res) => { 
     res.cookie("token", "", {maxAge: 0});

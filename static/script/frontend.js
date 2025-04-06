@@ -1,3 +1,5 @@
+// Deze code is geschreven met behulp van met Antrophic's Claude 3.7 Sonnet  en OpenAI's ChatGPT 4o
+
 document.addEventListener("DOMContentLoaded", function () {
     const filterSelect = document.getElementById("filter");
     const sortSelect = document.getElementById("sort");
@@ -39,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // NEW APPROACH: Use event delegation for the entire document
+    
     // This ensures that dynamically added elements will also have the event listener
     document.addEventListener('click', function(e) {
         // Only for favorites page
@@ -96,8 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const remainingItems = document.querySelectorAll('.podcast-item');
                 const emptyMessage = document.querySelector('.empty-message');
                 
-                // Only add the empty message if there are no remaining podcasts
-                // AND there isn't already an empty message
+                // If no items left and no empty message, show the empty message
                 if (remainingItems.length === 0 && !emptyMessage) {
                     const main = document.querySelector('main');
                     const newEmptyMessage = document.createElement('div');
@@ -240,13 +241,6 @@ document.addEventListener("DOMContentLoaded", function () {
             </svg>
         `;
         
-        // Create rating display
-        const ratingDisplay = document.createElement('div');
-        ratingDisplay.className = 'rating-display';
-        ratingDisplay.innerHTML = `
-            <span class="rating-star">★</span>
-            <span class="rating-value">5.0</span> 
-        `;
         
         // Create podcast description
         const description = document.createElement('p');
