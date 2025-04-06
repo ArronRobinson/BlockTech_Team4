@@ -20,26 +20,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     categoryItems.forEach(item => {
         item.addEventListener('click', function() {
-            // Deselecteer alle andere categorieën
             categoryItems.forEach(otherItem => {
                 if (otherItem !== this) {
                     otherItem.classList.remove('selected');
                     const checkbox = otherItem.querySelector('input[type="radio"]');
-                    if (checkbox) checkbox.checked = false; // deselecteer de radio button
+                    if (checkbox) checkbox.checked = false; 
                 }
             });
     
-            // Selecteer de aangeklikte categorie
             this.classList.add('selected');
             const checkbox = this.querySelector('input[type="radio"]');
-            if (checkbox) checkbox.checked = true; // selecteer de radio button
+            if (checkbox) checkbox.checked = true; 
         });
     });
-    
-
 
     // clicked kleur verandere
-
 
     SubcategoryGroup.forEach(item => {
         item.addEventListener('click', function() {
@@ -48,8 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-
-
     moodCheckboxes.forEach(checkbox => {
         checkbox.addEventListener("change", function () {
            const label = this.closest(".mood-option");
@@ -57,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    
     
     // Navigation: Step 1 to Step 2
     nextToStep2.addEventListener('click', function() {
@@ -76,14 +68,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.warn(`Geen subcategorie gevonden voor: ${categoryName}`);
             }
         });
-    
-        // Navigatie naar stap 2
+
         step1.style.display = 'none';
         step2.style.display = 'block';
     });
     
-
-
     
     // Navigation: Step 2 to Step 1
     backToStep1.addEventListener('click', function() {
@@ -91,30 +80,25 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-       // Navigation: Step 2 to Step 3
-    
-        nextToStep3.addEventListener('click', function(e) {
-            e.preventDefault(); 
+    // Navigation: Step 2 to Step 3
+    nextToStep3.addEventListener('click', function(e) {
+        e.preventDefault(); 
 
-            const selectedInterests = document.querySelectorAll('input[name="interests"]:checked');
-
+        const selectedInterests = document.querySelectorAll('input[name="interests"]:checked');
     
-            step2.style.display = 'none';
-            step3.style.display = 'block';
-        });
+        step2.style.display = 'none';
+        step3.style.display = 'block';
+    });
  
-       // Navigation: Step 3 to Step 2 
 
-        backToStep2.addEventListener('click', function() {
-            // Verberg stap 3
-            step3.style.display = 'none';
-            
-            // Toon stap 2
-            step2.style.display = 'block';
-        });
-});
-
+    // Navigation: Step 3 to Step 2 
+    backToStep2.addEventListener('click', function() {
   
+        step3.style.display = 'none';
+        step2.style.display = 'block';
+    });
+
+
    // Form submission validation
     document.getElementById('surveyForm').addEventListener('submit', function(e) {
         const selectedMoods = document.querySelectorAll('input[name="mood"]:checked');
@@ -124,3 +108,5 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Selecteer ten minste één sfeer voor je podcast');
         }
     });
+
+});
