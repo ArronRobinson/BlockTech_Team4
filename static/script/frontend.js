@@ -1,3 +1,5 @@
+// Deze code is geschreven met behulp van met Antrophic's Claude 3.7 Sonnet  en OpenAI's ChatGPT 4o
+
 document.addEventListener("DOMContentLoaded", function () {
     const filterSelect = document.getElementById("filter");
     const sortSelect = document.getElementById("sort");
@@ -39,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // NEW APPROACH: Use event delegation for the entire document
+    
     // This ensures that dynamically added elements will also have the event listener
     document.addEventListener('click', function(e) {
         // Only for favorites page
@@ -52,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
         e.stopPropagation();
         
+        // Find the closest section which contains the podcast data
         const section = likeButton.closest('section');
         if (!section) return;
         
@@ -85,18 +88,18 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Remove section from the DOM
-                if (section) {
-                    section.remove();
+                // Remove the li element from the DOM
+                const listItem = section.closest('.podcast-item');
+                if (listItem) {
+                    listItem.remove();
                 }
                 
                 // Check if we need to show the empty message
-                const remainingSections = document.querySelectorAll('main section[data-name]');
+                const remainingItems = document.querySelectorAll('.podcast-item');
                 const emptyMessage = document.querySelector('.empty-message');
                 
-                // Only add the empty message if there are no remaining podcasts
-                // AND there isn't already an empty message
-                if (remainingSections.length === 0 && !emptyMessage) {
+                // If no items left and no empty message, show the empty message
+                if (remainingItems.length === 0 && !emptyMessage) {
                     const main = document.querySelector('main');
                     const newEmptyMessage = document.createElement('div');
                     newEmptyMessage.className = 'empty-message';
@@ -144,6 +147,14 @@ document.addEventListener("DOMContentLoaded", function () {
         filterAndSort();
     }
 
+    // Function to load favorites from the server
+    function loadFavorites() {
+        // If we're using List.js for filtering/sorting, let it handle the display
+        // No need to manually fetch favorites since they're already in the HTML
+        if (filterSelect) {
+            filterAndSort();
+        }
+    }
 
     // Function to display favorites
     function displayFavorites(podcasts) {
@@ -195,8 +206,17 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // Function to create a podcast element
     function createPodcastElement(podcast) {
+        // Create the li element
+        const li = document.createElement('li');
+        li.className = 'podcast-item';
+        
+        // Create the section element
         const section = document.createElement('section');
         section.setAttribute('data-name', podcast.title);
+        
+        // Create a wrapper for clickable content
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'podcast-content';
         
         // Create podcast image
         const img = document.createElement('img');
@@ -206,6 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Create podcast title
         const title = document.createElement('h2');
         title.textContent = podcast.title;
+        title.className = 'title';
         
         // Create like and rating container
         const likeRatingContainer = document.createElement('div');
@@ -220,18 +241,22 @@ document.addEventListener("DOMContentLoaded", function () {
             </svg>
         `;
         
-        // Create rating display
-        const ratingDisplay = document.createElement('div');
-        ratingDisplay.className = 'rating-display';
-        ratingDisplay.innerHTML = `
-            <span class="rating-star">★</span>
-            <span class="rating-value">5.0</span> 
-        `;
         
         // Create podcast description
         const description = document.createElement('p');
         description.className = 'podcast-description';
         description.textContent = podcast.description || 'No description available';
+        
+        // Add all elements to the content div
+        contentDiv.appendChild(img);
+        contentDiv.appendChild(title);
+        
+        // Add the like button container
+        likeRatingContainer.appendChild(likeButton);
+        likeRatingContainer.appendChild(ratingDisplay);
+        
+        // Add description to content div
+        contentDiv.appendChild(description);
         
         // Create tags if available
         if (podcast.tags && podcast.tags.length > 0) {
@@ -245,30 +270,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 tagsContainer.appendChild(tagElement);
             });
             
-            section.appendChild(tagsContainer);
+            contentDiv.appendChild(tagsContainer);
         }
         
-        // Append all elements
-        likeRatingContainer.appendChild(likeButton);
-        likeRatingContainer.appendChild(ratingDisplay);
-        
-        section.appendChild(img);
-        section.appendChild(title);
+        // Add all main elements to the section
+        section.appendChild(contentDiv);
         section.appendChild(likeRatingContainer);
-        section.appendChild(description);
         
-        // Add click handler for the entire section to go to podcast
-        if (podcast.spotify_url) {
-            section.addEventListener('click', function(e) {
-                // Don't navigate if clicking on the like button
-                if (e.target.closest('.likeButton')) return;
-                
-                window.open(podcast.spotify_url, '_blank');
-            });
-            section.style.cursor = 'pointer';
-        }
+        // Add the section to the li element
+        li.appendChild(section);
         
-        return section;
+        return li;
     }
     
     // Your existing filter and sort functionality (for other pages)

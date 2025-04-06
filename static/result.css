@@ -1,3 +1,8 @@
+/* ******************* */
+/* Deze code is geschreven met behulp van met Antrophic's Claude 3.7 Sonnet  en OpenAI's ChatGPT 4o */
+/* ******************* */
+
+
 .circle {
     z-index: -2;
     overflow: hidden;
@@ -42,95 +47,7 @@ main{
     width: 75vw;
 }
 
-/* main section:nth-of-type(1){
-    grid-column: 1;
-    grid-row: 1;
-}
 
-main section:nth-of-type(2){
-    grid-column: 1;
-    grid-row: 2;
-}
-
-main section:nth-of-type(3){
-    grid-column: 1;
-    grid-row: 3;
-}
-
-main section:nth-of-type(4){
-    grid-column: 2;
-}
-
-main section p{
-    width: 40ch;
-}
-
-main img{
-    width: 15em;
-    height: 15em;
-    grid-column: 2;
-    grid-row: 1;
-    margin-left: 7em;
-}
-
-
-.likeButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-    outline: none;
-    display: flex; 
-    justify-content: flex-end; 
-    margin: auto;
-    order: 1;
-}
-
-.likeIcon {
-    transition: fill 0.3s ease-in-out, transform 0.3s ease-in-out;
-    fill: gray;
-    transform: scale(1);
-    width: 2em;
-    height: 2em;
-}
-
-.likeButton.liked .likeIcon {
-    fill: red;
-    transform: scale(1.05);
-}
-
-main section button{
-    align-content: right;
-}
-
-main p span {
-    color: var(--color-accentcolor);
-    font-weight: 900;
-}
-
-.like-rating-container{
-    filter: none;
-}
-
-.rating-display{
-    filter: none;
-}
-
-
-
-
-.recommendation-container {
-    display: flex;
-    flex-direction: column;
-    grid-column: 2;
-    grid-row: 2;
-    margin: auto;
-    gap: 1em;
-    overflow: visible;
-    width: 90vw;
-    background-color: gray;
-    padding: 2em;
-    border-radius: 1em;
-} */
 
 .recommendation-container p {
     font-size: 1em;
@@ -166,18 +83,18 @@ main p span {
     max-width: 60%;
 }
 
-/* Add this to your result.css file */
+
 .truncated-description {
     display: -webkit-box;
-    -webkit-line-clamp: 6;  /* Show exactly 6 lines of text */
+    -webkit-line-clamp: 6; 
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 100%;
-    line-height: 1.5; /* Adjust this value based on your design */
+    line-height: 1.5; 
 }
 
-/* Optional: Add a "Read more" button for expanding the text */
+
 .show-more-button {
     display: block;
     margin-top: 8px;
@@ -194,7 +111,7 @@ main p span {
     text-decoration: underline;
 }
 
-/* This class will be added with JavaScript to show full text */
+
 .show-full-text {
     -webkit-line-clamp: initial;
     display: block;
@@ -254,7 +171,7 @@ main p span {
 /* carousel styling */
 /* ----------------------------- */
 
-/* Carousel Navigation */
+
 .carousel-navigation {
     position: fixed;
     display: flex;
@@ -355,7 +272,7 @@ main p span {
     transition: 0s;
 }
 
-/* Loading spinner */
+
 .loading-spinner {
     display: inline-block;
     width: 1em;
@@ -370,7 +287,7 @@ main p span {
     to { transform: rotate(360deg); }
 }
 
-/* Success toast notification */
+
 .success-toast {
     position: fixed;
     bottom: 2rem;
@@ -427,7 +344,7 @@ main p span {
     color: var(--color-textcolor);
 }
 
-/* Carousel Slides */
+
 #recommendations-carousel {
     position: relative;
     overflow: hidden;
@@ -445,8 +362,10 @@ main p span {
 }
 
 
-
+/* ******************* */
 /* Survey Required Page */
+/* ******************* */
+
 
 .survey-required-container {
     max-width: 600px;
@@ -487,6 +406,12 @@ main p span {
     background: var(--color-accentcolor);
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    margin: 2em 0;
 }
 
 

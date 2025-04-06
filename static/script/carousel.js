@@ -1,3 +1,5 @@
+// Deze code is geschreven met behulp van met Antrophic's Claude 3.7 Sonnet 
+
 document.addEventListener('DOMContentLoaded', function() {
     // Variables to keep track of the carousel's state
     let currentIndex = 0;
@@ -83,9 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Update button states
-        // prevBtn.disabled = currentIndex === 0;
-        // nextBtn.disabled = currentIndex === recommendations.length - 1;
 
         // Call the function that handles button states
         updateCarouselControls();
