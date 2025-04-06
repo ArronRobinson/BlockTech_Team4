@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MatchCast - Your Recommendation</title>
-    <link rel="stylesheet" href="/nav.css">
     <link rel="stylesheet" href="/result.css">
     <link rel="stylesheet" href="/all.css">
 </head>
@@ -116,7 +115,7 @@
         </section>
     </main>
 
-    <!-- Create a global variable with podcast data -->
+    <!-- Create a global variable with podcast data AND carousel history -->
     <script>
         window.podcastData = <% if (podcast && spotify) { %> {
             title: '<%= podcast.title %>',
@@ -128,6 +127,9 @@
             image: '<%= spotify.image || "" %>',
             available: true
         } <% } else { %> { available: false } <% } %>
+        
+        // Initialize with history from session if available
+        window.carouselHistory = <%- JSON.stringify(locals.carouselHistory || []) %>;
     </script>
 
     <script>
@@ -167,6 +169,47 @@
                 // Insert button after the description
                 descriptionEl.parentNode.insertBefore(button, descriptionEl.nextSibling);
             }
+        });
+    </script>
+
+    <!-- Add this script to manage page navigation tracking -->
+    <script>
+        // Record that we are on the recommend page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current page in session storage
+            sessionStorage.setItem('lastPage', 'recommend');
+            
+            // Clear the survey submitted flag
+            sessionStorage.removeItem('surveySubmitted');
+            
+            // If there's a loading wrapper in the result page, hide it
+            const loadingWrapper = document.getElementById('loadingWrapper');
+            if (loadingWrapper) {
+                loadingWrapper.style.display = "none";
+            }
+        });
+    </script>
+
+    <!-- Add this script right at the top of your scripts to ensure proper loading behavior -->
+    <script>
+        // Clear the survey submitted flag when result page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            sessionStorage.removeItem('surveySubmitted');
+            
+            // If there's a loading wrapper in the result page, hide it
+            const loadingWrapper = document.getElementById('loadingWrapper');
+            if (loadingWrapper) {
+                loadingWrapper.style.display = "none";
+            }
+            
+            // Set up back button to properly handle return to survey
+            window.addEventListener('pagehide', function() {
+                // If navigating away from result page but keeping survey data,
+                // make sure we don't show loading screen on return to survey
+                if (window.performance && window.performance.navigation.type !== 1) {
+                    sessionStorage.removeItem('surveySubmitted');
+                }
+            });
         });
     </script>
 

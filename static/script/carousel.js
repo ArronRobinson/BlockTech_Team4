@@ -17,15 +17,39 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.podcastData && window.podcastData.available) {
         recommendations.push(window.podcastData);
         recommendedTitles.push(window.podcastData.title);
-        updateCarouselControls();
-        checkFavoriteStatus(window.podcastData.title);
+    }
+    
+    // Load saved carousel history from session
+    if (window.carouselHistory && Array.isArray(window.carouselHistory) && window.carouselHistory.length > 0) {
+        // If the first item in history is the same as the current recommendation, skip it
+        const startIndex = (window.carouselHistory.length > 0 && 
+                          window.podcastData && 
+                          window.podcastData.available && 
+                          window.carouselHistory[0].title === window.podcastData.title) ? 1 : 0;
+        
+        // Add all items from history
+        for (let i = startIndex; i < window.carouselHistory.length; i++) {
+            if (!recommendedTitles.includes(window.carouselHistory[i].title)) {
+                recommendations.push(window.carouselHistory[i]);
+                recommendedTitles.push(window.carouselHistory[i].title);
+                
+                // Create and append the slide
+                const newSlide = createRecommendationSlide(window.carouselHistory[i], recommendations.length - 1);
+                carousel.appendChild(newSlide);
+            }
+        }
+    }
+    
+    updateCarouselControls();
+    if (recommendations.length > 0) {
+        checkFavoriteStatus(recommendations[currentIndex].title);
     }
     
     // Event listeners
     if (prevBtn) prevBtn.addEventListener('click', showPrevious);
     if (nextBtn) nextBtn.addEventListener('click', showNext);
     if (generateNewBtn) generateNewBtn.addEventListener('click', generateNewRecommendation);
-    if (saveCurrentBtn) saveCurrentBtn.addEventListener('click', saveCurrentToFavorites);
+    if (saveCurrentBtn) saveCurrentBtn.addEventListener('click', toggleFavoriteStatus);
     
     // Functions to navigate carousel
     function showPrevious() {
@@ -60,8 +84,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Update button states
-        prevBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = currentIndex === recommendations.length - 1;
+        // prevBtn.disabled = currentIndex === 0;
+        // nextBtn.disabled = currentIndex === recommendations.length - 1;
+
+        // Call the function that handles button states
+        updateCarouselControls();
+        
+        // Save current carousel state to the session
+        saveCarouselToSession();
     }
     
     // Update carousel controls visibility and state
@@ -71,6 +101,33 @@ document.addEventListener('DOMContentLoaded', function() {
         
         prevBtn.disabled = currentIndex === 0;
         nextBtn.disabled = currentIndex === recommendations.length - 1 || recommendations.length <= 1;
+    }
+    
+    // Save the current carousel data to the session
+    function saveCarouselToSession() {
+        // Create a simplified version of recommendations for the session
+        const sessionData = recommendations.map(podcast => ({
+            title: podcast.title,
+            description: podcast.description,
+            explanation: podcast.explanation,
+            tags: podcast.tags,
+            spotify_url: podcast.spotify_url,
+            embed_url: podcast.embed_url,
+            image: podcast.image,
+            available: true
+        }));
+        
+        // Send to server to store in session
+        fetch('/api/save-carousel', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ podcasts: sessionData })
+        })
+        .catch(error => {
+            console.error('Error saving carousel to session:', error);
+        });
     }
     
     // Check if current podcast is already a favorite
@@ -102,12 +159,76 @@ document.addEventListener('DOMContentLoaded', function() {
         if (isFavorite) {
             saveCurrentBtn.classList.add('saved');
             saveCurrentBtn.innerHTML = `❤️ Saved`;
-            saveCurrentBtn.disabled = true;
+            saveCurrentBtn.dataset.favorite = 'true';
         } else {
             saveCurrentBtn.classList.remove('saved');
             saveCurrentBtn.innerHTML = `❤️`;
-            saveCurrentBtn.disabled = false;
+            saveCurrentBtn.dataset.favorite = 'false';
         }
+        saveCurrentBtn.disabled = false;
+    }
+    
+    // Toggle favorite status (add if not favorite, remove if already favorite)
+    function toggleFavoriteStatus() {
+        if (recommendations.length === 0 || currentIndex >= recommendations.length) return;
+        
+        const currentPodcast = recommendations[currentIndex];
+        const isFavorite = saveCurrentBtn.dataset.favorite === 'true';
+        
+        // Show loading state on button
+        if (saveCurrentBtn) {
+            saveCurrentBtn.disabled = true;
+            saveCurrentBtn.innerHTML = `<span class="loading-spinner"></span>`;
+        }
+        
+        const endpoint = isFavorite ? '/remove-favorite' : '/add-favorite';
+        const requestData = isFavorite ? 
+            { podcastTitle: currentPodcast.title } : // Use the expected parameter name for removal
+            {  // Use the full data for adding
+                title: currentPodcast.title,
+                description: currentPodcast.description,
+                tags: currentPodcast.tags,
+                spotify_url: currentPodcast.spotify_url,
+                image: currentPodcast.image
+            };
+        
+        fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Visual feedback for success
+                updateFavoriteButton(!isFavorite);
+                
+                // Show a temporary success message
+                const successMessage = document.createElement('div');
+                successMessage.className = 'success-toast';
+                successMessage.textContent = isFavorite ? 'Removed from favorites!' : 'Added to favorites!';
+                document.body.appendChild(successMessage);
+                
+                // Remove the success message after a delay
+                setTimeout(() => {
+                    successMessage.classList.add('fade-out');
+                    setTimeout(() => successMessage.remove(), 500);
+                }, 2000);
+            } else {
+                console.error('Error toggling favorite:', data.message);
+                updateFavoriteButton(data.isFavorite || false);
+            }
+        })
+        .catch(error => {
+            console.error('Error toggling favorite:', error);
+            // Reset button state
+            if (saveCurrentBtn) {
+                saveCurrentBtn.disabled = false;
+                saveCurrentBtn.innerHTML = isFavorite ? `❤️ Saved` : `❤️`;
+            }
+        });
     }
     
     // Generate a new recommendation using the API
@@ -161,6 +282,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentIndex = recommendations.length - 1;
                 updateCarouselDisplay();
                 updateCarouselControls();
+                
+                // Save to session
+                saveCarouselToSession();
                 
                 // Check if this is already a favorite
                 checkFavoriteStatus(newPodcast.title);
@@ -266,62 +390,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 100);
         
         return slide;
-    }
-    
-    // Save current recommendation to favorites
-    function saveCurrentToFavorites() {
-        if (recommendations.length === 0 || currentIndex >= recommendations.length) return;
-        
-        const currentPodcast = recommendations[currentIndex];
-        
-        // Show loading state on button
-        if (saveCurrentBtn) {
-            saveCurrentBtn.disabled = true;
-            saveCurrentBtn.innerHTML = `<span class="loading-spinner"></span>`;
-        }
-        
-        fetch('/add-favorite', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                title: currentPodcast.title,
-                description: currentPodcast.description,
-                tags: currentPodcast.tags,
-                spotify_url: currentPodcast.spotify_url,
-                image: currentPodcast.image
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Visual feedback for success
-                updateFavoriteButton(true);
-                
-                // Show a temporary success message
-                const successMessage = document.createElement('div');
-                successMessage.className = 'success-toast';
-                successMessage.textContent = 'Added to favorites!';
-                document.body.appendChild(successMessage);
-                
-                // Remove the success message after a delay
-                setTimeout(() => {
-                    successMessage.classList.add('fade-out');
-                    setTimeout(() => successMessage.remove(), 500);
-                }, 2000);
-            } else {
-                console.error('Error adding favorite:', data.message);
-                updateFavoriteButton(data.isFavorite || false);
-            }
-        })
-        .catch(error => {
-            console.error('Error saving favorite:', error);
-            // Reset button state
-            if (saveCurrentBtn) {
-                saveCurrentBtn.disabled = false;
-                saveCurrentBtn.innerHTML = `❤️`;
-            }
-        });
     }
 });

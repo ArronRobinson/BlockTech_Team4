@@ -10,6 +10,7 @@ const axios = require("axios");
 const { OpenAI } = require("openai");
 const rateLimit = require("express-rate-limit");
 const nodemailer = require('nodemailer');
+const session = require('express-session');
 const uri = `mongodb+srv://${process.env.DATA_USERNAME}:${process.env.DATA_PW}@${process.env.DATA_HOST}/${process.env.DATA_NAME}?retryWrites=true&w=majority`;
 const app = express();
 const PORT = 3000;
@@ -56,16 +57,22 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'podcast-recommendation-secret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 } // 24 hours
+}));
+
 app
     .get('/', onindex)
     .get('/signup', onsignup)
     .get('/login', onlogin)
     .get('/favorite', authenticateToken, onfavorite)
     .get('/survey', authenticateToken, onsurvey)
-    .get ('/result', authenticateToken, onresult)
+    .get('/recommend', authenticateToken, surveyCompletedCheck, onresult)
     .get('/account', authenticateToken, onaccount)
-    .get('/wachtwoordveranderen',authenticateToken, onwwveranderen)
-
+    .get('/wachtwoordveranderen', authenticateToken, onwwveranderen)
 
 function onsurvey(req, res) {
     res.render('survey', { title: 'Survey Page'});
@@ -90,8 +97,24 @@ function onlogin(req, res) {
     res.render('login', { title: 'Log In Page' });
 }
 
+// Update the onresult function to include carousel history from the session
 function onresult(req, res) {
-    res.render('result', { title: 'Result Page' });
+    // Check if there's a recommendation in the session
+    if (req.session.recommendation) {
+        // Include carousel history if it exists
+        return res.render('result', {
+            ...req.session.recommendation,
+            carouselHistory: req.session.carouselHistory || []
+        });
+    }
+    
+    // If no recommendation, show empty result
+    res.render('result', { 
+        title: 'Result Page',
+        podcast: null,
+        spotify: null,
+        carouselHistory: req.session.carouselHistory || []
+    });
 }
 
 function onwwveranderen(req, res) {
@@ -194,7 +217,7 @@ function generatePodcastPrompt(userData, triedPodcasts, alreadyRecommendedPodcas
     
     // Define allowed tags in Dutch
     const allowedTags = [
-        'All', 'Sports', 'Boeken', 'Koken', 'Gamen', 'Muziek', 'Film', 
+        'Sports', 'Boeken', 'Koken', 'Gamen', 'Muziek', 'Film', 
         'Nieuws en politiek', 'Kunst', 'Misdaad', 'Geschiedenis', 'Mode', 'Lifestyle'
     ];
     
@@ -225,7 +248,7 @@ async function getValidPodcastRecommendation(userData, alreadyRecommendedPodcast
     let maxAttempts = 3; // Try up to 3 times
     let triedPodcasts = new Set(); // Keep track of previous recommendations
     const allowedTags = [
-        'All', 'Sports', 'Boeken', 'Koken', 'Gamen', 'Muziek', 'Film', 
+        'Sports', 'Boeken', 'Koken', 'Gamen', 'Muziek', 'Film', 
         'Nieuws en politiek', 'Kunst', 'Misdaad', 'Geschiedenis', 'Mode', 'Lifestyle'
     ];
 
@@ -300,6 +323,19 @@ function authenticateToken (req, res, next) {
     });
 }
 
+function surveyCompletedCheck(req, res, next) {
+    if (req.path === '/recommend') {
+        // Check if the user has completed the survey in this session
+        if (!req.session?.surveyCompleted) {
+            return res.render('survey-required', { 
+                title: 'Survey Required',
+                message: 'Please complete the survey first to get recommendations.'
+            });
+        }
+    }
+    next();
+}
+
 app.post("/signup", async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -356,20 +392,31 @@ app.post("/recommend", authenticateToken, async (req, res) => {
 
         console.log("Received user data:", userData);
 
+        // Mark that the user has completed the survey in this session
+        req.session.surveyCompleted = true;
+        req.session.surveyData = userData;
+
         const finalPodcast = await getValidPodcastRecommendation(userData);
 
         if (!finalPodcast) {
             return res.render("result", { 
                 podcast: null, 
                 spotify: null,
-                surveyData: userData // Pass survey data to template
+                surveyData: userData
             });
         }
+
+        // Save the recommendation in the session
+        req.session.recommendation = {
+            podcast: finalPodcast.podcastRecommendation,
+            spotify: finalPodcast.spotifyPodcast,
+            surveyData: userData
+        };
 
         res.render("result", { 
             podcast: finalPodcast.podcastRecommendation, 
             spotify: finalPodcast.spotifyPodcast,
-            surveyData: userData // Pass survey data to template
+            surveyData: userData
         });
 
     } catch (error) {
@@ -518,6 +565,25 @@ app.post("/api/recommend", authenticateToken, async (req, res) => {
     }
 });
 
+// Add an API endpoint to save carousel history
+app.post("/api/save-carousel", authenticateToken, (req, res) => {
+    try {
+        const { podcasts } = req.body;
+        
+        if (!Array.isArray(podcasts)) {
+            return res.status(400).json({ success: false, message: "Invalid podcasts data" });
+        }
+        
+        // Save the carousel history to the session
+        req.session.carouselHistory = podcasts;
+        
+        res.status(200).json({ success: true, message: "Carousel history saved" });
+    } catch (error) {
+        console.error("Error saving carousel history:", error);
+        res.status(500).json({ success: false, message: "Error saving carousel history" });
+    }
+});
+
 app.post ("/logout", (req, res) => { 
     res.cookie("token", "", {maxAge: 0});
     res.redirect("/login");
@@ -562,5 +628,3 @@ app.post("/wachtwoordveranderen", async (req, res) => {
         res.status(500).json({ message: "Interne serverfout" });
     }
 });
-
-

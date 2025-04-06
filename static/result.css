@@ -222,6 +222,7 @@ main p span {
     justify-content: center;
     flex-direction: row;
     gap: 0.5em;
+    list-style: none;
 }
 
 .tag {
@@ -443,5 +444,49 @@ main p span {
     opacity: 1;
 }
 
+
+
+/* Survey Required Page */
+
+.survey-required-container {
+    max-width: 600px;
+    margin: 100px auto;
+    text-align: center;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+}
+
+.survey-required-container h1 {
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.survey-required-container p {
+    margin-bottom: 30px;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.start-survey-btn {
+    background: var(--color-accentcolor);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.start-survey-btn:hover {
+    background: var(--color-accentcolor);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
 
 
